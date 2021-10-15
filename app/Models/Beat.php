@@ -18,4 +18,8 @@ class Beat extends Model
     //     'delayed' => false,
     // ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

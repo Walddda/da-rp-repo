@@ -5,11 +5,9 @@
             <hr>
             Penis:
             {{ beats.length }}
-            <!-- <div v-if="beats.length > 0">
-                <ul>
-                    <li :v-for="x in beats">abc</li>
-                </ul>
-            </div> -->
+            <ul>
+                <li :v-for="x in beats">abc</li>
+            </ul>
             <!-- <div  :v-if="beats" :v-for="beat in beats" :key="beat.title">
                 {{ beat.title }}
             </div> -->

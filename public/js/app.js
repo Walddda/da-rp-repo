@@ -22161,7 +22161,9 @@ var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
+var _hoisted_2 = ["v-for"];
+
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
 /* HOISTED */
 );
 
@@ -22170,9 +22172,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Head, {
     title: "Test"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Penis: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.beats.length), 1
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Penis: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.beats.length) + " ", 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div v-if=\"beats.length > 0\">\r\n                <ul>\r\n                    <li :v-for=\"x in beats\">abc</li>\r\n                </ul>\r\n            </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div  :v-if=\"beats\" :v-for=\"beat in beats\" :key=\"beat.title\">\r\n                {{ beat.title }}\r\n            </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <test-comp-vue :v-if=\"beats.length\" :v-for=\"(n, i) in beats\" :beats=\"beats[i]\"></test-comp-vue> "), _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <BreezeAuthenticatedLayout>\r\n                <template #header>\r\n                    <h2 class=\"font-semibold text-xl text-gray-800 leading-tight\">\r\n                        Dashboard\r\n                    </h2>\r\n                </template>\r\n\r\n                <div class=\"py-12\">\r\n                    <div class=\"max-w-7xl mx-auto sm:px-6 lg:px-8\">\r\n                        <div class=\"bg-white overflow-hidden shadow-sm sm:rounded-lg\">\r\n                            <div class=\"p-6 bg-white border-b border-gray-200\">\r\n                                You're logged in!\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </BreezeAuthenticatedLayout> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\r\n            Loading\r\n        </div> ")])], 64
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", {
+    "v-for": _ctx.x in $props.beats
+  }, "abc", 8
+  /* PROPS */
+  , _hoisted_2)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div  :v-if=\"beats\" :v-for=\"beat in beats\" :key=\"beat.title\">\r\n                {{ beat.title }}\r\n            </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <test-comp-vue :v-if=\"beats.length\" :v-for=\"(n, i) in beats\" :beats=\"beats[i]\"></test-comp-vue> "), _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <BreezeAuthenticatedLayout>\r\n                <template #header>\r\n                    <h2 class=\"font-semibold text-xl text-gray-800 leading-tight\">\r\n                        Dashboard\r\n                    </h2>\r\n                </template>\r\n\r\n                <div class=\"py-12\">\r\n                    <div class=\"max-w-7xl mx-auto sm:px-6 lg:px-8\">\r\n                        <div class=\"bg-white overflow-hidden shadow-sm sm:rounded-lg\">\r\n                            <div class=\"p-6 bg-white border-b border-gray-200\">\r\n                                You're logged in!\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </BreezeAuthenticatedLayout> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\r\n            Loading\r\n        </div> ")])], 64
   /* STABLE_FRAGMENT */
   );
 }

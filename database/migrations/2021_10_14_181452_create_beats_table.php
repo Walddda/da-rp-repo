@@ -20,7 +20,7 @@ class CreateBeatsTable extends Migration
             $table->string('tag1');
             $table->string('tag2');
             $table->text('description');
-            $table->integer('fk_user_id');
+            $table->integer('user_id');
 
             $table->timestamps();
         });
