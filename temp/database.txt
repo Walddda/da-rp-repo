@@ -1,0 +1,8 @@
+Tables:
+Users
+Beats
+Milestones
+Transaction
+Complaint?
+
+php artisan make:model Flight -mfsc
