@@ -2,7 +2,14 @@ Tables:
 Users
 Beats
 Milestones
-Transaction
-Complaint?
+Transactions
+Complaints
+KeySignatures
+
+beats_users
+beats_milestones
+
+
+
 
 php artisan make:model Flight -mfsc

@@ -19,9 +19,15 @@ class CreateBeatsTable extends Migration
             $table->string('path');
             $table->string('tag1');
             $table->string('tag2');
+            $table->string('tag3');
+            $table->string('tag4');
+            $table->string('tag5');
             $table->text('description');
+            $table->integer('bpm');
+            $table->integer('key_signatures_id');
+            $table->integer('price');
+            $table->boolean('archive');
             $table->integer('user_id');
-
             $table->timestamps();
         });
     }
