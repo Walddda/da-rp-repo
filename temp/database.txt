@@ -11,5 +11,4 @@ beats_milestones
 
 
 
-
 php artisan make:model Flight -mfsc

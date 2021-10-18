@@ -1,6 +1,6 @@
 <template>
             <div>
-                Penis
+                TestComp
                 <!-- {{ beats.title }} -->
             <!-- <div :v-for="value in beats">
                 {{ value }}
