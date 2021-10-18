@@ -3,7 +3,7 @@ Users
 Beats
 Milestones
 Transactions
-Complaints
+#Complaints
 KeySignatures
 
 beats_users

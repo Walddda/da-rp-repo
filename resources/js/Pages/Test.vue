@@ -7,7 +7,7 @@
             {{ beats[0] }}
             <ul>
                 <li v-for="x in beats">
-                    {{x.title}}
+                    {{x.title}} Lol HalloAdam &lt;3
                     </li>
             </ul>
             <!-- <div  :v-if="beats" :v-for="beat in beats" :key="beat.title">
