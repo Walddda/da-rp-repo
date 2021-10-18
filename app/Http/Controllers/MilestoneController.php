@@ -7,4 +7,7 @@ use Illuminate\Http\Request;
 class MilestoneController extends Controller
 {
     //
+    public function show()
+    {
+    }
 }

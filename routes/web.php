@@ -29,6 +29,12 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-require __DIR__ . '/auth.php';
-
 Route::get('/test', [BeatController::class, 'show']);
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::resource('roles', 'RoleController');
+    Route::resource('users', 'UserController');
+    Route::resource('blogs', 'BlogController');
+});
+
+require __DIR__ . '/auth.php';
