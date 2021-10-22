@@ -20479,7 +20479,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       form: this.$inertia.form({
-        email: ''
+        login: ''
       })
     };
   },
@@ -20535,7 +20535,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       form: this.$inertia.form({
-        email: '',
+        login: '',
         password: '',
         remember: false
       })
@@ -20650,14 +20650,14 @@ __webpack_require__.r(__webpack_exports__);
     Head: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_5__.Head
   },
   props: {
-    email: String,
+    login: String,
     token: String
   },
   data: function data() {
     return {
       form: this.$inertia.form({
         token: this.token,
-        email: this.email,
+        login: this.login,
         password: '',
         password_confirmation: ''
       })
@@ -21301,7 +21301,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     width: "48"
   }, {
     trigger: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$page.props.auth.user.name) + " ", 1
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$page.props.auth.user.username) + " ", 1
       /* TEXT */
       ), _hoisted_13])])];
     }),
@@ -21568,15 +21568,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.submit && $options.submit.apply($options, arguments);
     }, ["prevent"]))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "email",
-    value: "Email"
+    "for": "login",
+    value: "Email / Username"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
-    id: "email",
-    type: "email",
-    "class": "mt-1 block w-full",
-    modelValue: $data.form.email,
+    id: "login",
+    type: "text",
+    "class": "block w-full mt-1",
+    modelValue: $data.form.login,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.form.email = $event;
+      return $data.form.login = $event;
     }),
     required: "",
     autofocus: "",
@@ -21645,7 +21645,9 @@ var _hoisted_6 = {
 
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Forgot your password? ");
 
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Log in ");
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Do you want to create an account? ");
+
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Log in ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
@@ -21673,15 +21675,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.submit && $options.submit.apply($options, arguments);
     }, ["prevent"]))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "email",
-    value: "Email"
+    "for": "login",
+    value: "Email / Username"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
-    id: "email",
-    type: "email",
-    "class": "mt-1 block w-full",
-    modelValue: $data.form.email,
+    id: "login",
+    type: "text",
+    "class": "block w-full mt-1",
+    modelValue: $data.form.login,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.form.email = $event;
+      return $data.form.login = $event;
     }),
     required: "",
     autofocus: "",
@@ -21724,14 +21726,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeButton, {
+  , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+    href: _ctx.route('register'),
+    "class": "underline text-sm text-gray-600 hover:text-gray-900"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_8];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["href"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeButton, {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["ml-4", {
       'opacity-25': $data.form.processing
     }]),
     disabled: $data.form.processing
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_8];
+      return [_hoisted_9];
     }),
     _: 1
     /* STABLE */
@@ -21818,9 +21832,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "first_name",
     type: "text",
     "class": "mt-2 block w-full",
-    modelValue: $data.form.name,
+    modelValue: $data.form.first_name,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.form.name = $event;
+      return $data.form.first_name = $event;
     }),
     required: "",
     autofocus: "",
@@ -21834,9 +21848,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "last_name",
     type: "text",
     "class": "mt-2 block w-full",
-    modelValue: $data.form.name,
+    modelValue: $data.form.last_name,
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-      return $data.form.name = $event;
+      return $data.form.last_name = $event;
     }),
     required: "",
     autofocus: "",
@@ -21983,15 +21997,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.submit && $options.submit.apply($options, arguments);
     }, ["prevent"]))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeLabel, {
-    "for": "email",
-    value: "Email"
+    "for": "login",
+    value: "Email / Username"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeInput, {
-    id: "email",
-    type: "email",
+    id: "login",
+    type: "text",
     "class": "mt-1 block w-full",
-    modelValue: $data.form.email,
+    modelValue: $data.form.login,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-      return $data.form.email = $event;
+      return $data.form.login = $event;
     }),
     required: "",
     autofocus: "",

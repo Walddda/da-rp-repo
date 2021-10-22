@@ -5,8 +5,8 @@
 
     <form @submit.prevent="submit">
         <div>
-            <BreezeLabel for="email" value="Email" />
-            <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus autocomplete="username" />
+            <BreezeLabel for="login" value="Email / Username" />
+            <BreezeInput id="login" type="text" class="mt-1 block w-full" v-model="form.login" required autofocus autocomplete="username" />
         </div>
 
         <div class="mt-4">
@@ -47,18 +47,18 @@ export default {
     },
 
     props: {
-        email: String,
-        token: String,
+    login: String,
+    token: String,
     },
 
     data() {
         return {
-            form: this.$inertia.form({
-                token: this.token,
-                email: this.email,
-                password: '',
-                password_confirmation: '',
-            })
+        form: this.$inertia.form({
+            token: this.token,
+            login: this.login,
+            password: '',
+            password_confirmation: '',
+        })
         }
     },
 

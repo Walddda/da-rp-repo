@@ -38,9 +38,17 @@ class NewPasswordController extends Controller
      */
     public function store(Request $request)
     {
+        $loginField = filter_var(
+            $request->input('login'),
+            FILTER_VALIDATE_EMAIL
+        )
+            ? 'email'
+            : 'username';
+        $request->merge([$loginField => $request->input('login')]);
         $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
+            'email' => 'required_without:username|email|exists:users,email',
+            'username' =>
+            'required_without:email|string|exists:users,username',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 

@@ -32,8 +32,17 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request)
     {
+        $loginField = filter_var(
+            $request->input('login'),
+            FILTER_VALIDATE_EMAIL
+        )
+            ? 'email'
+            : 'username';
+        $request->merge([$loginField => $request->input('login')]);
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required_without:username|email|exists:users,email',
+            'username' =>
+            'required_without:email|string|exists:users,username'
         ]);
 
         // We will send the password reset link to this user. Once we have attempted

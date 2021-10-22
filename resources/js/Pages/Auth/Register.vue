@@ -7,12 +7,12 @@
         <div class="inline-flex w-full box-border">
             <div class="mt-4 flex-1 w-2/5 box-border pr-4">
                 <BreezeLabel for="first_name" value="First Name" />
-                <BreezeInput id="first_name" type="text" class="mt-2 block w-full" v-model="form.name" required autofocus autocomplete="first_name" />
+                <BreezeInput id="first_name" type="text" class="mt-2 block w-full" v-model="form.first_name" required autofocus autocomplete="first_name" />
             </div>
             
             <div class="mt-4 flex-1 w-2/5 box-border pl-4">
                 <BreezeLabel for="last_name" value="Last Name" />
-                <BreezeInput id="last_name" type="text" class="mt-2 block w-full" v-model="form.name" required autofocus autocomplete="last_name" />
+                <BreezeInput id="last_name" type="text" class="mt-2 block w-full" v-model="form.last_name" required autofocus autocomplete="last_name" />
             </div>
         </div>
 
