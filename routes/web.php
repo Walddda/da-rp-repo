@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BeatController;
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\FileUpload;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,6 +19,20 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
+// Routes for File Upload
+Route::get('/upload-file', [FileUpload::class, 'createForm']);
+
+Route::post('/upload-file', [FileUpload::class, 'fileUpload'])->name('fileUpload');
+
+
+//Routes for our pages
+
+Route::get('/feed', [FeedController::class, 'show']);
+// ->middleware('guest')
+// ->name('register');
+
+
+// Routes for Auth-Pages
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -38,6 +54,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('blogs', 'BlogController');
 });
 
+
+// Routes for E-Mail-Verification
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');

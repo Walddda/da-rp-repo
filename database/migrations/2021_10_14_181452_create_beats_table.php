@@ -17,6 +17,7 @@ class CreateBeatsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('path');
+            $table->string('type');
             $table->string('tag1');
             $table->string('tag2');
             $table->string('tag3');
@@ -28,6 +29,7 @@ class CreateBeatsTable extends Migration
             $table->integer('price');
             $table->boolean('archive');
             $table->integer('user_id');
+            $table->integer('file_id');
             $table->timestamps();
         });
     }
