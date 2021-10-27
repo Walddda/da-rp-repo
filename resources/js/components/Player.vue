@@ -6,13 +6,14 @@
 		<div class="bg-white shadow-lg rounded-lg" style="width: 45rem !important;">
 			<div class="flex">
 				<div>
-					<img class="w-full rounded hidden md:block" src="https://tailwindcss.com/img/card-top.jpg" alt="Album Pic">
+					{{numb}}
+					<!-- <img class="w-full rounded hidden md:block" :src="'/storage/covers/'+track.is_beat.get_cover.name" alt="Album Pic"> -->
 				</div>
 				<div class="w-full p-8">
 					<div class="flex justify-between">
 						<div>
-							<h3 class="text-2xl text-grey-darkest font-medium">{{track.name}}</h3>
-							<p class="text-sm text-grey mt-1">Username</p>
+							<h3 class="text-2xl text-grey-darkest font-medium">{{track.is_beat.title}}</h3>
+							<p class="text-sm text-grey mt-1">{{track.is_beat.from_user.username}}</p>
 						</div>
 						<div class="text-red-lighter">
 							<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/></svg>
@@ -25,12 +26,11 @@
 						<div class="text-grey-darker">
 							<svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5h3v10H4V5zm12 0v10l-9-5 9-5z"/></svg>
 						</div>
-						<div class="text-white p-8 rounded-full bg-red-light shadow-lg">
-                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-play-fill" viewBox="0 0 16 16">
-  <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-</svg> -->
-							<svg class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
+						<div class="text-white p-8 rounded-full bg-red-light shadow-lg" @click="testEmit" >
+							<svg v-if="rn" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
+							<svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
 						</div>
+						
 						<div class="text-grey-darker">
 							<svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>
 						</div>
@@ -67,7 +67,26 @@ export default {
     
     props: {
         track: Object,
-
+		current: Boolean,
+		numb: Number,
+		rn: {Boolean, default: false},
     },
+	data() {
+		return{
+			hover: false,
+		}
+	},
+	methods: {
+    testEmit() {
+		// console.log('yaay');
+		this.emitter.emit("play-pause", this.numb);
+    }
+  }
 }
 </script>
+
+<style scoped>
+.active {
+  background: green;
+}
+</style>

@@ -14,6 +14,6 @@ class File extends Model
     ];
     public function isBeat()
     {
-        return $this->hasOne(Beat::class);
+        return $this->belongsTo(Beat::class, 'beat_id');
     }
 }

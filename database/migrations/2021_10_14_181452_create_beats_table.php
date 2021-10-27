@@ -11,25 +11,24 @@ class CreateBeatsTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('beats', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('path');
             $table->string('type');
-            $table->string('tag1');
-            $table->string('tag2');
-            $table->string('tag3');
-            $table->string('tag4');
-            $table->string('tag5');
-            $table->text('description');
+            $table->string('tag1')->nullable();
+            $table->string('tag2')->nullable();
+            $table->string('tag3')->nullable();
+            $table->string('tag4')->nullable();
+            $table->string('tag5')->nullable();
+            $table->text('description')->nullable();
             $table->integer('bpm');
             $table->integer('key_signatures_id');
             $table->integer('price');
             $table->boolean('archive');
             $table->integer('user_id');
-            $table->integer('file_id');
             $table->timestamps();
         });
     }

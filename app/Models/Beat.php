@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Beat extends Model
 {
@@ -18,8 +19,21 @@ class Beat extends Model
     //     'delayed' => false,
     // ];
 
-    public function user()
+    public function getNextId()
     {
-        return $this->belongsTo(User::class);
+
+        $statement = DB::select("show table status like 'beats'");
+
+        return $statement[0]->Auto_increment;
+    }
+
+    public function fromUser()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getCover()
+    {
+        return $this->hasOne(Cover::class, 'beat_id');
     }
 }
