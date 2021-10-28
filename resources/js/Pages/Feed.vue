@@ -30,7 +30,7 @@
             <br>
             /storage/uploads/{{files[currentPlaying].name}}
             
-            <audio style="display:none" ref="player">
+            <audio style="display:none" ref="player"  preload="metadata">
                     <source :src="'/storage/uploads/'+files[currentPlaying].name" type="audio/mp3" />
             </audio>
 
@@ -52,6 +52,40 @@
                     <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
                 </div>
             </div>
+            <slider v-model="audio.curLength.sum" :max="audio.length.sum" @update="updateCurTime"/>
+            {{audio.length.min}}:{{audio.length.sec}}
+            <!-- <div class="flex  w-64 m-auto items-center h-32 justify-center">
+				<div class="py-1 relative min-w-full">
+					<div class="h-2 bg-gray-200 rounded-full">
+						<div class="absolute h-2 rounded-full bg-teal-600 w-0" style="width: 58.5714%;"></div>
+						<div class="absolute h-4 flex items-center justify-center w-4 rounded-full bg-white shadow border border-gray-300 -ml-2 top-0 cursor-pointer" unselectable="on" onselectstart="return false;" style="left: 58.5714%;">
+							<div class="relative -mt-2 w-1">
+								<div class="absolute z-40 opacity-100 bottom-100 mb-2 left-0 min-w-full" style="margin-left: -20.5px;">
+									<div class="relative shadow-md">
+										<div class="bg-black -mt-8 text-white truncate text-xs rounded py-1 px-4">92</div>
+										<svg class="absolute text-black w-full h-2 left-0 top-100" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve">
+											<polygon class="fill-current" points="0,0 127.5,127.5 255,0"></polygon>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="absolute text-gray-800 -ml-1 bottom-0 left-0 -mb-6">0</div>
+						<div class="absolute text-gray-800 -mr-1 bottom-0 right-0 -mb-6">{{audio.length.min}}:{{audio.length.sec}}</div>
+					</div>
+				</div>
+			</div> -->
+
+            <div>
+                <vue-tags-input
+                v-model="tag"
+                :tags="tags"
+                @tags-changed="newTags => tags = newTags"
+                :max-tags="5"
+                />
+            </div>
+
+            
         </div>
     </div>
 </template>
@@ -60,12 +94,16 @@
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import Player from '@/Components/Player.vue';
+import VueTagsInput from '@sipec/vue3-tags-input';
+  import Slider from '@vueform/slider'
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Head,
         Player,
+        VueTagsInput,
+        Slider,
     },
 
     props: { 
@@ -78,6 +116,12 @@ export default {
             loadedBeats: false,
             playing: false,
             currentPlaying: 0,
+            tag: '',
+            tags: [],
+            audio: {
+                length: {min:0,sec:0, sum:0},
+                curLength: {min:0,sec:0, sum:0}},
+            value: 20,
         };
     },
     methods: {
@@ -90,9 +134,46 @@ export default {
             var audio = this.$refs.player;
             if (audio.paused) {audio.play()}
             else {audio.pause()}
-        }
+        },
+
+        getLength(){
+            var sis = this;
+            this.$refs.player.onloadedmetadata = function() {
+                var min = Math.trunc(this.duration/60)
+                var sec = (Math.trunc(this.duration) - min*60 ).toFixed(0)
+                console.log(min+':'+sec)
+                sis.audio.length.sum = this.duration
+                sis.audio.length.min = min
+                sis.audio.length.sec = sec
+                
+            }
+            // this.audio.length = this.$refs.player.duration/60
+        },
+
+        getCurrentTime(){
+            var min = Math.trunc(this.$refs.player.currentTime/60)
+            var sec = (Math.trunc(this.$refs.player.currentTime) - min*60 ).toFixed(0)
+            // console.log(min+':'+sec)
+            this.audio.curLength.sum = this.$refs.player.currentTime
+            this.audio.curLength.min = min
+            this.audio.curLength.sec = sec
+        },
+
+        updateCurTime($event){
+            console.log($event);
+            this.$refs.player.currentTime = $event;
+            // this.getCurrentTime()
+        },
+    },
+    created(){
     },
     mounted() { 
+        
+        this.getCurrentTime();
+        setInterval(this.getCurrentTime, 500);
+
+
+        this.getLength();
         this.emitter.on("test-emit", text => {
             this.playing = !this.playing;
             // console.log(text);
@@ -108,7 +189,11 @@ export default {
         this.$watch('currentPlaying', () => {
                 this.$refs.player.load()
                 console.log('heyy');
+                this.playing = true;
+                this.toggleAudio();
             })
     }
 };
 </script>
+
+<style src="@vueform/slider/themes/default.css"></style>

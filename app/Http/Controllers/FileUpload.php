@@ -17,8 +17,8 @@ class FileUpload extends Controller
     public function fileUpload(Request $req)
     {
         $req->validate([
-            'file' => 'required',
-            'file.*' => 'mimes:mp3,png,jpg'
+            'file' => 'required|mimes:mp3|max:10240',
+            'file2' => 'mimes:png,jpg'
         ]);
         // $req->validate([
         //     'file2' => 'required|mimes:png|max:10240'

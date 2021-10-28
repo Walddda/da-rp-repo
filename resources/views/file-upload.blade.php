@@ -21,6 +21,8 @@
 
 <body>
     {{auth()->id()}}
+    --
+    {{ config('app.name') }}
     <div class="container mt-5">
         <form action="{{route('fileUpload')}}" method="post" enctype="multipart/form-data">
           <h3 class="text-center mb-5">Upload File in Laravel</h3>
@@ -53,6 +55,8 @@
                 <input type="file" name="file2" class="custom-file-input" id="chooseFile">
                 <label class="custom-file-label" for="chooseFile">Select Cover</label>
             </div>
+
+            
 
             <button type="submit" name="submit" class="btn btn-primary btn-block mt-4">
                 Upload Files
