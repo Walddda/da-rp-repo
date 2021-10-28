@@ -1,51 +1,54 @@
 <template>
-    <Head title="Register" />
+    <div>
+        <Head title="Register" />
 
-    <BreezeValidationErrors class="mb-4" />
+        <BreezeValidationErrors class="mb-4" />
 
-    <form @submit.prevent="submit" class="box-border">
-        <div class="inline-flex w-full box-border">
-            <div class="mt-4 flex-1 w-2/5 box-border pr-4">
-                <BreezeLabel for="first_name" value="First Name" />
-                <BreezeInput id="first_name" type="text" class="mt-2 block w-full" v-model="form.first_name" required autofocus autocomplete="first_name" />
+        <form @submit.prevent="submit" class="box-border">
+            <div class="inline-flex w-full box-border">
+                <div class="mt-4 flex-1 w-2/5 box-border pr-4">
+                    <BreezeLabel for="first_name" value="First Name" />
+                    <BreezeInput id="first_name" type="text" class="mt-2 block w-full" v-model="form.first_name" required autofocus autocomplete="first_name" />
+                </div>
+                
+                <div class="mt-4 flex-1 w-2/5 box-border pl-4">
+                    <BreezeLabel for="last_name" value="Last Name" />
+                    <BreezeInput id="last_name" type="text" class="mt-2 block w-full" v-model="form.last_name" required autofocus autocomplete="last_name"/>
+                </div>
             </div>
-            
-            <div class="mt-4 flex-1 w-2/5 box-border pl-4">
-                <BreezeLabel for="last_name" value="Last Name" />
-                <BreezeInput id="last_name" type="text" class="mt-2 block w-full" v-model="form.last_name" required autofocus autocomplete="last_name" />
+
+            <div class="mt-4">
+                <BreezeLabel for="email" value="Email" />
+                <!-- warum autocomplete email? -->
+                <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
             </div>
-        </div>
 
-        <div class="mt-4">
-            <BreezeLabel for="email" value="Email" />
-            <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-        </div>
+            <div class="mt-4">
+                <BreezeLabel for="username" value="Username" />
+                <BreezeInput id="username" type="text" class="mt-1 block w-full" v-model="form.username" required autocomplete="username" />
+            </div>
 
-        <div class="mt-4">
-            <BreezeLabel for="username" value="Username" />
-            <BreezeInput id="username" type="text" class="mt-1 block w-full" v-model="form.username" required autocomplete="username" />
-        </div>
+            <div class="mt-4">
+                <BreezeLabel for="password" value="Password" />
+                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password"/>
+            </div>
 
-        <div class="mt-4">
-            <BreezeLabel for="password" value="Password" />
-            <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
-        </div>
+            <div class="mt-4">
+                <BreezeLabel for="password_confirmation" value="Confirm Password" />
+                <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"  />
+            </div>
 
-        <div class="mt-4">
-            <BreezeLabel for="password_confirmation" value="Confirm Password" />
-            <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
-        </div>
+            <div class="flex items-center justify-end mt-4">
+                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                    Already registered?
+                </Link>
 
-        <div class="flex items-center justify-end mt-4">
-            <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                Already registered?
-            </Link>
-
-            <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Register
-            </BreezeButton>
-        </div>
-    </form>
+                <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    Register
+                </BreezeButton>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>
@@ -71,12 +74,12 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                first_name: '',
-                last_name: '',
-                email: '',
-                username: '',
-                password: '',
-                password_confirmation: '',
+                first_name: 'Roman',
+                last_name: 'Stimpfl',
+                email: 'beatchainbeatchain@gmail.com',
+                username: 'test01',
+                password: 'Hallo123',
+                password_confirmation: 'Hallo123',
                 terms: false,
             })
         }

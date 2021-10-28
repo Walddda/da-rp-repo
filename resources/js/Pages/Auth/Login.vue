@@ -1,44 +1,46 @@
 <template>
-    <Head title="Log in" />
+    <div>
+        <Head title="Log in" />
 
-    <BreezeValidationErrors class="mb-4" />
+        <BreezeValidationErrors class="mb-4" />
 
-    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-        {{ status }}
+        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+            {{ status }}
+        </div>
+
+        <form @submit.prevent="submit">
+            <div>
+                <BreezeLabel for="login" value="Email / Username" />
+                <BreezeInput id="login" type="text" class="block w-full mt-1" v-model="form.login" required autofocus autocomplete="username" />
+            </div>
+
+            <div class="mt-4">
+                <BreezeLabel for="password" value="Password" />
+                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" />
+            </div>
+
+            <div class="block mt-4">
+                <label class="flex items-center">
+                    <BreezeCheckbox name="remember" v-model:checked="form.remember" />
+                    <span class="ml-2 text-sm text-gray-600">Remember mee</span>
+                </label>
+            </div>
+
+            <div class="flex items-center justify-end mt-4">
+                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                    Forgot your password?
+                </Link>
+
+                <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                    Do you want to create an account?
+                </Link>
+
+                <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    Log in
+                </BreezeButton>
+            </div>
+        </form>
     </div>
-
-    <form @submit.prevent="submit">
-        <div>
-            <BreezeLabel for="login" value="Email / Username" />
-            <BreezeInput id="login" type="text" class="block w-full mt-1" v-model="form.login" required autofocus autocomplete="username" />
-        </div>
-
-        <div class="mt-4">
-            <BreezeLabel for="password" value="Password" />
-            <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" />
-        </div>
-
-        <div class="block mt-4">
-            <label class="flex items-center">
-                <BreezeCheckbox name="remember" v-model:checked="form.remember" />
-                <span class="ml-2 text-sm text-gray-600">Remember me</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                Forgot your password?
-            </Link>
-
-            <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                Do you want to create an account?
-            </Link>
-
-            <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Log in
-            </BreezeButton>
-        </div>
-    </form>
 </template>
 
 <script>
