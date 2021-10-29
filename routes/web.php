@@ -20,9 +20,9 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 */
 
 // Routes for File Upload
-Route::get('/upload-file', [FileUpload::class, 'createForm']);
+Route::get('/upload', [FileUpload::class, 'createForm']);
 
-Route::post('/upload-file', [FileUpload::class, 'fileUpload'])->name('fileUpload');
+Route::post('/upload', [FileUpload::class, 'fileUpload'])->name('fileUpload');
 
 
 //Routes for our pages

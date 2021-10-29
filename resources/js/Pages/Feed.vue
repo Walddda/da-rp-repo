@@ -52,7 +52,8 @@
                     <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
                 </div>
             </div>
-            <slider v-model="audio.curLength.sum" :max="audio.length.sum" @update="updateCurTime"/>
+            <!-- <slider v-model="audio.curLength.sum" :max="audio.length.sum" @update="updateCurTime"/>@drag-end="updateCurTime" -->
+            <slider2 v-model="audio.curLength.sum" :max="audio.length.sum" @change="changeSlider" @dragging="updateCurTime" @click="testClick" @drag-start="updateCurTime" />
             {{audio.length.min}}:{{audio.length.sec}}
             <!-- <div class="flex  w-64 m-auto items-center h-32 justify-center">
 				<div class="py-1 relative min-w-full">
@@ -76,14 +77,7 @@
 				</div>
 			</div> -->
 
-            <div>
-                <vue-tags-input
-                v-model="tag"
-                :tags="tags"
-                @tags-changed="newTags => tags = newTags"
-                :max-tags="5"
-                />
-            </div>
+            
 
             
         </div>
@@ -94,16 +88,19 @@
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import Player from '@/Components/Player.vue';
-import VueTagsInput from '@sipec/vue3-tags-input';
   import Slider from '@vueform/slider'
+  import Slider2 from "vue3-slider"
+//   import VueSlider from 'vue-slider-component'
+// import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
+// import 'vue-slider-component/dist-css/vue-slider-component.css'
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Head,
         Player,
-        VueTagsInput,
         Slider,
+        Slider2
     },
 
     props: { 
@@ -119,8 +116,10 @@ export default {
             tag: '',
             tags: [],
             audio: {
-                length: {min:0,sec:0, sum:0},
-                curLength: {min:0,sec:0, sum:0}},
+                length: {min:0,sec:0, sum:1},
+                curLength: {min:0,sec:0, sum:0},
+                curLengthOld: {min:0,sec:0, sum:0}
+            },
             value: 20,
         };
     },
@@ -154,6 +153,7 @@ export default {
             var min = Math.trunc(this.$refs.player.currentTime/60)
             var sec = (Math.trunc(this.$refs.player.currentTime) - min*60 ).toFixed(0)
             // console.log(min+':'+sec)
+            this.audio.curLengthOld = this.audio.curLength;
             this.audio.curLength.sum = this.$refs.player.currentTime
             this.audio.curLength.min = min
             this.audio.curLength.sec = sec
@@ -164,13 +164,31 @@ export default {
             this.$refs.player.currentTime = $event;
             // this.getCurrentTime()
         },
+
+        testClick($event){
+            console.log($event);
+        },
+        changeSlider($event){
+            console.log('event:')
+            console.log($event);
+            console.log('current:')
+            console.log(this.audio.curLengthOld.sum)
+            console.log('--------------------------')
+            // console.log('<+3'+$event +' - '+ this.audio.curLength.sum+3);
+            // console.log('>-3'+$event +' - '+ this.audio.curLength.sum-3);
+            // if($event < this.audio.curLength.sum+3 && $event > this.audio.curLength.sum-3){
+            //     console.log('cng: '+$event);
+            // }else{
+            //     console.log('cngFR: '+$event);
+            // }
+        },
     },
     created(){
     },
     mounted() { 
         
         this.getCurrentTime();
-        setInterval(this.getCurrentTime, 500);
+        setInterval(this.getCurrentTime, 1000);
 
 
         this.getLength();

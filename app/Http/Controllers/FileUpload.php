@@ -6,12 +6,14 @@ use App\Models\Cover;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Beat;
+use Inertia\Inertia;
 
 class FileUpload extends Controller
 {
     public function createForm()
     {
-        return view('file-upload');
+        // return view('file-upload');
+        return Inertia::render('FileUpload');
     }
 
     public function fileUpload(Request $req)
@@ -61,10 +63,11 @@ class FileUpload extends Controller
             $coverModel->save();
             $beatModel->save();
 
-            return back()
-                ->with('success', 'File has been uploaded.')
-                ->with('file', $fileName)
-                ->with('file2', $coverName);
+            return Inertia::render('FileUpload', [
+                'success' => 'File has been uploaded.',
+                'file' => $fileName,
+                'file2' => $coverName,
+            ]);
         }
     }
 }

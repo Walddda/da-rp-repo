@@ -41,6 +41,8 @@
         "@vueform/slider": "^2.0.5",
         "mitt": "^3.0.0",
         "vue-material": "^1.0.0-beta-15",
+        "vue-slider-component": "^3.2.15",
+        "vue3-slider": "^1.6.6",
         "vuelidate": "^0.7.6"
     }
 }

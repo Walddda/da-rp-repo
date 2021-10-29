@@ -7,7 +7,7 @@
 			<div class="flex">
 				<div>
 					{{numb}}
-					<img class="w-full rounded hidden md:block" :src="'/storage/covers/'+track.is_beat.get_cover.name" alt="Album Pic">
+					<!-- <img class="w-full rounded hidden md:block" :src="'/storage/covers/'+track.is_beat.get_cover.name" alt="Album Pic"> -->
 				</div>
 				<div class="w-full p-8">
 					<div class="flex justify-between">
