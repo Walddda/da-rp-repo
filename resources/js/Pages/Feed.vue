@@ -26,35 +26,39 @@
                 
             </div>
             <hr>
-            {{files[currentPlaying].is_beat.title}} - {{files[currentPlaying].is_beat.from_user.username}}
-            <br>
-            /storage/uploads/{{files[currentPlaying].name}}
-            
-            <audio style="display:none" ref="player"  preload="metadata">
-                    <source :src="'/storage/uploads/'+files[currentPlaying].name" type="audio/mp3" />
-            </audio>
+            <div class="bottom-1/5">
+                {{files[currentPlaying].is_beat.title}} - {{files[currentPlaying].is_beat.from_user.username}}
+                <br>
+                /storage/uploads/{{files[currentPlaying].name}}
+                
+                <audio style="display:none" ref="player"  preload="metadata">
+                        <source :src="'/storage/uploads/'+files[currentPlaying].name" type="audio/mp3" />
+                </audio>
+                <div class="text-center w-500">
+                <slider2 class="text-center" width="500px" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @change="changeSlider" @dragging="updateCurTime" @click="testClick" @drag-start="updateCurTime" />
+                {{audio.length.min}}:{{audio.length.sec}}
+                </div>
 
-            <div class="flex justify-around items-center mt-8">
-                <div class="text-grey-darker">
-                    <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z"/></svg>
+                <div class="flex justify-around items-center mt-8">
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z"/></svg>
+                    </div>
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5h3v10H4V5zm12 0v10l-9-5 9-5z"/></svg>
+                    </div>
+                    <div class="text-white p-8 rounded-full bg-red-light shadow-lg" @click="play" >
+                        <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
+                        <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
+                    </div>
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>
+                    </div>
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
+                    </div>
                 </div>
-                <div class="text-grey-darker">
-                    <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5h3v10H4V5zm12 0v10l-9-5 9-5z"/></svg>
-                </div>
-                <div class="text-white p-8 rounded-full bg-red-light shadow-lg" @click="play" >
-                    <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
-                    <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
-                </div>
-                <div class="text-grey-darker">
-                    <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>
-                </div>
-                <div class="text-grey-darker">
-                    <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
-                </div>
-            </div>
             <!-- <slider v-model="audio.curLength.sum" :max="audio.length.sum" @update="updateCurTime"/>@drag-end="updateCurTime" -->
-            <slider2 v-model="audio.curLength.sum" :max="audio.length.sum" @change="changeSlider" @dragging="updateCurTime" @click="testClick" @drag-start="updateCurTime" />
-            {{audio.length.min}}:{{audio.length.sec}}
+            
             <!-- <div class="flex  w-64 m-auto items-center h-32 justify-center">
 				<div class="py-1 relative min-w-full">
 					<div class="h-2 bg-gray-200 rounded-full">
@@ -80,6 +84,7 @@
             
 
             
+            </div>
         </div>
     </div>
 </template>
@@ -140,7 +145,7 @@ export default {
             this.$refs.player.onloadedmetadata = function() {
                 var min = Math.trunc(this.duration/60)
                 var sec = (Math.trunc(this.duration) - min*60 ).toFixed(0)
-                console.log(min+':'+sec)
+                console.log(min+':'+sec + '--------'+this.duration)
                 sis.audio.length.sum = this.duration
                 sis.audio.length.min = min
                 sis.audio.length.sec = sec
@@ -166,14 +171,21 @@ export default {
         },
 
         testClick($event){
-            console.log($event);
+            console.log($event.clientX);
+            console.log($event.srcElement.clientWidth);
+            var disc = $event.srcElement.clientWidth/this.audio.length.sum;
+            console.log('disc'+disc)
+            var calc = $event.clientX/disc
+            console.log('spould'+calc)
+            this.$refs.player.currentTime = calc;
+            // console.log('--------------------------')
         },
         changeSlider($event){
-            console.log('event:')
-            console.log($event);
-            console.log('current:')
-            console.log(this.audio.curLengthOld.sum)
-            console.log('--------------------------')
+            // console.log('event:')
+            // console.log($event);
+            // console.log('current:')
+            // console.log(this.audio.curLengthOld.sum)
+            // console.log('--------------------------')
             // console.log('<+3'+$event +' - '+ this.audio.curLength.sum+3);
             // console.log('>-3'+$event +' - '+ this.audio.curLength.sum-3);
             // if($event < this.audio.curLength.sum+3 && $event > this.audio.curLength.sum-3){
