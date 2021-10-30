@@ -13,7 +13,10 @@ class FileUpload extends Controller
     public function createForm()
     {
         // return view('file-upload');
-        return Inertia::render('FileUpload');
+        return Inertia::render('FileUpload', [
+            'route' => route('fileUpload'),
+            'token' => csrf_token(),
+        ]);
     }
 
     public function fileUpload(Request $req)
@@ -65,8 +68,9 @@ class FileUpload extends Controller
 
             return Inertia::render('FileUpload', [
                 'success' => 'File has been uploaded.',
-                'file' => $fileName,
+                'file1' => $fileName,
                 'file2' => $coverName,
+                'token' => csrf_token(),
             ]);
         }
     }
