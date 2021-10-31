@@ -6,6 +6,7 @@ use App\Models\Cover;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Beat;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class FileUpload extends Controller
@@ -16,6 +17,7 @@ class FileUpload extends Controller
         return Inertia::render('FileUpload', [
             'route' => route('fileUpload'),
             'token' => csrf_token(),
+            'logedin' => Auth::id(),
         ]);
     }
 
@@ -71,6 +73,7 @@ class FileUpload extends Controller
                 'file1' => $fileName,
                 'file2' => $coverName,
                 'token' => csrf_token(),
+                'logedin' => Auth::id(),
             ]);
         }
     }

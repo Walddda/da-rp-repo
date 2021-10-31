@@ -26242,7 +26242,8 @@ __webpack_require__.r(__webpack_exports__);
     token: String,
     success: String,
     file1: String,
-    file2: String
+    file2: String,
+    logedin: Number
   },
   methods: {}
 });
@@ -28309,7 +28310,7 @@ var _hoisted_4 = {
 };
 var _hoisted_5 = ["value"];
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"custom-file\"><input type=\"text\" name=\"beatTitle\" class=\"custom-text-input\" id=\"title\"><label class=\"custom-text-label\" for=\"title\">Title</label></div><div class=\"custom-file\"><input type=\"file\" name=\"file\" class=\"custom-file-input\" id=\"chooseFile\"><label class=\"custom-file-label\" for=\"chooseFile\">Select Beat</label></div><div class=\"custom-file\"><input type=\"file\" name=\"file2\" class=\"custom-file-input\" id=\"chooseFile\"><label class=\"custom-file-label\" for=\"chooseFile\">Select Cover</label></div>", 3);
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"custom-file\"><input type=\"text\" name=\"beatTitle\" class=\"custom-text-input\" id=\"title\" required><label class=\"custom-text-label\" for=\"title\">Title</label></div><div class=\"custom-file\"><input type=\"file\" name=\"file\" class=\"custom-file-input\" id=\"chooseFile\"><label class=\"custom-file-label\" for=\"chooseFile\">Select Beat</label></div><div class=\"custom-file\"><input type=\"file\" name=\"file2\" class=\"custom-file-input\" id=\"chooseFile\"><label class=\"custom-file-label\" for=\"chooseFile\">Select Cover</label></div>", 3);
 
 var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
   type: "submit",
@@ -28318,8 +28319,34 @@ var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
+var _hoisted_10 = {
+  key: 1
+};
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Please log in in order to upload ");
+
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+  href: "/login"
+}, "Login", -1
+/* HOISTED */
+);
+
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" or ");
+
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+  href: "/register"
+}, "Register", -1
+/* HOISTED */
+);
+
+var _hoisted_16 = [_hoisted_11, _hoisted_12, _hoisted_13, _hoisted_14, _hoisted_15];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Logedin: {{ logedin }}; "), $props.logedin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("form", {
+    key: 0,
     action: $props.route,
     method: "post",
     enctype: "multipart/form-data"
@@ -28331,11 +28358,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     value: $props.token
   }, null, 8
   /* PROPS */
-  , _hoisted_5), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.token) + " ", 1
-  /* TEXT */
-  ), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\r\n                <vue-tags-input\r\n                v-model=\"tag\"\r\n                :tags=\"tags\"\r\n                @tags-changed=\"newTags => tags = newTags\"\r\n                :max-tags=\"5\"\r\n                />\r\n            </div> "), _hoisted_9], 8
+  , _hoisted_5), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\r\n                <vue-tags-input\r\n                v-model=\"tag\"\r\n                :tags=\"tags\"\r\n                @tags-changed=\"newTags => tags = newTags\"\r\n                :max-tags=\"5\"\r\n                />\r\n            </div> "), _hoisted_9], 8
   /* PROPS */
-  , _hoisted_2)]);
+  , _hoisted_2)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, _hoisted_16))]);
 }
 
 /***/ }),

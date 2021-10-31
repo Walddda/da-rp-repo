@@ -14,7 +14,7 @@ class FeedController extends Controller
     {
         // $beats = File::all()->toArray();
         // $files = Beat::with('fromUser')->get()->toArray();
-        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover')->get()->toArray();
+        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover')->has('isBeat')->get()->toArray();
         $paths = [];
         // dd($files);
 
