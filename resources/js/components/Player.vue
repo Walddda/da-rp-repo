@@ -7,7 +7,8 @@
 			<div class="flex">
 				<div>
 					{{numb}}
-					<img class="w-full rounded hidden md:block box-border h-44 w-44 border-2 border-black" :src="'/storage/covers/'+track.is_beat.get_cover.name" alt="Album Pic">
+					<img class="rounded box-border block h-44 w-44 border-2 border-black max-w-none" @error="defaultCover = true" v-if="!defaultCover" :src="'/storage/covers/'+track.is_beat.get_cover.name" />
+					<img class="rounded box-border block h-44 w-44 border-2 border-black max-w-none" v-if="defaultCover" src="/storage/covers/placeholder.jpg" />
 				</div>
 				<div class="w-full p-8">
 					<div class="flex justify-between">
@@ -98,6 +99,7 @@ export default {
 	data() {
 		return{
 			hover: false,
+			defaultCover: false,
 		}
 	},
 	created() {

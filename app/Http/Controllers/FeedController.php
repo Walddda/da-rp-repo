@@ -29,4 +29,9 @@ class FeedController extends Controller
             'paths' => $paths,
         ]);
     }
+
+    public function showAxios()
+    {
+        return Inertia::render('Feed');
+    }
 }

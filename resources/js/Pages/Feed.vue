@@ -2,7 +2,7 @@
     <div>
         <Head title="Test" />
         <div>
-            <div v-if="files.length > 0">
+            <div v-if="files">
                 <div class="container mb-96 mt-10 flex mx-auto w-full items-center justify-center">
                     <ul class="flex flex-col p-4">
                         <!-- <li 
@@ -26,16 +26,16 @@
                 
             </div>
             <div class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
-                <audio style="display:none" ref="player"  preload="metadata">
+                <audio style="display:none" ref="player"  preload="metadata"  v-if="files">
                         <source :src="'/storage/uploads/'+files[currentPlaying].name" type="audio/mp3" />
                 </audio>
                 <div class="w-5/12 flex flex-row items-center"> 
-                    <img class="box-border h-28 w-28 border-2 border-black" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic">
+                    <img  v-if="files" class="box-border h-28 w-28 border-2 border-black" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic">
                     <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
                     <div class="w-10/12 px-5 flex flex-col items-center">
-                        <div class="w-full">{{files[currentPlaying].is_beat.title}} - {{files[currentPlaying].is_beat.from_user.username}}</div>
-                        <slider2 class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick" @drag-start="updateCurTime" />
-                        <div class="flex justify-between items-center w-full">
+                        <div class="w-full" v-if="files">{{files[currentPlaying].is_beat.title}} - {{files[currentPlaying].is_beat.from_user.username}}</div>
+                        <slider2 v-if="files" class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick" @drag-start="updateCurTime" />
+                        <div v-if="files" class="flex justify-between items-center w-full">
                             <span>{{audio.curLength.min}}:<span v-if="audio.curLength.sec <= 9">0</span>{{audio.curLength.sec}}</span>
                             <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
                         </div>
@@ -71,6 +71,7 @@ import { Head } from "@inertiajs/inertia-vue3";
 import Player from '@/Components/Player.vue';
   import Slider from '@vueform/slider'
   import Slider2 from "vue3-slider"
+import axios from 'axios';
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
 // import 'vue-slider-component/dist-css/vue-slider-component.css'
@@ -85,12 +86,13 @@ export default {
     },
 
     props: { 
-        files: Array,
+        // files: Array,
         paths: Array,
      },
 
     data() {
         return {
+            files: null,
             loadedBeats: false,
             playing: false,
             currentPlaying: 0,
@@ -107,6 +109,15 @@ export default {
     created() {
     },
     methods: {
+        getTracks(){
+            console.log('start');
+            axios.get('/api/beats')
+            .then(response => {
+                this.files = response.data
+                console.log('finish: ');
+                console.log(response.data);
+            })
+        },
         play(){
             this.playing = !this.playing;
             this.toggleAudio();
@@ -119,6 +130,7 @@ export default {
         },
 
         getLength(){
+            if (this.files) {
             var sis = this;
             this.$refs.player.onloadedmetadata = function() {
                 var min = Math.trunc(this.duration/60)
@@ -128,21 +140,23 @@ export default {
                 sis.audio.length.min = min
                 sis.audio.length.sec = sec
                 
-            }
+            }}
             // this.audio.length = this.$refs.player.duration/60
         },
 
         getCurrentTime(){
-            if(this.$refs.player.currentTime >= this.audio.length.sum){
-                this.audio.curLength.sum = 0;
-                this.playing = false;
-            }else{
-                var min = Math.trunc(this.$refs.player.currentTime/60)
-                var sec = (Math.trunc(this.$refs.player.currentTime) - min*60 ).toFixed(0)
-                this.audio.curLength.sum = this.$refs.player.currentTime
-                this.audio.curLength.min = min
-                this.audio.curLength.sec = sec
-                // console.log(this.audio.curLength.sum);
+            if (this.files) {
+                if(this.$refs.player.currentTime >= this.audio.length.sum){
+                    this.audio.curLength.sum = 0;
+                    this.playing = false;
+                }else{
+                    var min = Math.trunc(this.$refs.player.currentTime/60)
+                    var sec = (Math.trunc(this.$refs.player.currentTime) - min*60 ).toFixed(0)
+                    this.audio.curLength.sum = this.$refs.player.currentTime
+                    this.audio.curLength.min = min
+                    this.audio.curLength.sec = sec
+                    // console.log(this.audio.curLength.sum);
+                }  
             }
         },
 
@@ -167,7 +181,9 @@ export default {
             this.$refs.player.currentTime += value;
         }
     },
-    mounted() {         
+    mounted() {    
+        this.getTracks();
+
         this.getCurrentTime();
         setInterval(this.getCurrentTime, 100);
 

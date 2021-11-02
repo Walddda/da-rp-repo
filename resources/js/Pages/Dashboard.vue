@@ -6,6 +6,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Dashboard
             </h2>
+
+            <nav-bar></nav-bar>
         </template>
 
         <div class="py-12">
@@ -23,11 +25,13 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import { Head } from '@inertiajs/inertia-vue3';
+import NavBar from '@/Components/NavBar.vue'
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Head,
+        NavBar,
     },
 }
 </script>

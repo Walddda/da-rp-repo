@@ -24,10 +24,10 @@ Route::get('/upload', [FileUpload::class, 'createForm']);
 
 Route::post('/upload', [FileUpload::class, 'fileUpload'])->name('fileUpload');
 
-
 //Routes for our pages
 
 Route::get('/feed', [FeedController::class, 'show']);
+Route::get('/fed', [FeedController::class, 'showAxios']);
 // ->middleware('guest')
 // ->name('register');
 

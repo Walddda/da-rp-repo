@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\AxiosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
+Route::get('beats',  [AxiosController::class, 'getTracks']);
+Route::post('upload',  [AxiosController::class, 'upload']);
 
 /*
 |--------------------------------------------------------------------------

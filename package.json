@@ -43,6 +43,7 @@
         "@vueform/slider": "^2.0.5",
         "mitt": "^3.0.0",
         "vee-validate": "^4.5.4",
+        "vue-advanced-cropper": "^2.6.3",
         "vue-headless-ui": "0.0.16-alpha.1",
         "vue-material": "^1.0.0-beta-15",
         "vue-slider-component": "^3.2.15",
