@@ -39,16 +39,15 @@ class AxiosController extends Controller
             $errorKey = 'authMpty';
         } else if ($req->hasfile('beat') && $req->hasfile('cover')) {
             $beat_id = $beatModel->getNextId();
+            $path_name = time() . '_' . $req->input('userID') . '_' . rand(1000000, 9999999) . '_' . $beat_id;
 
-            $fileName = time() . '_' . $req->file('beat')->getClientOriginalName();
-            $filePath = $req->file('beat')->storePubliclyAs('uploads', $fileName, 'public');
+            $filePath = $req->file('beat')->storePubliclyAs('uploads', $path_name . '.' . $req->file('beat')->extension(), 'public');
 
             $fileModel->name = time() . '_' . $req->file('beat')->getClientOriginalName();
             $fileModel->file_path = '/storage/' . $filePath;
             $fileModel->beat_id = $beat_id;
 
-            $coverName = time() . '_' . $req->file('cover')->getClientOriginalName();
-            $coverPath = $req->file('cover')->storePubliclyAs('covers', $coverName, 'public');
+            $coverPath = $req->file('cover')->storePubliclyAs('covers', $path_name . '.' . $req->file('cover')->extension(), 'public');
 
             $coverModel->name = time() . '_' . $req->file('cover')->getClientOriginalName();
             $coverModel->cover_path = '/storage/' . $coverPath;
@@ -56,15 +55,15 @@ class AxiosController extends Controller
 
 
 
-            $beatModel->title = $req->input('title');
-            $beatModel->type = 'x';
-            $beatModel->tag1 = 'x';
-            $beatModel->description = 'x';
+            $beatModel->title = htmlspecialchars($req->input('title'));
+            $beatModel->type = htmlspecialchars('x');
+            $beatModel->tag1 = htmlspecialchars('x');
+            $beatModel->description = htmlspecialchars('x');
             $beatModel->bpm = 1;
             $beatModel->key_signatures_id = 1;
             $beatModel->price = 1;
             $beatModel->archive = 0;
-            $beatModel->user_id = $req->input('userID');
+            $beatModel->user_id = htmlspecialchars($req->input('userID'));
 
             $fileModel->save();
             $coverModel->save();

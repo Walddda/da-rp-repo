@@ -26101,6 +26101,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       files: null,
       loadedBeats: false,
+      rendered: false,
       playing: false,
       currentPlaying: 0,
       tag: '',
@@ -26135,11 +26136,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.files = response.data;
         console.log('finish: ');
         console.log(response.data);
+        _this.loadedBeats = true;
+        console.log(_this.$refs.player);
       });
     },
     play: function play() {
       this.playing = !this.playing;
       this.toggleAudio();
+      this.getLength();
     },
     toggleAudio: function toggleAudio() {
       var audio = this.$refs.player;
@@ -26151,13 +26155,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getLength: function getLength() {
-      if (this.files) {
+      if (this.files && this.$refs.player) {
         var sis = this;
 
         this.$refs.player.onloadedmetadata = function () {
           var min = Math.trunc(this.duration / 60);
-          var sec = (Math.trunc(this.duration) - min * 60).toFixed(0);
-          console.log(min + ':' + sec + '--------' + this.duration);
+          var sec = (Math.trunc(this.duration) - min * 60).toFixed(0); // console.log(min+':'+sec + '--------'+this.duration)
+
           sis.audio.length.sum = this.duration;
           sis.audio.length.min = min;
           sis.audio.length.sec = sec;
@@ -26166,7 +26170,9 @@ __webpack_require__.r(__webpack_exports__);
 
     },
     getCurrentTime: function getCurrentTime() {
-      if (this.files) {
+      // console.log('getCurrentTime()')
+      if (this.files && this.loadedBeats && this.$refs.player) {
+        // console.log(this.$refs.player.currentTime)
         if (this.$refs.player.currentTime >= this.audio.length.sum) {
           this.audio.curLength.sum = 0;
           this.playing = false;
@@ -26180,7 +26186,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     updateCurTime: function updateCurTime($event) {
-      // console.log($event);
+      console.log($event);
       this.$refs.player.currentTime = $event; // this.getCurrentTime()
     },
     testClick: function testClick($event) {
@@ -26190,16 +26196,21 @@ __webpack_require__.r(__webpack_exports__);
 
       var calc = $event.clientX / disc; // console.log('spould '+calc)
 
-      this.$refs.player.currentTime = calc; // console.log('--------------------------')
+      this.$refs.player.currentTime = calc;
+      console.log('--------------------------');
     },
     changeCurTime: function changeCurTime(value) {
       // this.audio.curLength.sum += value;
       this.$refs.player.currentTime += value;
+      console.log('yeha');
     }
   },
   mounted: function mounted() {
     var _this2 = this;
 
+    this.$nextTick(function () {
+      this.rendered = true;
+    });
     this.getTracks();
     this.getCurrentTime();
     setInterval(this.getCurrentTime, 100);
@@ -26208,6 +26219,8 @@ __webpack_require__.r(__webpack_exports__);
       _this2.playing = !_this2.playing; // console.log(text);
     });
     this.emitter.on("play-pause", function (numb) {
+      _this2.getLength();
+
       if (_this2.currentPlaying == numb || !_this2.playing) {
         _this2.playing = !_this2.playing;
 
@@ -26217,12 +26230,34 @@ __webpack_require__.r(__webpack_exports__);
       _this2.currentPlaying = numb; // console.log(text);
     });
     this.$watch('currentPlaying', function () {
-      _this2.$refs.player.load();
+      _this2.getLength();
+
+      if (_this2.$refs.player) {
+        _this2.$refs.player.load();
+      }
 
       console.log('heyy');
       _this2.playing = true;
 
       _this2.toggleAudio();
+    });
+    this.$watch('loadedBeats', function () {
+      if (_this2.rendered) {
+        _this2.$refs.player.load();
+
+        console.log('heyy222');
+
+        _this2.getLength();
+      }
+    });
+    this.$watch('rendered', function () {
+      if (_this2.loadedBeats) {
+        _this2.$refs.player.load();
+
+        console.log('heyy3332');
+
+        _this2.getLength();
+      }
     });
     window.addEventListener('keydown', function (e) {
       // console.log(e.key +' - '+ e.keyCode);
@@ -27128,7 +27163,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onError: _cache[0] || (_cache[0] = function ($event) {
       return $data.defaultCover = true;
     }),
-    src: '/storage/covers/' + $props.track.is_beat.get_cover.name
+    src: $props.track.is_beat.get_cover.cover_path
   }, null, 40
   /* PROPS, HYDRATE_EVENTS */
   , _hoisted_6)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.defaultCover ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", _hoisted_7)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.track.is_beat.title), 1
@@ -28309,7 +28344,6 @@ var _hoisted_4 = {
   "class": "border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white"
 };
 var _hoisted_5 = {
-  key: 0,
   style: {
     "display": "none"
   },
@@ -28404,17 +28438,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["track", "numb"]))]);
   }), 256
   /* UNKEYED_FRAGMENT */
-  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [$data.files ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("audio", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("source", {
-    src: '/storage/uploads/' + $data.files[$data.currentPlaying].name,
+  ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("audio", _hoisted_5, [$data.loadedBeats ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("source", {
+    key: 0,
+    src: $data.files[$data.currentPlaying].file_path,
     type: "audio/mp3"
   }, null, 8
   /* PROPS */
-  , _hoisted_6)], 512
+  , _hoisted_6)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 512
   /* NEED_PATCH */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [$data.files ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", {
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [$data.files ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", {
     key: 0,
     "class": "box-border h-28 w-28 border-2 border-black",
-    src: '/storage/covers/' + $data.files[$data.currentPlaying].is_beat.get_cover.name,
+    src: $data.files[$data.currentPlaying].is_beat.get_cover.cover_path,
     alt: "Album Pic"
   }, null, 8
   /* PROPS */
@@ -28430,11 +28465,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     max: $data.audio.length.sum,
     onDragging: $options.updateCurTime,
-    onClick: $options.testClick,
-    onDragStart: $options.updateCurTime
+    onClick: $options.testClick
   }, null, 8
   /* PROPS */
-  , ["modelValue", "max", "onDragging", "onClick", "onDragStart"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.files ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.audio.curLength.min) + ":", 1
+  , ["modelValue", "max", "onDragging", "onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.files ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.audio.curLength.min) + ":", 1
   /* TEXT */
   ), $data.audio.curLength.sec <= 9 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_12, "0")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.audio.curLength.sec), 1
   /* TEXT */

@@ -43,21 +43,21 @@ class FileUpload extends Controller
             $fileName = time() . '_' . $req->file('file')->getClientOriginalName();
             $filePath = $req->file('file')->storePubliclyAs('uploads', $fileName, 'public');
 
-            $fileModel->name = time() . '_' . $req->file('file')->getClientOriginalName();
-            $fileModel->file_path = '/storage/' . $filePath;
+            $fileModel->name = htmlspecialchars(time() . '_' . $req->file('file')->getClientOriginalName());
+            $fileModel->file_path = '/storage/' . htmlspecialchars($filePath);
             $fileModel->beat_id = $beat_id;
 
-            $coverName = time() . '_' . $req->file('file2')->getClientOriginalName();
+            $coverName = htmlspecialchars(time() . '_' . $req->file('file2')->getClientOriginalName());
             $coverPath = $req->file('file2')->storePubliclyAs('covers', $coverName, 'public');
 
-            $coverModel->name = time() . '_' . $req->file('file2')->getClientOriginalName();
-            $coverModel->cover_path = '/storage/' . $coverPath;
+            $coverModel->name = htmlspecialchars(time() . '_' . $req->file('file2')->getClientOriginalName());
+            $coverModel->cover_path = '/storage/' . htmlspecialchars($coverPath);
             $coverModel->beat_id = $beat_id;
 
-            $beatModel->title = $req->input('beatTitle');
-            $beatModel->type = 'x';
-            $beatModel->tag1 = 'x';
-            $beatModel->description = 'x';
+            $beatModel->title = htmlspecialchars($req->input('beatTitle'));
+            $beatModel->type = htmlspecialchars('x');
+            $beatModel->tag1 = htmlspecialchars('x');
+            $beatModel->description = htmlspecialchars('x');
             $beatModel->bpm = 1;
             $beatModel->key_signatures_id = 1;
             $beatModel->price = 1;
@@ -70,8 +70,8 @@ class FileUpload extends Controller
 
             return Inertia::render('FileUpload', [
                 'success' => 'File has been uploaded.',
-                'file1' => $fileName,
-                'file2' => $coverName,
+                'file1' => htmlspecialchars($fileName),
+                'file2' => htmlspecialchars($coverName),
                 'token' => csrf_token(),
                 'logedin' => Auth::id(),
             ]);

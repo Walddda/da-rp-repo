@@ -26,15 +26,15 @@
                 
             </div>
             <div class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
-                <audio style="display:none" ref="player"  preload="metadata"  v-if="files">
-                        <source :src="'/storage/uploads/'+files[currentPlaying].name" type="audio/mp3" />
+                <audio style="display:none" ref="player"  preload="metadata" >
+                        <source :src="files[currentPlaying].file_path" type="audio/mp3" v-if="loadedBeats" />
                 </audio>
                 <div class="w-5/12 flex flex-row items-center"> 
-                    <img  v-if="files" class="box-border h-28 w-28 border-2 border-black" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic">
+                    <img  v-if="files" class="box-border h-28 w-28 border-2 border-black" :src="files[currentPlaying].is_beat.get_cover.cover_path" alt="Album Pic">
                     <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
                     <div class="w-10/12 px-5 flex flex-col items-center">
                         <div class="w-full" v-if="files">{{files[currentPlaying].is_beat.title}} - {{files[currentPlaying].is_beat.from_user.username}}</div>
-                        <slider2 v-if="files" class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick" @drag-start="updateCurTime" />
+                        <slider2 v-if="files" class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick"/>
                         <div v-if="files" class="flex justify-between items-center w-full">
                             <span>{{audio.curLength.min}}:<span v-if="audio.curLength.sec <= 9">0</span>{{audio.curLength.sec}}</span>
                             <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
@@ -88,12 +88,13 @@ export default {
     props: { 
         // files: Array,
         paths: Array,
-     },
+    },
 
     data() {
         return {
             files: null,
             loadedBeats: false,
+            rendered: false,
             playing: false,
             currentPlaying: 0,
             tag: '',
@@ -116,11 +117,14 @@ export default {
                 this.files = response.data
                 console.log('finish: ');
                 console.log(response.data);
+                this.loadedBeats = true;
+                console.log(this.$refs.player)
             })
         },
         play(){
             this.playing = !this.playing;
             this.toggleAudio();
+            this.getLength()
         },
 
         toggleAudio(){
@@ -130,12 +134,12 @@ export default {
         },
 
         getLength(){
-            if (this.files) {
+            if (this.files  && this.$refs.player) {
             var sis = this;
             this.$refs.player.onloadedmetadata = function() {
                 var min = Math.trunc(this.duration/60)
                 var sec = (Math.trunc(this.duration) - min*60 ).toFixed(0)
-                console.log(min+':'+sec + '--------'+this.duration)
+                // console.log(min+':'+sec + '--------'+this.duration)
                 sis.audio.length.sum = this.duration
                 sis.audio.length.min = min
                 sis.audio.length.sec = sec
@@ -145,7 +149,9 @@ export default {
         },
 
         getCurrentTime(){
-            if (this.files) {
+            // console.log('getCurrentTime()')
+            if (this.files && this.loadedBeats && this.$refs.player) {
+            // console.log(this.$refs.player.currentTime)
                 if(this.$refs.player.currentTime >= this.audio.length.sum){
                     this.audio.curLength.sum = 0;
                     this.playing = false;
@@ -161,7 +167,7 @@ export default {
         },
 
         updateCurTime($event){
-            // console.log($event);
+            console.log($event);
             this.$refs.player.currentTime = $event;
             // this.getCurrentTime()
         },
@@ -174,14 +180,18 @@ export default {
             var calc = $event.clientX/disc
             // console.log('spould '+calc)
             this.$refs.player.currentTime = calc;
-            // console.log('--------------------------')
+            console.log('--------------------------')
         },
         changeCurTime(value){
             // this.audio.curLength.sum += value;
             this.$refs.player.currentTime += value;
+            console.log('yeha')
         }
     },
     mounted() {    
+        this.$nextTick(function () {
+            this.rendered = true;
+        })
         this.getTracks();
 
         this.getCurrentTime();
@@ -194,6 +204,7 @@ export default {
             // console.log(text);
         });
         this.emitter.on("play-pause", numb => {
+            this.getLength()
             if(this.currentPlaying == numb || !this.playing){
                 this.playing = !this.playing;
                 this.toggleAudio();
@@ -202,10 +213,24 @@ export default {
             // console.log(text);
         });
         this.$watch('currentPlaying', () => {
-                this.$refs.player.load()
+                this.getLength()
+                if(this.$refs.player){
+                this.$refs.player.load()}
                 console.log('heyy');
                 this.playing = true;
                 this.toggleAudio();
+            });
+        this.$watch('loadedBeats', () => {
+                if(this.rendered){
+                this.$refs.player.load()
+                console.log('heyy222');
+                this.getLength()}
+            })
+        this.$watch('rendered', () => {
+                if(this.loadedBeats){
+                this.$refs.player.load()
+                console.log('heyy3332');
+                this.getLength()}
             })
 
         

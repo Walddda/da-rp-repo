@@ -7,7 +7,7 @@
 			<div class="flex">
 				<div>
 					{{numb}}
-					<img class="rounded box-border block h-44 w-44 border-2 border-black max-w-none" @error="defaultCover = true" v-if="!defaultCover" :src="'/storage/covers/'+track.is_beat.get_cover.name" />
+					<img class="rounded box-border block h-44 w-44 border-2 border-black max-w-none" @error="defaultCover = true" v-if="!defaultCover" :src="track.is_beat.get_cover.cover_path" />
 					<img class="rounded box-border block h-44 w-44 border-2 border-black max-w-none" v-if="defaultCover" src="/storage/covers/placeholder.jpg" />
 				</div>
 				<div class="w-full p-8">

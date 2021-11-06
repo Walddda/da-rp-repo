@@ -25,7 +25,7 @@ class FeedController extends Controller
         }
 
         return Inertia::render('Feed', [
-            'files' => $files,
+            'files' => json_encode($files),
             'paths' => $paths,
         ]);
     }
