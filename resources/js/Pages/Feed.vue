@@ -167,20 +167,23 @@ export default {
         },
 
         updateCurTime($event){
-            console.log($event);
+            // console.log($event);
             this.$refs.player.currentTime = $event;
             // this.getCurrentTime()
         },
 
         testClick($event){
-            // console.log($event.clientX);
-            // console.log($event.srcElement.clientWidth);
-            var disc = $event.srcElement.clientWidth/this.audio.length.sum;
+            console.log($event)
+            console.log($event.layerX);
+            console.log($event.srcElement.offsetParent.clientWidth);
+            console.log(this.audio.length.sum);
+            var disc = $event.srcElement.offsetParent.clientWidth/this.audio.length.sum;
             // console.log('disc '+disc)
-            var calc = $event.clientX/disc
+            var calc = $event.layerX/disc
             // console.log('spould '+calc)
             this.$refs.player.currentTime = calc;
-            console.log('--------------------------')
+            console.log(this.$refs.player);
+            console.log('--------------------------'+calc)
         },
         changeCurTime(value){
             // this.audio.curLength.sum += value;
