@@ -35,7 +35,7 @@ class FileUpload extends Controller
         $coverModel = new Cover;
         $beatModel = new Beat;
 
-        // dd($req);
+        dd($req);
 
         if ($req->hasfile('file') && $req->hasfile('file2')) {
             $beat_id = $beatModel->getNextId();
@@ -64,9 +64,9 @@ class FileUpload extends Controller
             $beatModel->archive = 0;
             $beatModel->user_id = auth()->id();
 
-            $fileModel->save();
-            $coverModel->save();
-            $beatModel->save();
+            // $fileModel->save();
+            // $coverModel->save();
+            // $beatModel->save();
 
             return Inertia::render('FileUpload', [
                 'success' => 'File has been uploaded.',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use App\Models\Beat;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -32,6 +33,9 @@ class FeedController extends Controller
 
     public function showAxios()
     {
-        return Inertia::render('Feed');
+        return Inertia::render('Feed', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+        ]);
     }
 }

@@ -41,13 +41,13 @@ class AxiosController extends Controller
             $beat_id = $beatModel->getNextId();
             $path_name = time() . '_' . $req->input('userID') . '_' . rand(1000000, 9999999) . '_' . $beat_id;
 
-            $filePath = $req->file('beat')->storePubliclyAs('uploads', $path_name . '.' . $req->file('beat')->extension(), 'public');
+            $filePath = $req->file('beat')->storePubliclyAs('uploads', $path_name . '.' . $req->file('beat')->getClientOriginalExtension(), 'public');
 
             $fileModel->name = time() . '_' . $req->file('beat')->getClientOriginalName();
             $fileModel->file_path = '/storage/' . $filePath;
             $fileModel->beat_id = $beat_id;
 
-            $coverPath = $req->file('cover')->storePubliclyAs('covers', $path_name . '.' . $req->file('cover')->extension(), 'public');
+            $coverPath = $req->file('cover')->storePubliclyAs('covers', $path_name . '.' . $req->file('cover')->getClientOriginalExtension(), 'public');
 
             $coverModel->name = time() . '_' . $req->file('cover')->getClientOriginalName();
             $coverModel->cover_path = '/storage/' . $coverPath;

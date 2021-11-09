@@ -27,13 +27,19 @@ Route::post('/upload', [FileUpload::class, 'fileUpload'])->name('fileUpload');
 //Routes for our pages
 
 Route::get('/feed', [FeedController::class, 'show']);
-Route::get('/fed', [FeedController::class, 'showAxios']);
+// Route::get('/fed', [FeedController::class, 'showAxios']);
+Route::get('/', function () {
+    return Inertia::render('Feed', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register')
+    ]);
+});
 // ->middleware('guest')
 // ->name('register');
 
 
 // Routes for Auth-Pages
-Route::get('/', function () {
+Route::get('/old', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),

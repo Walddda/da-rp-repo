@@ -1,6 +1,8 @@
 <template>
     <div>
         <Head title="Test" />
+        
+            <nav-bar :canLogin="canLogin" :canRegister="canRegister"></nav-bar>
         <div>
             <div v-if="files">
                 <div class="container mb-96 mt-10 flex mx-auto w-full items-center justify-center">
@@ -62,6 +64,7 @@
                 </div>
             </div>
         </div>
+            <upload v-if="showPopupUpload"></upload>
     </div>
 </template>
 
@@ -72,6 +75,8 @@ import Player from '@/Components/Player.vue';
   import Slider from '@vueform/slider'
   import Slider2 from "vue3-slider"
 import axios from 'axios';
+import NavBar from '@/Components/NavBar.vue'
+import Upload from '@/Components/PopupUpload.vue'
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
 // import 'vue-slider-component/dist-css/vue-slider-component.css'
@@ -82,12 +87,16 @@ export default {
         Head,
         Player,
         Slider,
-        Slider2
+        Slider2,
+        NavBar,
+        Upload
     },
 
     props: { 
         // files: Array,
         paths: Array,
+        canLogin: Boolean,
+        canRegister: Boolean,
     },
 
     data() {
@@ -105,6 +114,7 @@ export default {
                 curLengthOld: {min:0,sec:0, sum:0}
             },
             value: 20,
+            showPopupUpload: true,
         };
     },
     created() {
@@ -214,6 +224,14 @@ export default {
             }
             this.currentPlaying = numb;
             // console.log(text);
+        });
+        this.emitter.on("closePopupUpload", () => {
+            this.showPopupUpload = false;
+            console.log('cl')
+        });
+        this.emitter.on("openPopupUpload", () => {
+            this.showPopupUpload = true;
+            console.log('op')
         });
         this.$watch('currentPlaying', () => {
                 this.getLength()
