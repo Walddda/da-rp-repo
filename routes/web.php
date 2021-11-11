@@ -3,6 +3,7 @@
 use App\Http\Controllers\BeatController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileUpload;
+use App\Http\Controllers\LikeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,6 +37,11 @@ Route::get('/', function () {
 });
 // ->middleware('guest')
 // ->name('register');
+
+//LIkes
+
+Route::get('beat/like/{id}', [LikeController::class, 'likeBeat'])->name('beat.like');
+// Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);
 
 
 // Routes for Auth-Pages
@@ -81,5 +87,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/profile', function () {
     // Only verified users may access this route...
 })->middleware('verified');
+
+// Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);
 
 require __DIR__ . '/auth.php';

@@ -44,4 +44,13 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function likedBeat()
+    {
+        return $this->morphedByMany(Beat::class, 'likeable')->whereDeletedAt(null);
+    }
+    public function getIsLikedAttribute()
+    {
+        return Beat::where('followable_id', $this->attributes['id'])->where('user_id', Auth()->user()->id)->count() > 0 ? true : false;
+    }
 }

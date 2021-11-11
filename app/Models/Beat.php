@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Beat extends Model
@@ -35,5 +36,21 @@ class Beat extends Model
     public function getCover()
     {
         return $this->hasOne(Cover::class, 'beat_id');
+    }
+
+    public function likes()
+    {
+        return $this->morphToMany(User::class, 'likeable')->whereDeletedAt(null);
+    }
+
+    public function getIsLikedAttribute()
+    {
+        $like = $this->likes()->whereUserId(Auth::id())->first();
+        return (!is_null($like)) ? true : false;
+    }
+
+    public function likes2()
+    {
+        return $this->hasManyThrough(User::class, 'App\Models\Like', 'likeable_id', 'id', 'id', 'user_id');
     }
 }

@@ -11,7 +11,7 @@ class AxiosController extends Controller
 {
     public function getTracks(Request $request)
     {
-        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover')->has('isBeat')->get()->toArray();
+        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat')->get()->toArray();
         return response()->json($files);
     }
 

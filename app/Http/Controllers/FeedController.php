@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
 use App\Models\Beat;
+use App\Models\File;
+use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Storage;
@@ -13,11 +14,12 @@ class FeedController extends Controller
 {
     public function show()
     {
+        //---------------------Files werden über AxiosController geholt, das hier is derzeit useless
         // $beats = File::all()->toArray();
         // $files = Beat::with('fromUser')->get()->toArray();
-        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover')->has('isBeat')->get()->toArray();
+        $files = File::with('isBeat', 'isBeat.likes2', 'isBeat.fromUser', 'isBeat.getCover')->has('isBeat')->get()->toArray();
         $paths = [];
-        // dd($files);
+        dd($files);
 
 
         foreach ($files as $key => $value) {

@@ -4,12 +4,17 @@
         <div v-if="beats.length > 0">
             <hr />
             Test:
-            {{ beats[0] }}
+            {{text}}
+            {{beats[1].likes2.length}}
+            <pre>
+            {{ beats[1] }}
+            </pre>
+            <!--
             <ul>
                 <li v-for="x in beats">
-                    {{x.title}} Lol HalloAdam &lt;3
+                    {{x.title}} {{x.likes}} &lt;3
                     </li>
-            </ul>
+            </ul> -->
             
             <!-- <div  :v-if="beats" :v-for="beat in beats" :key="beat.title">
                 {{ beat.title }}
@@ -17,7 +22,7 @@
             <!-- <test-comp-vue :v-if="beats.length" :v-for="(n, i) in beats" :beats="beats[i]"></test-comp-vue> -->
             <hr />
 
-            <nav-bar></nav-bar>
+            <!-- <nav-bar></nav-bar> -->
 
         </div>
         <!-- <div>
@@ -38,7 +43,7 @@ export default {
         NavBar
     },
 
-    props: { beats: Array },
+    props: { beats: Array, text: String },
 
     data() {
         return {
