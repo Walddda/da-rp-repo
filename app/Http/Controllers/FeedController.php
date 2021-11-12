@@ -7,6 +7,7 @@ use App\Models\File;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -38,6 +39,7 @@ class FeedController extends Controller
         return Inertia::render('Feed', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
+            'logedIn' => Auth::id(),
         ]);
     }
 }

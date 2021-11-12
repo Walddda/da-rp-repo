@@ -18,7 +18,7 @@
 
 						</div>
 						<div class="text-red-lighter">
-							<svg class="w-6 h-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/></svg>
+							<svg class="w-6 h-6" @click="likeUnlike" :fill="likedColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/></svg>
 							{{track.is_beat.likes2.length}}
 						</div>
 					</div>
@@ -88,6 +88,7 @@
 
 
 <script>    
+import axios from 'axios';
 export default {
     name: 'Player',
     
@@ -101,14 +102,39 @@ export default {
 		return{
 			hover: false,
 			defaultCover: false,
+			likedColor: 'black'
 		}
 	},
 	created() {
+	},
+	mounted(){
+		this.liked()
 	},
 	methods: {
 		testEmit() {
 			// console.log('yaay');
 			this.emitter.emit("play-pause", this.numb);
+		},
+		liked(){
+			this.track.is_beat.likes2.forEach(e => {
+				if(e.id == this.$page.props.auth.user.id){
+					console.log('lohl')
+					this.likedColor = 'red'
+				}
+			});
+		},
+		likeUnlike(){
+            console.log('like/unlike: '+this.track.beat_id);
+            axios.get('/api/beat/like/'+this.track.beat_id+'/'+this.$page.props.auth.user.id)
+            .then(response => {
+                console.log('liked: ');
+                console.log(response.data);
+				if(!response.data.del){
+					this.likedColor = 'red'
+				}else{
+					this.likedColor = 'black'
+					}
+            })
 		},
 	}
 }

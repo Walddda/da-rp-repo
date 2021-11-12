@@ -8,21 +8,34 @@ use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
-    public function likeBeat($id)
+    public function likeBeat($id, $authId)
     {
         // here you can check if product exists or is valid or whatever
 
-        $this->handleLike(Beat::class, $id);
-        return redirect()->back();
+        return $this->handleLike(Beat::class, $id, $authId);
+        // return redirect()->back();
     }
 
-    public function handleLike($type, $id)
+    public function handleLike($type, $id, $authId)
     {
         $existing_like = Like::withTrashed()->whereLikeableType($type)->whereLikeableId($id)->whereUserId(Auth::id())->first();
 
+        // return response()->json([
+        //     'test' => 'File has been liked.',
+        //     'user_id'       =>  $authId,
+        //     'likeable_id'   => $id,
+        //     'likeable_type' => $type,
+        // ]);
+
+        #$req->input('userID')
+
+        // return response()->json([
+        //     'success' => 'File has been liked.',
+        // ]);
+
         if (is_null($existing_like)) {
             Like::create([
-                'user_id'       => Auth::id(),
+                'user_id'       => $authId,
                 'likeable_id'   => $id,
                 'likeable_type' => $type,
             ]);
@@ -33,5 +46,10 @@ class LikeController extends Controller
                 $existing_like->restore();
             }
         }
+
+        return response()->json([
+            'success' => 'File has been liked.',
+            'del' => false
+        ]);
     }
 }

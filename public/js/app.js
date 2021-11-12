@@ -25558,6 +25558,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Player',
   props: {
@@ -25572,14 +25575,43 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       hover: false,
-      defaultCover: false
+      defaultCover: false,
+      likedColor: 'black'
     };
   },
   created: function created() {},
+  mounted: function mounted() {
+    this.liked();
+  },
   methods: {
     testEmit: function testEmit() {
       // console.log('yaay');
       this.emitter.emit("play-pause", this.numb);
+    },
+    liked: function liked() {
+      var _this = this;
+
+      this.track.is_beat.likes2.forEach(function (e) {
+        if (e.id == _this.$page.props.auth.user.id) {
+          console.log('lohl');
+          _this.likedColor = 'red';
+        }
+      });
+    },
+    likeUnlike: function likeUnlike() {
+      var _this2 = this;
+
+      console.log('like/unlike: ' + this.track.beat_id);
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/beat/like/' + this.track.beat_id + '/' + this.$page.props.auth.user.id).then(function (response) {
+        console.log('liked: ');
+        console.log(response.data);
+
+        if (!response.data.del) {
+          _this2.likedColor = 'red';
+        } else {
+          _this2.likedColor = 'black';
+        }
+      });
     }
   }
 });
@@ -26179,7 +26211,8 @@ __webpack_require__.r(__webpack_exports__);
     // files: Array,
     paths: Array,
     canLogin: Boolean,
-    canRegister: Boolean
+    canRegister: Boolean,
+    logedIn: Number
   },
   data: function data() {
     return {
@@ -26208,7 +26241,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       },
       value: 20,
-      showPopupUpload: true
+      showPopupUpload: false
     };
   },
   created: function created() {},
@@ -27225,24 +27258,21 @@ var _hoisted_11 = {
 var _hoisted_12 = {
   "class": "text-red-lighter"
 };
+var _hoisted_13 = ["fill"];
 
-var _hoisted_13 = /*#__PURE__*/_withScopeId(function () {
-  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
-    "class": "w-6 h-6",
-    fill: "currentColor",
-    xmlns: "http://www.w3.org/2000/svg",
-    viewBox: "0 0 20 20"
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+var _hoisted_14 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
     d: "M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"
-  })], -1
+  }, null, -1
   /* HOISTED */
   );
 });
 
-var _hoisted_14 = {
+var _hoisted_15 = [_hoisted_14];
+var _hoisted_16 = {
   "class": "flex justify-between items-center mt-8"
 };
-var _hoisted_15 = {
+var _hoisted_17 = {
   key: 0,
   "class": "w-8 h-8",
   fill: "black",
@@ -27250,7 +27280,7 @@ var _hoisted_15 = {
   viewBox: "0 0 20 20"
 };
 
-var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_18 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
     d: "M5 4h3v12H5V4zm7 0h3v12h-3V4z"
   }, null, -1
@@ -27258,8 +27288,8 @@ var _hoisted_16 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_17 = [_hoisted_16];
-var _hoisted_18 = {
+var _hoisted_19 = [_hoisted_18];
+var _hoisted_20 = {
   key: 1,
   "class": "w-8 h-8",
   fill: "black",
@@ -27267,7 +27297,7 @@ var _hoisted_18 = {
   viewBox: "0 0 20 20"
 };
 
-var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
+var _hoisted_21 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
     d: "M 5 4 l 10 6 l -10 6 z z"
   }, null, -1
@@ -27275,7 +27305,7 @@ var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_20 = [_hoisted_19];
+var _hoisted_22 = [_hoisted_21];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.numb) + " ", 1
   /* TEXT */
@@ -27292,14 +27322,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.track.is_beat.from_user.username), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.track.is_beat.likes2.length), 1
-  /* TEXT */
-  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z\"/></svg>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 5h3v10H4V5zm12 0v10l-9-5 9-5z\"/></svg>\r\n\t\t\t\t\t\t</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": "text-white p-8 rounded-full bg-red-light shadow-lg",
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", {
+    "class": "w-6 h-6",
     onClick: _cache[1] || (_cache[1] = function () {
+      return $options.likeUnlike && $options.likeUnlike.apply($options, arguments);
+    }),
+    fill: $data.likedColor,
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 20 20"
+  }, _hoisted_15, 8
+  /* PROPS */
+  , _hoisted_13)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.track.is_beat.likes2.length), 1
+  /* TEXT */
+  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z\"/></svg>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 5h3v10H4V5zm12 0v10l-9-5 9-5z\"/></svg>\r\n\t\t\t\t\t\t</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "text-white p-8 rounded-full bg-red-light shadow-lg",
+    onClick: _cache[2] || (_cache[2] = function () {
       return $options.testEmit && $options.testEmit.apply($options, arguments);
     })
-  }, [$props.rn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", _hoisted_15, _hoisted_17)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", _hoisted_18, _hoisted_20))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 5h3v10h-3V5zM4 5l9 5-9 5V5z\"/></svg>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z\"/></svg>\r\n\t\t\t\t\t\t</div> ")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"flex  w-64 m-auto items-center h-32 justify-center\">\r\n\t\t\t\t<div class=\"py-1 relative min-w-full\">\r\n\t\t\t\t\t<div class=\"h-2 bg-gray-200 rounded-full\">\r\n\t\t\t\t\t\t<div class=\"absolute h-2 rounded-full bg-teal-600 w-0\" style=\"width: 58.5714%;\"></div>\r\n\t\t\t\t\t\t<div class=\"absolute h-4 flex items-center justify-center w-4 rounded-full bg-white shadow border border-gray-300 -ml-2 top-0 cursor-pointer\" unselectable=\"on\" onselectstart=\"return false;\" style=\"left: 58.5714%;\">\r\n\t\t\t\t\t\t\t<div class=\"relative -mt-2 w-1\">\r\n\t\t\t\t\t\t\t\t<div class=\"absolute z-40 opacity-100 bottom-100 mb-2 left-0 min-w-full\" style=\"margin-left: -20.5px;\">\r\n\t\t\t\t\t\t\t\t\t<div class=\"relative shadow-md\">\r\n\t\t\t\t\t\t\t\t\t\t<div class=\"bg-black -mt-8 text-white truncate text-xs rounded py-1 px-4\">92</div>\r\n\t\t\t\t\t\t\t\t\t\t<svg class=\"absolute text-black w-full h-2 left-0 top-100\" x=\"0px\" y=\"0px\" viewBox=\"0 0 255 255\" xml:space=\"preserve\">\r\n\t\t\t\t\t\t\t\t\t\t\t<polygon class=\"fill-current\" points=\"0,0 127.5,127.5 255,0\"></polygon>\r\n\t\t\t\t\t\t\t\t\t\t</svg>\r\n\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"absolute text-gray-800 -ml-1 bottom-0 left-0 -mb-6\">0</div>\r\n\t\t\t\t\t\t<div class=\"absolute text-gray-800 -mr-1 bottom-0 right-0 -mb-6\">150</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<div class=\"mx-8 py-4\">\r\n\t\t\t\t<div class=\"flex justify-between text-sm text-grey-darker\">\r\n\t\t\t\t\t<p>0:40</p>\r\n\t\t\t\t\t<p>4:20</p>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"mt-1\">\r\n\t\t\t\t\t<div class=\"h-1 bg-grey-dark rounded-full\">\r\n\t\t\t\t\t\t<div class=\"w-1/5 h-1 bg-red-light rounded-full relative\">\r\n\t\t\t\t\t\t\t<span class=\"w-4 h-4 bg-red absolute pin-r pin-b -mb-1 rounded-full shadow\"></span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div> ")])])])]);
+  }, [$props.rn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", _hoisted_17, _hoisted_19)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("svg", _hoisted_20, _hoisted_22))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M13 5h3v10h-3V5zM4 5l9 5-9 5V5z\"/></svg>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z\"/></svg>\r\n\t\t\t\t\t\t</div> ")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"flex  w-64 m-auto items-center h-32 justify-center\">\r\n\t\t\t\t<div class=\"py-1 relative min-w-full\">\r\n\t\t\t\t\t<div class=\"h-2 bg-gray-200 rounded-full\">\r\n\t\t\t\t\t\t<div class=\"absolute h-2 rounded-full bg-teal-600 w-0\" style=\"width: 58.5714%;\"></div>\r\n\t\t\t\t\t\t<div class=\"absolute h-4 flex items-center justify-center w-4 rounded-full bg-white shadow border border-gray-300 -ml-2 top-0 cursor-pointer\" unselectable=\"on\" onselectstart=\"return false;\" style=\"left: 58.5714%;\">\r\n\t\t\t\t\t\t\t<div class=\"relative -mt-2 w-1\">\r\n\t\t\t\t\t\t\t\t<div class=\"absolute z-40 opacity-100 bottom-100 mb-2 left-0 min-w-full\" style=\"margin-left: -20.5px;\">\r\n\t\t\t\t\t\t\t\t\t<div class=\"relative shadow-md\">\r\n\t\t\t\t\t\t\t\t\t\t<div class=\"bg-black -mt-8 text-white truncate text-xs rounded py-1 px-4\">92</div>\r\n\t\t\t\t\t\t\t\t\t\t<svg class=\"absolute text-black w-full h-2 left-0 top-100\" x=\"0px\" y=\"0px\" viewBox=\"0 0 255 255\" xml:space=\"preserve\">\r\n\t\t\t\t\t\t\t\t\t\t\t<polygon class=\"fill-current\" points=\"0,0 127.5,127.5 255,0\"></polygon>\r\n\t\t\t\t\t\t\t\t\t\t</svg>\r\n\t\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"absolute text-gray-800 -ml-1 bottom-0 left-0 -mb-6\">0</div>\r\n\t\t\t\t\t\t<div class=\"absolute text-gray-800 -mr-1 bottom-0 right-0 -mb-6\">150</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\r\n\t\t\t<div class=\"mx-8 py-4\">\r\n\t\t\t\t<div class=\"flex justify-between text-sm text-grey-darker\">\r\n\t\t\t\t\t<p>0:40</p>\r\n\t\t\t\t\t<p>4:20</p>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"mt-1\">\r\n\t\t\t\t\t<div class=\"h-1 bg-grey-dark rounded-full\">\r\n\t\t\t\t\t\t<div class=\"w-1/5 h-1 bg-red-light rounded-full relative\">\r\n\t\t\t\t\t\t\t<span class=\"w-4 h-4 bg-red absolute pin-r pin-b -mb-1 rounded-full shadow\"></span>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t</div> ")])])])]);
 }
 
 /***/ }),
@@ -28690,7 +28730,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     canRegister: $props.canRegister
   }, null, 8
   /* PROPS */
-  , ["canLogin", "canRegister"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [$data.files ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <li \r\n                            v-for=\"x in files\" \r\n                            class=\"border-gray-400 flex flex-row my-5\">\r\n                            <div class=\"select-none flex flex-1 items-center p-4 transition duration-500 ease-in-out transform hover:-translate-y-2 rounded-2xl border-2 p-6 hover:shadow-2xl border-red-400\">\r\n                                <div class=\"flex-1 pl-1\">\r\n                                        <player :track=\"x\"/>\r\n                                </div>\r\n                            </div>\r\n                        </li> "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.files, function (x, k) {
+  , ["canLogin", "canRegister"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.logedIn) + " ---" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(this.$page.props.auth.user.id) + " ", 1
+  /* TEXT */
+  ), $data.files ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <li \r\n                            v-for=\"x in files\" \r\n                            class=\"border-gray-400 flex flex-row my-5\">\r\n                            <div class=\"select-none flex flex-1 items-center p-4 transition duration-500 ease-in-out transform hover:-translate-y-2 rounded-2xl border-2 p-6 hover:shadow-2xl border-red-400\">\r\n                                <div class=\"flex-1 pl-1\">\r\n                                        <player :track=\"x\"/>\r\n                                </div>\r\n                            </div>\r\n                        </li> "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.files, function (x, k) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", null, [k == $data.currentPlaying ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_player, {
       key: 0,
       track: x,

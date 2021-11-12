@@ -4,6 +4,7 @@
         
             <nav-bar :canLogin="canLogin" :canRegister="canRegister"></nav-bar>
         <div>
+            {{logedIn}} ---{{this.$page.props.auth.user.id}}
             <div v-if="files">
                 <div class="container mb-96 mt-10 flex mx-auto w-full items-center justify-center">
                     <ul class="flex flex-col p-4">
@@ -97,6 +98,7 @@ export default {
         paths: Array,
         canLogin: Boolean,
         canRegister: Boolean,
+        logedIn: Number,
     },
 
     data() {
@@ -114,7 +116,7 @@ export default {
                 curLengthOld: {min:0,sec:0, sum:0}
             },
             value: 20,
-            showPopupUpload: true,
+            showPopupUpload: false,
         };
     },
     created() {

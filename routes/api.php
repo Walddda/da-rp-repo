@@ -3,10 +3,27 @@
 use App\Http\Controllers\AxiosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LikeController;
 
 
 Route::get('beats',  [AxiosController::class, 'getTracks']);
 Route::post('upload',  [AxiosController::class, 'upload']);
+
+// Route::middleware(['auth:api'])->group(function () {
+
+
+
+//     //other authenticated Routes goes inside this block
+
+// });
+
+// Route::group(['middleware' => ['auth']], function () {
+Route::get('beat/like/{id}/{authId}', [LikeController::class, 'likeBeat'])->name('beat.like');
+// });
+
+//LIkes
+
+// Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);
 
 /*
 |--------------------------------------------------------------------------
