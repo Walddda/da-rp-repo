@@ -19,8 +19,8 @@
                         </li> -->
 
                         <li v-for="(x, k) in files" >
-                            <player v-if="k == currentPlaying" :track="x" :numb="k" :rn="playing" current/>
-                            <player v-else :track="x" :numb="k" />
+                            <player v-if="k == currentPlaying" :track="x" :numb="k" :rn="playing" :info="info" current/>
+                            <player v-else :track="x" :numb="k" :info="info" />
                         </li>
                     </ul>
                 </div>
@@ -115,6 +115,7 @@ export default {
             },
             value: 20,
             showPopupUpload: false,
+            info: null,
         };
     },
     created() {
@@ -215,6 +216,13 @@ export default {
         this.emitter.on("test-emit", text => {
             this.playing = !this.playing;
             // console.log(text);
+        });
+        this.emitter.on("show-info", num => {
+            if(this.info == num){
+                this.info = null;
+            }else{
+                this.info = num;
+            }
         });
         this.emitter.on("play-pause", numb => {
             this.getLength()

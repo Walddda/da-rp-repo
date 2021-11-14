@@ -18,9 +18,9 @@ class FeedController extends Controller
         //---------------------Files werden über AxiosController geholt, das hier is derzeit useless
         // $beats = File::all()->toArray();
         // $files = Beat::with('fromUser')->get()->toArray();
-        $files = File::with('isBeat', 'isBeat.likes2', 'isBeat.fromUser', 'isBeat.getCover')->has('isBeat')->get()->toArray();
+        $files = File::with('isBeat', 'isBeat.likes2', 'isBeat.fromUser', 'isBeat.getCover')->has('isBeat.fromUser')->get()->toArray();
         $paths = [];
-        // dd($files);
+        dd($files);
 
 
         foreach ($files as $key => $value) {

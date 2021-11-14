@@ -1,12 +1,38 @@
 <template>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <div class="container" style="margin-top: 50px">
         <!-- Logedin: {{ logedin }}; -->
         <!-- <form v-if="logedin" :action="route" method="post" enctype="multipart/form-data">upload -->
         <form v-if="logedin" @submit="upload" enctype="multipart/form-data">
             <h3>Upload File</h3>
-            <div v-if="success !== ''" class="alert alert-success" role="alert">
-                {{ success }}
-            </div>
+            
+            <transition name="fade">
+                <div v-if="!isHidden && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="material-icons material-icons-outlined m-auto sm:inline" style="font-size:20px">gpp_bad</span>
+                    <strong class="font-bold">Upload error </strong>
+                    <span class="block sm:inline">{{error}}</span>
+                    <button v-on:click="hide">
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                        </span>
+                    </button>
+                    
+                </div>
+            </transition>
+
+            <transition name="fade">
+                <div v-if="!isHidden && success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Success! </strong>
+                    <span class="block sm:inline">Your track has been uploaded.</span>
+                    <button v-on:click="hide">
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                        </span>
+                    </button>
+                </div>
+            </transition>
+
             <input type="hidden" name="_token" v-bind:value="token" />
 
             <div class="custom-file">
@@ -32,6 +58,7 @@
                     name="beatType"
                     value="beat"
                     v-model="type"
+                    required
                     />
                     <span class="ml-2">Beat</span>
                 </label>
@@ -68,7 +95,7 @@
             <div>
                 <select class="form-control" @change="changeKey($event)">
                     <option value="" selected disabled>Select Key</option>
-                    <option v-for="key in keys" :value="key.id" :key="key.id">{{ key.name }}</option>
+                    <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
                 </select>
             </div>
 
@@ -78,8 +105,9 @@
                     name="file"
                     class="custom-file-input"
                     id="chooseFile"
-                    accept="audio/*"
+                    accept="audio/mp3"
                     v-on:change="onBeatChange"
+                    required
                 />
                 <label class="custom-file-label" for="chooseFile"
                     >Select Beat</label
@@ -96,15 +124,23 @@
                     >Select Cover</label
                 >
             </div> -->
-            <div class="upload-example">
+
+            <div class="flex mt-6">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox" v-model="coverType" name="coverType">
+                    <span class="ml-2">I wish to use a <span class="underline">custom cover</span></span>
+                </label>
+            </div>
+
+            <div v-if="coverType" class="upload-example">
                 <div class="button-wrapper">
-                        <input type="file" ref="file" name="file2" @change="loadImage($event)" accept="image/*">
+                        <input type="file" ref="file" name="file2" @change="loadImage($event)" accept="image/*" required>
                         Load image
                 </div>
                 <cropper
                     ref="cropper"
                     class="upload-example-cropper max-w-7xl max-h-7xl block overflow-hidden"
-                    imageClass="cropImg" 
+                    imageClass="cropImg"
                     :stencil-props="{
                         aspectRatio: 10/10
                     }"
@@ -140,12 +176,16 @@
                 }"
                 @change="change"
             ></cropper> -->
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
         </form>
+
         <div v-else>
             Please log in in order to upload <br>
             <a href="/login">Login</a> or 
             <a href="/register" >Register</a>
         </div>
+
+        
     </div>
 </template>
 <script>
@@ -192,6 +232,7 @@ export default {
 			},
             beat: '',
             cover: '',
+            coverType: '',
             title: '',
             tag: '',
             tags: [],
@@ -201,85 +242,86 @@ export default {
             tag4: String,
             tag5: String,
             bpm: '',
-            keys: [
-                { name: "C"},
-                { name: "Cm"},
-                { name: "DB"},
-                { name: "C#m"},
-                { name: "D"},
-                { name: "Dm"},
-                { name: "Eb"},
-                { name: "D#m"},
-                { name: "E"},
-                { name: "Em"},
-                { name: "F"},
-                { name: "Fm"},
-                { name: "Gb"},
-                { name: "F#m"},
-                { name: "G"},
-                { name: "Gm"},
-                { name: "Ab"},
-                { name: "G#m"},
-                { name: "A"},
-                { name: "Am"},
-                { name: "Bb"},
-                { name: "A#m"},
-                { name: "B"},
-                { name: "Bm"},
-            ],
+            keys: ["C", "Cm", "Db", "C#m", "D", "Dm", "Eb", "D#m", "E", "Em", "F", "Fm", "Gb", "F#m", "G", "Gm", "Ab", "G#m", "A", "Am", "Bb", "A#m", "B", "Bm"],
             selectedKey: null,
             type: '',
             description: '',
+            error: '',
+            success: null,
+            isHidden: false,
+            loading: false,
         }
     },
     
     props: {
         route: String,
         token: String,
-        success: String,
         file1: String,
         file2: String,
         logedin: Number,
     },
     methods: {
+        hide(e){
+            e.preventDefault();
+            this.isHidden = true;
+        },
         upload(e){
             console.log('lezzgo')
+            this.loading = true;
             e.preventDefault();
                 let currentObj = this;
                 const config = {
                     headers: {
                         'content-type': 'multipart/form-data',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    }
+                    },
                 }
 
-            console.log(this.tags);
-            console.log(this.type);
+            // console.log(this.coverType);
+
+            // console.log(this.tags);
+            // console.log(this.type);
 
             //console.log(Object.keys(this.tags).length !== 0);
             if (Object.keys(this.tags).length >= 1) {
                 this.tag1 = this.tags[0].text;
+            } else {
+                this.tag1 = null;
             }
 
             if (Object.keys(this.tags).length >= 2) {
                 this.tag2 = this.tags[1].text;
+            } else {
+                this.tag2 = null;
             }
 
             if (Object.keys(this.tags).length >= 3) {
                 this.tag3 = this.tags[2].text;
+            } else {
+                this.tag3 = null;
             }
 
             if (Object.keys(this.tags).length >= 4) {
                 this.tag4 = this.tags[3].text;
+            } else {
+                this.tag4 = null;
             }
 
             if (Object.keys(this.tags).length >= 5) {
                 this.tag5 = this.tags[4].text;
-            } 
+            } else {
+                this.tag5 = null;
+            }
 
             let formData = new FormData();
             formData.append('beat', this.beat);
-            formData.append('cover', this.cover);
+
+            if (this.coverType) {
+                formData.append('cover', this.cover);
+            }
+
+
+
             formData.append('title', this.title);
             formData.append('userID', this.logedin);
             formData.append('bpm', this.bpm);
@@ -288,17 +330,24 @@ export default {
             formData.append('tag3', this.tag3);
             formData.append('tag4', this.tag4);
             formData.append('tag5', this.tag5);
-            formData.append('key', this.key);
+            formData.append('selectedKey', this.selectedKey);
             formData.append('type', this.type);
             formData.append('description', this.description);
 
-            
-
             axios.post('/api/upload', formData, config)
                     .then(function (response) {
+                        currentObj.loading = false;
+                        currentObj.isHidden = false;
                         console.log(response);
-                        // currentObj.success = response.data.success;
-                        // currentObj.filename = "";
+                        if (response.data.error) {
+                            currentObj.error = response.data.error
+                            currentObj.success = null
+                            console.log(currentObj.error)
+                        }else if (response.data.success) {
+                            currentObj.success = response.data.success
+                            currentObj.error = null
+                            console.log(currentObj.success)
+                        }
                     })
         },
         onBeatChange(e) {
@@ -371,8 +420,14 @@ export default {
         }, 
 
         changeKey (event) {
-            this.selectedKey = event.target.options[event.target.options.selectedIndex].text
+            console.log(event.target.value);
+            this.selectedKey = event.target.value
+            // this.selectedKey = event.target.options[event.target.options.selectedIndex].text
         }, 
+
+        getType($file){
+            //chooseFile
+        }
     },
 
 	destroyed() {
@@ -388,4 +443,29 @@ export default {
 .cropImg{
     border: 2px solid green;
 }
+
+.loader {
+  border-top-color: #3498db;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+
 </style>

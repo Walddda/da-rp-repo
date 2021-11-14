@@ -11,7 +11,7 @@ class AxiosController extends Controller
 {
     public function getTracks(Request $request)
     {
-        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat')->get()->toArray();
+        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')->get()->toArray();
         return response()->json($files);
     }
 
@@ -26,6 +26,10 @@ class AxiosController extends Controller
         $errorMsg = [
             "titleMpty" => 'Please set a title',
             "authMpty" => 'Please log in?',
+            "mp3" => 'Please upload a mp3 or wav File',
+            "type" => 'Please select a Type',
+            "bpm" => 'Please select a BPM',
+            "bpm" => 'Please select a BPM',
             "other" => 'Something other went wrong',
         ];
         $errorKey = 'other';
@@ -34,6 +38,9 @@ class AxiosController extends Controller
             'beat' => 'required|max:10240',
             'cover' => 'mimes:png,jpg'
         ]);
+
+
+
         $fileModel = new File;
         $coverModel = new Cover;
         $beatModel = new Beat;
@@ -43,7 +50,14 @@ class AxiosController extends Controller
             $errorKey = 'titleMpty';
         } else if (!auth()->id() && !$req->input('userID')) {
             $errorKey = 'authMpty';
-        } else if ($req->hasfile('beat') && $req->hasfile('cover')) {
+        } else if ($req->hasfile('beat')) {
+            if ($req->file('beat')->getClientOriginalExtension() != 'mp3' && $req->file('beat')->getClientOriginalExtension() != 'wav') {
+                return response()->json([
+                    'error' => $errorMsg['mp3'],
+                ]);
+            }
+
+            // return var_dump($req->file('beat')->getClientOriginalExtension());
             $beat_id = $beatModel->getNextId();
             $path_name = time() . '_' . $req->input('userID') . '_' . rand(1000000, 9999999) . '_' . $beat_id;
 
@@ -53,11 +67,20 @@ class AxiosController extends Controller
             $fileModel->file_path = '/storage/' . $filePath;
             $fileModel->beat_id = $beat_id;
 
-            $coverPath = $req->file('cover')->storePubliclyAs('covers', $path_name . '.' . $req->file('cover')->getClientOriginalExtension(), 'public');
+            $coverId = '';
 
-            $coverModel->name = time() . '_' . $req->file('cover')->getClientOriginalName();
-            $coverModel->cover_path = '/storage/' . $coverPath;
-            $coverModel->beat_id = $beat_id;
+            if ($req->hasfile('cover')) {
+
+                $coverPath = $req->file('cover')->storePubliclyAs('covers', $path_name . '.' . $req->file('cover')->getClientOriginalExtension(), 'public');
+
+                $coverModel->name = time() . '_' . $req->file('cover')->getClientOriginalName();
+                $coverModel->cover_path = '/storage/' . $coverPath;
+                $coverModel->save();
+
+                $coverId = $coverModel->id();
+            } else {
+                $coverId = 1;
+            }
 
 
 
@@ -68,16 +91,15 @@ class AxiosController extends Controller
             $beatModel->tag3 = htmlspecialchars($req->input('tag3'));
             $beatModel->tag4 = htmlspecialchars($req->input('tag4'));
             $beatModel->tag5 = htmlspecialchars($req->input('tag5'));
-            $beatModel->key_signatures_id = htmlspecialchars($req->input('key'));
+            $beatModel->key = htmlspecialchars($req->input('selectedKey'));
             $beatModel->description = htmlspecialchars($req->input('description'));
             $beatModel->bpm = htmlspecialchars($req->input('bpm'));
-            $beatModel->key_signatures_id = 1;
             $beatModel->price = 1;
             $beatModel->archive = 0;
             $beatModel->user_id = htmlspecialchars($req->input('userID'));
+            $beatModel->cover_id = $coverId;
 
             $fileModel->save();
-            $coverModel->save();
             $beatModel->save();
             return response()->json([
                 'path' => $filePath,

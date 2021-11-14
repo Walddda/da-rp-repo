@@ -33,6 +33,10 @@
 							<svg v-if="rn" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
 							<svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
 						</div>
+
+						<div class="p-8 rounded-full bg-red-light shadow-lg" @click="infoEmit" >
+							INFO
+						</div>
 						
 						<!-- <div class="text-grey-darker">
 							<svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>
@@ -40,6 +44,16 @@
 						<div class="text-grey-darker">
 							<svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
 						</div> -->
+					</div>
+					<div v-if="info == numb">
+						<span v-if="track.is_beat.bpm">BPM: {{track.is_beat.bpm}}</span><br>
+						<span v-if="track.is_beat.key">Key: {{track.is_beat.key}}</span><br>
+						<span v-if="track.is_beat.description">{{track.is_beat.description}}</span><br>
+						<span v-if="track.is_beat.tag1">{{track.is_beat.tag1}}</span><br>
+						<span v-if="track.is_beat.tag2">{{track.is_beat.tag2}}</span><br>
+						<span v-if="track.is_beat.tag3">{{track.is_beat.tag3}}</span><br>
+						<span v-if="track.is_beat.tag4">{{track.is_beat.tag4}}</span><br>
+						<span v-if="track.is_beat.tag5 !== null">{{track.is_beat.tag5}}</span><br>	
 					</div>
 				</div>
 			</div>
@@ -97,6 +111,7 @@ export default {
 		current: Boolean,
 		numb: Number,
 		rn: {Boolean, default: false},
+		info: {Boolean, default: false},
     },
 	data() {
 		return{
@@ -104,6 +119,7 @@ export default {
 			defaultCover: false,
 			likedColor: 'black',
 			likeCount: this.track.is_beat.likes2.length,
+			showInfo: false,
 		}
 	},
 	created() {
@@ -115,6 +131,9 @@ export default {
 		testEmit() {
 			// console.log('yaay');
 			this.emitter.emit("play-pause", this.numb);
+		},
+		infoEmit() {
+			this.emitter.emit("show-info", this.numb);
 		},
 		liked(){
 			this.track.is_beat.likes2.forEach(e => {

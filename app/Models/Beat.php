@@ -35,7 +35,7 @@ class Beat extends Model
 
     public function getCover()
     {
-        return $this->hasOne(Cover::class, 'beat_id');
+        return $this->belongsTo(Cover::class, 'cover_id');
     }
 
     public function likes()
