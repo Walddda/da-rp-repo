@@ -108,8 +108,6 @@ export default {
             rendered: false,
             playing: false,
             currentPlaying: 0,
-            tag: '',
-            tags: [],
             audio: {
                 length: {min:0,sec:0, sum:1},
                 curLength: {min:0,sec:0, sum:0},

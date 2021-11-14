@@ -18,7 +18,7 @@ class LikeController extends Controller
 
     public function handleLike($type, $id, $authId)
     {
-        $existing_like = Like::withTrashed()->whereLikeableType($type)->whereLikeableId($id)->whereUserId(Auth::id())->first();
+        $existing_like = Like::withTrashed()->whereLikeableType($type)->whereLikeableId($id)->whereUserId($authId)->first();
 
         // return response()->json([
         //     'test' => 'File has been liked.',
@@ -42,13 +42,21 @@ class LikeController extends Controller
         } else {
             if (is_null($existing_like->deleted_at)) {
                 $existing_like->delete();
+                return response()->json([
+                    'success' => 'Like deleted.',
+                    'del' => true
+                ]);
             } else {
                 $existing_like->restore();
+                return response()->json([
+                    'success' => 'Like restored.',
+                    'del' => false
+                ]);
             }
         }
 
         return response()->json([
-            'success' => 'File has been liked.',
+            'success' => 'Like.',
             'del' => false
         ]);
     }

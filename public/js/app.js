@@ -25576,7 +25576,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       hover: false,
       defaultCover: false,
-      likedColor: 'black'
+      likedColor: 'black',
+      likeCount: this.track.is_beat.likes2.length
     };
   },
   created: function created() {},
@@ -25606,11 +25607,22 @@ __webpack_require__.r(__webpack_exports__);
         console.log('liked: ');
         console.log(response.data);
 
+        _this2.refreshLikeCount();
+
         if (!response.data.del) {
           _this2.likedColor = 'red';
         } else {
           _this2.likedColor = 'black';
         }
+      });
+    },
+    refreshLikeCount: function refreshLikeCount() {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/likeCount/' + this.track.beat_id).then(function (response) {
+        console.log(response);
+        console.log(response.data[0].is_beat.likes2.length);
+        _this3.likeCount = response.data[0].is_beat.likes2.length;
       });
     }
   }
@@ -26221,8 +26233,6 @@ __webpack_require__.r(__webpack_exports__);
       rendered: false,
       playing: false,
       currentPlaying: 0,
-      tag: '',
-      tags: [],
       audio: {
         length: {
           min: 0,
@@ -26466,7 +26476,67 @@ function getMimeType(file) {
       },
       beat: '',
       cover: '',
-      title: ''
+      title: '',
+      tag: '',
+      tags: [],
+      tag1: String,
+      tag2: String,
+      tag3: String,
+      tag4: String,
+      tag5: String,
+      bpm: '',
+      keys: [{
+        name: "C"
+      }, {
+        name: "Cm"
+      }, {
+        name: "DB"
+      }, {
+        name: "C#m"
+      }, {
+        name: "D"
+      }, {
+        name: "Dm"
+      }, {
+        name: "Eb"
+      }, {
+        name: "D#m"
+      }, {
+        name: "E"
+      }, {
+        name: "Em"
+      }, {
+        name: "F"
+      }, {
+        name: "Fm"
+      }, {
+        name: "Gb"
+      }, {
+        name: "F#m"
+      }, {
+        name: "G"
+      }, {
+        name: "Gm"
+      }, {
+        name: "Ab"
+      }, {
+        name: "G#m"
+      }, {
+        name: "A"
+      }, {
+        name: "Am"
+      }, {
+        name: "Bb"
+      }, {
+        name: "A#m"
+      }, {
+        name: "B"
+      }, {
+        name: "Bm"
+      }],
+      selectedKey: null,
+      type: '',
+      description: ''
     };
   },
   props: {
@@ -26488,11 +26558,43 @@ function getMimeType(file) {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         }
       };
+      console.log(this.tags);
+      console.log(this.type); //console.log(Object.keys(this.tags).length !== 0);
+
+      if (Object.keys(this.tags).length >= 1) {
+        this.tag1 = this.tags[0].text;
+      }
+
+      if (Object.keys(this.tags).length >= 2) {
+        this.tag2 = this.tags[1].text;
+      }
+
+      if (Object.keys(this.tags).length >= 3) {
+        this.tag3 = this.tags[2].text;
+      }
+
+      if (Object.keys(this.tags).length >= 4) {
+        this.tag4 = this.tags[3].text;
+      }
+
+      if (Object.keys(this.tags).length >= 5) {
+        this.tag5 = this.tags[4].text;
+      }
+
       var formData = new FormData();
       formData.append('beat', this.beat);
       formData.append('cover', this.cover);
       formData.append('title', this.title);
       formData.append('userID', this.logedin);
+      formData.append('bpm', this.bpm);
+      formData.append('tag1', this.tag1);
+      formData.append('tag2', this.tag2);
+      formData.append('tag3', this.tag3);
+      formData.append('tag4', this.tag4);
+      formData.append('tag5', this.tag5);
+      formData.append('key', this.key);
+      formData.append('type', this.type);
+      formData.append('description', this.description);
       axios.post('/api/upload', formData, config).then(function (response) {
         console.log(response); // currentObj.success = response.data.success;
         // currentObj.filename = "";
@@ -26561,6 +26663,20 @@ function getMimeType(file) {
 
         reader.readAsArrayBuffer(files[0]);
       }
+    },
+    NumbersOnly: function NumbersOnly(evt) {
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+
+      if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
+        evt.preventDefault();
+        ;
+      } else {
+        return true;
+      }
+    },
+    changeKey: function changeKey(event) {
+      this.selectedKey = event.target.options[event.target.options.selectedIndex].text;
     }
   },
   destroyed: function destroyed() {
@@ -27332,7 +27448,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     viewBox: "0 0 20 20"
   }, _hoisted_15, 8
   /* PROPS */
-  , _hoisted_13)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.track.is_beat.likes2.length), 1
+  , _hoisted_13)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.likeCount), 1
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z\"/></svg>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t<div class=\"text-grey-darker\">\r\n\t\t\t\t\t\t\t<svg class=\"w-8 h-8\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path d=\"M4 5h3v10H4V5zm12 0v10l-9-5 9-5z\"/></svg>\r\n\t\t\t\t\t\t</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "text-white p-8 rounded-full bg-red-light shadow-lg",
@@ -28842,63 +28958,132 @@ var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_7 = {
+  "class": "block"
+};
+
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-gray-700"
+}, "Type", -1
+/* HOISTED */
+);
+
+var _hoisted_9 = {
+  "class": "mt-2"
+};
+var _hoisted_10 = {
+  "class": "inline-flex items-center"
+};
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "ml-2"
+}, "Beat", -1
+/* HOISTED */
+);
+
+var _hoisted_12 = {
+  "class": "inline-flex items-center"
+};
+
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "ml-2"
+}, "Sample", -1
+/* HOISTED */
+);
+
+var _hoisted_14 = {
+  "class": ""
+};
+
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "custom-text-label",
+  "for": "title"
+}, "BPM", -1
+/* HOISTED */
+);
+
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  value: "",
+  selected: "",
+  disabled: ""
+}, "Select Key", -1
+/* HOISTED */
+);
+
+var _hoisted_17 = ["value"];
+var _hoisted_18 = {
   "class": "custom-file"
 };
 
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "custom-file-label",
   "for": "chooseFile"
 }, "Select Beat", -1
 /* HOISTED */
 );
 
-var _hoisted_9 = {
+var _hoisted_20 = {
   "class": "upload-example"
 };
-var _hoisted_10 = {
+var _hoisted_21 = {
   "class": "button-wrapper"
 };
 
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Load image ");
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Load image ");
 
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+var _hoisted_23 = {
+  "class": "flex flex-wrap -mx-3 mb-6"
+};
+var _hoisted_24 = {
+  "class": "w-full px-3"
+};
+
+var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2",
+  "for": "description"
+}, " Description ", -1
+/* HOISTED */
+);
+
+var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
   type: "submit",
   name: "submit"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_13 = {
+var _hoisted_27 = {
   key: 1
 };
 
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Please log in in order to upload ");
+var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Please log in in order to upload ");
 
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
 /* HOISTED */
 );
 
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
   href: "/login"
 }, "Login", -1
 /* HOISTED */
 );
 
-var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" or ");
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" or ");
 
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
   href: "/register"
 }, "Register", -1
 /* HOISTED */
 );
 
-var _hoisted_19 = [_hoisted_14, _hoisted_15, _hoisted_16, _hoisted_17, _hoisted_18];
+var _hoisted_33 = [_hoisted_28, _hoisted_29, _hoisted_30, _hoisted_31, _hoisted_32];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_cropper = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("cropper");
 
+  var _component_vue_tags_input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("vue-tags-input");
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Logedin: {{ logedin }}; "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <form v-if=\"logedin\" :action=\"route\" method=\"post\" enctype=\"multipart/form-data\">upload "), $props.logedin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("form", {
     key: 0,
-    onSubmit: _cache[3] || (_cache[3] = function () {
+    onSubmit: _cache[11] || (_cache[11] = function () {
       return $options.upload && $options.upload.apply($options, arguments);
     }),
     enctype: "multipart/form-data"
@@ -28921,28 +29106,78 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.title]]), _hoisted_6]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.title]]), _hoisted_6]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "radio",
+    "class": "form-radio",
+    name: "beatType",
+    value: "beat",
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+      return $data.type = $event;
+    })
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $data.type]]), _hoisted_11])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "radio",
+    "class": "form-radio",
+    name: "beatType",
+    value: "sample",
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+      return $data.type = $event;
+    })
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $data.type]]), _hoisted_13])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    name: "beatBPM",
+    "class": "custom-text-input",
+    id: "bpm",
+    required: "",
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.bpm = $event;
+    }),
+    onKeypress: _cache[4] || (_cache[4] = function () {
+      return $options.NumbersOnly && $options.NumbersOnly.apply($options, arguments);
+    })
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.bpm]]), _hoisted_15]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    "class": "form-control",
+    onChange: _cache[5] || (_cache[5] = function ($event) {
+      return $options.changeKey($event);
+    })
+  }, [_hoisted_16, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.keys, function (key) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+      value: key.id,
+      key: key.id
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(key.name), 9
+    /* TEXT, PROPS */
+    , _hoisted_17);
+  }), 128
+  /* KEYED_FRAGMENT */
+  ))], 32
+  /* HYDRATE_EVENTS */
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "file",
     name: "file",
     "class": "custom-file-input",
     id: "chooseFile",
     accept: "audio/*",
-    onChange: _cache[1] || (_cache[1] = function () {
+    onChange: _cache[6] || (_cache[6] = function () {
       return $options.onBeatChange && $options.onBeatChange.apply($options, arguments);
     })
   }, null, 32
   /* HYDRATE_EVENTS */
-  ), _hoisted_8]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"custom-file\">\r\n                <input\r\n                    type=\"file\"\r\n                    name=\"file2\"\r\n                    class=\"custom-file-input\"\r\n                    id=\"chooseFile\"\r\n                />\r\n                <label class=\"custom-file-label\" for=\"chooseFile\"\r\n                    >Select Cover</label\r\n                >\r\n            </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), _hoisted_19]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"custom-file\">\r\n                <input\r\n                    type=\"file\"\r\n                    name=\"file2\"\r\n                    class=\"custom-file-input\"\r\n                    id=\"chooseFile\"\r\n                />\r\n                <label class=\"custom-file-label\" for=\"chooseFile\"\r\n                    >Select Cover</label\r\n                >\r\n            </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "file",
     ref: "file",
     name: "file2",
-    onChange: _cache[2] || (_cache[2] = function ($event) {
+    onChange: _cache[7] || (_cache[7] = function ($event) {
       return $options.loadImage($event);
     }),
     accept: "image/*"
   }, null, 544
   /* HYDRATE_EVENTS, NEED_PATCH */
-  ), _hoisted_11]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_cropper, {
+  ), _hoisted_22]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_cropper, {
     ref: "cropper",
     "class": "upload-example-cropper max-w-7xl max-h-7xl block overflow-hidden",
     imageClass: "cropImg",
@@ -28952,9 +29187,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     src: $data.image.src
   }, null, 8
   /* PROPS */
-  , ["src"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div>\r\n                <vue-tags-input\r\n                v-model=\"tag\"\r\n                :tags=\"tags\"\r\n                @tags-changed=\"newTags => tags = newTags\"\r\n                :max-tags=\"5\"\r\n                />\r\n            </div> "), _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button @click=\"upload\">Axios-Upload</button> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <cropper\r\n                class=\"cropper\"\r\n                src=\"/storage/covers/placeholder.jpg\"\r\n                :stencil-props=\"{\r\n                aspectRatio: 10/10\r\n                }\"\r\n                @change=\"change\"\r\n            ></cropper> ")], 32
+  , ["src"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_vue_tags_input, {
+    modelValue: $data.tag,
+    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+      return $data.tag = $event;
+    }),
+    tags: $data.tags,
+    onTagsChanged: _cache[9] || (_cache[9] = function (newTags) {
+      return $data.tags = newTags;
+    }),
+    "max-tags": 5
+  }, null, 8
+  /* PROPS */
+  , ["modelValue", "tags"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [_hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+    "onUpdate:modelValue": _cache[10] || (_cache[10] = function ($event) {
+      return $data.description = $event;
+    }),
+    name: "description",
+    "class": "no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none",
+    id: "description"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.description]])])]), _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button @click=\"upload\">Axios-Upload</button> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <cropper\r\n                class=\"cropper\"\r\n                src=\"/storage/covers/placeholder.jpg\"\r\n                :stencil-props=\"{\r\n                aspectRatio: 10/10\r\n                }\"\r\n                @change=\"change\"\r\n            ></cropper> ")], 32
   /* HYDRATE_EVENTS */
-  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, _hoisted_19))]);
+  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, _hoisted_33))]);
 }
 
 /***/ }),

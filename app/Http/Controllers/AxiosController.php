@@ -15,6 +15,12 @@ class AxiosController extends Controller
         return response()->json($files);
     }
 
+    public function likeCount($id, Request $request)
+    {
+        $files = File::with('isBeat', 'isBeat.likes2')->has('isBeat')->where('id', '=', $id)->get();
+        return response()->json($files);
+    }
+
     public function upload(Request $req)
     {
         $errorMsg = [
@@ -56,10 +62,15 @@ class AxiosController extends Controller
 
 
             $beatModel->title = htmlspecialchars($req->input('title'));
-            $beatModel->type = htmlspecialchars('x');
-            $beatModel->tag1 = htmlspecialchars('x');
-            $beatModel->description = htmlspecialchars('x');
-            $beatModel->bpm = 1;
+            $beatModel->type = htmlspecialchars($req->input('type'));
+            $beatModel->tag1 = htmlspecialchars($req->input('tag1'));
+            $beatModel->tag2 = htmlspecialchars($req->input('tag2'));
+            $beatModel->tag3 = htmlspecialchars($req->input('tag3'));
+            $beatModel->tag4 = htmlspecialchars($req->input('tag4'));
+            $beatModel->tag5 = htmlspecialchars($req->input('tag5'));
+            $beatModel->key_signatures_id = htmlspecialchars($req->input('key'));
+            $beatModel->description = htmlspecialchars($req->input('description'));
+            $beatModel->bpm = htmlspecialchars($req->input('bpm'));
             $beatModel->key_signatures_id = 1;
             $beatModel->price = 1;
             $beatModel->archive = 0;

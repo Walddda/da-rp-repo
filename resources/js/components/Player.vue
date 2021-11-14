@@ -19,7 +19,7 @@
 						</div>
 						<div class="text-red-lighter">
 							<svg class="w-6 h-6" @click="likeUnlike" :fill="likedColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/></svg>
-							{{track.is_beat.likes2.length}}
+							{{likeCount}}
 						</div>
 					</div>
 					<div class="flex justify-between items-center mt-8">
@@ -102,7 +102,8 @@ export default {
 		return{
 			hover: false,
 			defaultCover: false,
-			likedColor: 'black'
+			likedColor: 'black',
+			likeCount: this.track.is_beat.likes2.length,
 		}
 	},
 	created() {
@@ -129,6 +130,7 @@ export default {
             .then(response => {
                 console.log('liked: ');
                 console.log(response.data);
+				this.refreshLikeCount()
 				if(!response.data.del){
 					this.likedColor = 'red'
 				}else{
@@ -136,6 +138,14 @@ export default {
 					}
             })
 		},
+		refreshLikeCount(){
+			axios.get('/api/likeCount/'+this.track.beat_id)
+			.then(response =>{
+				console.log(response)
+				console.log(response.data[0].is_beat.likes2.length)
+				this.likeCount= response.data[0].is_beat.likes2.length
+			})
+		}
 	}
 }
 </script>

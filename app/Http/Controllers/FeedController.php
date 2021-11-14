@@ -20,7 +20,7 @@ class FeedController extends Controller
         // $files = Beat::with('fromUser')->get()->toArray();
         $files = File::with('isBeat', 'isBeat.likes2', 'isBeat.fromUser', 'isBeat.getCover')->has('isBeat')->get()->toArray();
         $paths = [];
-        dd($files);
+        // dd($files);
 
 
         foreach ($files as $key => $value) {

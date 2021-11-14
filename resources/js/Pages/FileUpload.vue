@@ -21,6 +21,57 @@
                 <label class="custom-text-label" for="title">Title</label>
             </div>
 
+            <div class="block">
+            <span class="text-gray-700">Type</span>
+            <div class="mt-2">
+                <div>
+                <label class="inline-flex items-center">
+                    <input
+                    type="radio"
+                    class="form-radio"
+                    name="beatType"
+                    value="beat"
+                    v-model="type"
+                    />
+                    <span class="ml-2">Beat</span>
+                </label>
+                </div>
+                <div>
+                <label class="inline-flex items-center">
+                    <input
+                    type="radio"
+                    class="form-radio"
+                    name="beatType"
+                    value="sample"
+                    v-model="type"
+                    />
+                    <span class="ml-2">Sample</span>
+                </label>
+                </div>
+            </div>
+            </div>
+
+
+            <div class="">
+                <input
+                    type="text"
+                    name="beatBPM"
+                    class="custom-text-input"
+                    id="bpm"
+                    required
+                    v-model="bpm"
+                    v-on:keypress="NumbersOnly"
+                />
+                <label class="custom-text-label" for="title">BPM</label>
+            </div>
+
+            <div>
+                <select class="form-control" @change="changeKey($event)">
+                    <option value="" selected disabled>Select Key</option>
+                    <option v-for="key in keys" :value="key.id" :key="key.id">{{ key.name }}</option>
+                </select>
+            </div>
+
             <div class="custom-file">
                 <input
                     type="file"
@@ -61,14 +112,23 @@
                 />
             </div>
 
-            <!-- <div>
+            <div>
                 <vue-tags-input
                 v-model="tag"
                 :tags="tags"
                 @tags-changed="newTags => tags = newTags"
                 :max-tags="5"
                 />
-            </div> -->
+            </div>
+
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="description">
+                        Description
+                    </label>
+                    <textarea v-model="description" name="description" class="no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none" id="description"></textarea>
+                </div>
+            </div>
 
             <input type="submit" name="submit" />
             <!-- <button @click="upload">Axios-Upload</button> -->
@@ -116,6 +176,7 @@ function getMimeType(file, fallback = null) {
     }
 }
 
+
 export default {
     components: {
         VueTagsInput,
@@ -132,8 +193,46 @@ export default {
             beat: '',
             cover: '',
             title: '',
-        };
+            tag: '',
+            tags: [],
+            tag1: String,
+            tag2: String,
+            tag3: String,
+            tag4: String,
+            tag5: String,
+            bpm: '',
+            keys: [
+                { name: "C"},
+                { name: "Cm"},
+                { name: "DB"},
+                { name: "C#m"},
+                { name: "D"},
+                { name: "Dm"},
+                { name: "Eb"},
+                { name: "D#m"},
+                { name: "E"},
+                { name: "Em"},
+                { name: "F"},
+                { name: "Fm"},
+                { name: "Gb"},
+                { name: "F#m"},
+                { name: "G"},
+                { name: "Gm"},
+                { name: "Ab"},
+                { name: "G#m"},
+                { name: "A"},
+                { name: "Am"},
+                { name: "Bb"},
+                { name: "A#m"},
+                { name: "B"},
+                { name: "Bm"},
+            ],
+            selectedKey: null,
+            type: '',
+            description: '',
+        }
     },
+    
     props: {
         route: String,
         token: String,
@@ -154,11 +253,46 @@ export default {
                     }
                 }
 
+            console.log(this.tags);
+            console.log(this.type);
+
+            //console.log(Object.keys(this.tags).length !== 0);
+            if (Object.keys(this.tags).length >= 1) {
+                this.tag1 = this.tags[0].text;
+            }
+
+            if (Object.keys(this.tags).length >= 2) {
+                this.tag2 = this.tags[1].text;
+            }
+
+            if (Object.keys(this.tags).length >= 3) {
+                this.tag3 = this.tags[2].text;
+            }
+
+            if (Object.keys(this.tags).length >= 4) {
+                this.tag4 = this.tags[3].text;
+            }
+
+            if (Object.keys(this.tags).length >= 5) {
+                this.tag5 = this.tags[4].text;
+            } 
+
             let formData = new FormData();
             formData.append('beat', this.beat);
             formData.append('cover', this.cover);
             formData.append('title', this.title);
             formData.append('userID', this.logedin);
+            formData.append('bpm', this.bpm);
+            formData.append('tag1', this.tag1);
+            formData.append('tag2', this.tag2);
+            formData.append('tag3', this.tag3);
+            formData.append('tag4', this.tag4);
+            formData.append('tag5', this.tag5);
+            formData.append('key', this.key);
+            formData.append('type', this.type);
+            formData.append('description', this.description);
+
+            
 
             axios.post('/api/upload', formData, config)
                     .then(function (response) {
@@ -225,13 +359,28 @@ export default {
 				reader.readAsArrayBuffer(files[0]);
 			}
 		},
-	},
+
+        NumbersOnly(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                evt.preventDefault();;
+        } else {
+            return true;
+        }
+        }, 
+
+        changeKey (event) {
+            this.selectedKey = event.target.options[event.target.options.selectedIndex].text
+        }, 
+    },
+
 	destroyed() {
 		// Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
 		if (this.image.src) {
 			URL.revokeObjectURL(this.image.src)
 		}
-    },
+    }, 
 };
 </script>
 

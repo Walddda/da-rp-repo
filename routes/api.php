@@ -19,6 +19,8 @@ Route::post('upload',  [AxiosController::class, 'upload']);
 
 // Route::group(['middleware' => ['auth']], function () {
 Route::get('beat/like/{id}/{authId}', [LikeController::class, 'likeBeat'])->name('beat.like');
+Route::get('likeCount/{id}', [AxiosController::class, 'likeCount'])->name('likeCount');
+
 // });
 
 //LIkes

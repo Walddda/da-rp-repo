@@ -29,7 +29,7 @@ class BeatController extends Controller
         // $testBeats = Like::whereHasMorph('beats', [Beat::class], function ($query) {
         // $query->where('title', 'tst#title#1');
         // })->get();
-        dd($testBeats);
+        // dd($testBeats);
         $txt = '';
         foreach ($testBeats as $beat) {
             foreach ($beat['likes2'] as $like) {
