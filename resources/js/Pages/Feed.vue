@@ -28,8 +28,8 @@
                 
                 
             </div>
-            <div class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
-                <audio style="display:none" ref="player"  preload="metadata" >
+            <div v-if="files" class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
+                <audio v-if="files" style="display:none" ref="player"  preload="metadata" >
                         <source :src="files[currentPlaying].file_path" type="audio/mp3" v-if="loadedBeats" />
                 </audio>
                 <div class="w-5/12 flex flex-row items-center"> 
@@ -41,6 +41,41 @@
                         <div v-if="files" class="flex justify-between items-center w-full">
                             <span>{{audio.curLength.min}}:<span v-if="audio.curLength.sec <= 9">0</span>{{audio.curLength.sec}}</span>
                             <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-around items-center mt-8 w-full">
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z"/></svg>
+                    </div>
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5h3v10H4V5zm12 0v10l-9-5 9-5z"/></svg>
+                    </div>
+                    <div class="text-white p-8 rounded-full bg-red-light shadow-lg" @click="play" >
+                        <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
+                        <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
+                    </div>
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>
+                    </div>
+                    <div class="text-grey-darker">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
+                <audio style="display:none" ref="player"  preload="metadata" >
+                </audio>
+                <div class="w-5/12 flex flex-row items-center"> 
+                    <img class="box-border h-28 w-28 border-2 border-black" src="/storage/covers/placeholder.jpg" alt="Album Pic">
+                    <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
+                    <div class="w-10/12 px-5 flex flex-col items-center">
+                        <div class="w-full">-</div>
+                        <slider2 class="text-center" v-model="audio.curLength.sum" trackColor="#020203"/>
+                        <div class="flex justify-between items-center w-full">
+                            <span>00:00</span>
+                            <span>00:00</span>
                         </div>
                     </div>
                 </div>
