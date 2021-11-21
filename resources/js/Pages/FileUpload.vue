@@ -186,7 +186,7 @@
         </div>
 
         
-    </div>
+</div>
 </template>
 <script>
 import { Head } from "@inertiajs/inertia-vue3";

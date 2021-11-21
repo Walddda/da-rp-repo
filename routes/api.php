@@ -41,3 +41,6 @@ Route::get('likeCount/{id}', [AxiosController::class, 'likeCount'])->name('likeC
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('/beat/search', 'SearchController@search');
