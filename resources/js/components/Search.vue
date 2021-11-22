@@ -1,44 +1,45 @@
 <template>
     <div>
-        <div>
-            <div class="input-group">
-                <input type="text" v-model="search" class="form-control">
-                <div class="input-group-prepend">
-                    <button @click.prevent="searchBeat()">SEARCH</button>
-                </div>
-            </div>
-        </div>
+        <input type="text" v-model="keywords">
+        <ul v-if="results.length > 0">
+            <!-- <li v-for="result in results" :key="result.id" v-text="result.title"></li> -->
+            <li v-for="(x, k) in results">
+                {{x}}: {{k}}
+                
+            </li>
+        </ul>
     </div>
 </template>
 
 
 <script>
+import Player from '@/Components/Player.vue';
 
 export default {
-    name: 'Search',
 
-    methods: {
-        searchBeat() {
-            fetch('/api/beat/search?q='+this.search)
-            .then(res => res.json())
-            .then(res => {
-                this.results = res
-                this.search = ''
-                this.showsearch = true;
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        }
+    components: {
+        Player,
     }, 
 
-    props: {
-        search: String,
-        results: Array,
-    },
     data() {
         return {
-            showsearch: false,
+            keywords: null,
+            results: []
+        };
+    },
+    watch: {
+        keywords(after, before) {
+            this.fetch();
+        }
+    },
+    methods: {
+        fetch() {
+            axios.get('/api/search', { params: { keywords: this.keywords } })
+                .then(response => {
+                    this.results = response.data;
+                    console.log(this.results);
+                })
+                .catch(error => {console.log("Lol")});
         }
     }
 }

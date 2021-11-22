@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BeatController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\FileUpload;
 use Illuminate\Foundation\Application;
@@ -36,6 +38,13 @@ Route::get('/', function () {
 });
 // ->middleware('guest')
 // ->name('register');
+
+Route::get('/feed', [FeedController::class, 'show']);
+
+
+Route::get('/result', [SearchController::class, 'result']);
+
+Route::get('/myprofile', [ProfileController::class, 'show']);
 
 
 
@@ -82,6 +91,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/profile', function () {
     // Only verified users may access this route...
 })->middleware('verified');
+
 
 // Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);
 

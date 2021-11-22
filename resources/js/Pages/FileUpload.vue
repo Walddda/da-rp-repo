@@ -10,8 +10,9 @@
             <transition name="fade">
                 <div v-if="!isHidden && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                     <span class="material-icons material-icons-outlined m-auto sm:inline" style="font-size:20px">gpp_bad</span>
-                    <strong class="font-bold">Upload error </strong>
-                    <span class="block sm:inline">{{error}}</span>
+                    <strong class="font-bold">Upload error<span v-if="error.length > 1">s</span>{{error.length}}: </strong>
+                    <span class="block sm:inline" v-if="error.length < 2">{{error}}</span>
+                    <span class="block sm:inline" v-else v-for="e in error">{{e[0]}}lol<br></span>
                     <button v-on:click="hide">
                         <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
                             <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
@@ -107,7 +108,7 @@
                     id="chooseFile"
                     accept="audio/mp3"
                     v-on:change="onBeatChange"
-                    required
+                    
                 />
                 <label class="custom-file-label" for="chooseFile"
                     >Select Beat</label
@@ -233,18 +234,13 @@ export default {
             beat: '',
             cover: '',
             coverType: '',
-            title: '',
+            title: 'testTitle',
             tag: '',
             tags: [],
-            tag1: String,
-            tag2: String,
-            tag3: String,
-            tag4: String,
-            tag5: String,
-            bpm: '',
+            bpm: '1232',
             keys: ["C", "Cm", "Db", "C#m", "D", "Dm", "Eb", "D#m", "E", "Em", "F", "Fm", "Gb", "F#m", "G", "Gm", "Ab", "G#m", "A", "Am", "Bb", "A#m", "B", "Bm"],
-            selectedKey: null,
-            type: '',
+            selectedKey: '',
+            type: 'beat',
             description: '',
             error: '',
             success: null,
@@ -277,42 +273,6 @@ export default {
                     },
                 }
 
-            // console.log(this.coverType);
-
-            // console.log(this.tags);
-            // console.log(this.type);
-
-            //console.log(Object.keys(this.tags).length !== 0);
-            if (Object.keys(this.tags).length >= 1) {
-                this.tag1 = this.tags[0].text;
-            } else {
-                this.tag1 = null;
-            }
-
-            if (Object.keys(this.tags).length >= 2) {
-                this.tag2 = this.tags[1].text;
-            } else {
-                this.tag2 = null;
-            }
-
-            if (Object.keys(this.tags).length >= 3) {
-                this.tag3 = this.tags[2].text;
-            } else {
-                this.tag3 = null;
-            }
-
-            if (Object.keys(this.tags).length >= 4) {
-                this.tag4 = this.tags[3].text;
-            } else {
-                this.tag4 = null;
-            }
-
-            if (Object.keys(this.tags).length >= 5) {
-                this.tag5 = this.tags[4].text;
-            } else {
-                this.tag5 = null;
-            }
-
             let formData = new FormData();
             formData.append('beat', this.beat);
 
@@ -320,16 +280,16 @@ export default {
                 formData.append('cover', this.cover);
             }
 
+            var tagsFin = [];
+            Object.values(this.tags).forEach(e => {
+                tagsFin.push(e.text)
+            });
 
 
             formData.append('title', this.title);
             formData.append('userID', this.logedin);
             formData.append('bpm', this.bpm);
-            formData.append('tag1', this.tag1);
-            formData.append('tag2', this.tag2);
-            formData.append('tag3', this.tag3);
-            formData.append('tag4', this.tag4);
-            formData.append('tag5', this.tag5);
+            formData.append('tagsArr', tagsFin);
             formData.append('selectedKey', this.selectedKey);
             formData.append('type', this.type);
             formData.append('description', this.description);
@@ -349,6 +309,13 @@ export default {
                             console.log(currentObj.success)
                         }
                     })
+                    .catch(error => {
+                        currentObj.error = error.response.data.errors
+                        currentObj.success = null
+                        console.log(error.response.data); // logs an object to the console
+
+                        // Do something with error data
+                    });
         },
         onBeatChange(e) {
                 //console.log(e.target.files[0]);

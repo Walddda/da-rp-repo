@@ -41,7 +41,7 @@ class setupData extends Command
      */
     public function handle()
     {
-        $this->line('Display this on the screen');
+        // $this->line('Display this on the screen');
         $defCover = new Cover;
         $defCover->name = time() . '_placeholder.jpg';
         $defCover->cover_path = '/storage/covers/placeholder.jpg';
@@ -55,10 +55,10 @@ class setupData extends Command
         $user->username = 'admin';
         $user->password = Hash::make('VwW2KPh^fA4oy@8yTBsWW');
         $user->save();
-        $this->line('Display this on the screen2');
+        // $this->line('Display this on the screen2');
 
         $this->info('The command was successful!');
-        $this->error('Something went wrong!');
+        // $this->error('Something went wrong!');
 
         return Command::SUCCESS;
     }

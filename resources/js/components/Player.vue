@@ -53,7 +53,7 @@
 						<span v-if="track.is_beat.tag2">{{track.is_beat.tag2}}</span><br>
 						<span v-if="track.is_beat.tag3">{{track.is_beat.tag3}}</span><br>
 						<span v-if="track.is_beat.tag4">{{track.is_beat.tag4}}</span><br>
-						<span v-if="track.is_beat.tag5 !== null">{{track.is_beat.tag5}}</span><br>	
+						<span v-if="track.is_beat.tag5">{{track.is_beat.tag5}}</span><br>
 					</div>
 				</div>
 			</div>

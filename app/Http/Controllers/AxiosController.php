@@ -12,6 +12,7 @@ class AxiosController extends Controller
     public function getTracks(Request $request)
     {
         $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')->get()->toArray();
+        echo (response()->json($files));
         return response()->json($files);
     }
 
@@ -36,9 +37,14 @@ class AxiosController extends Controller
         // dd($req);
         $req->validate([
             'beat' => 'required|max:10240',
-            'cover' => 'mimes:png,jpg'
+            'cover' => 'mimes:png,jpg',
+            'title' => 'required|max:255',
+            'type' => array('required', 'regex:/(sample|beat)/'),
+            'bpm' => array('required', 'regex:/\d+/'),
         ]);
 
+        // 'type' => 'required|regex:(sample|beat)',
+        // 'bpm' => 'required|regex:(\d*)',
 
 
         $fileModel = new File;
@@ -82,15 +88,16 @@ class AxiosController extends Controller
                 $coverId = 1;
             }
 
-
+            $tagsSplit = explode(',', $req->input('tagsArr'));
+            // dd(explode(',', $req->input('tagsArr')));
 
             $beatModel->title = htmlspecialchars($req->input('title'));
             $beatModel->type = htmlspecialchars($req->input('type'));
-            $beatModel->tag1 = htmlspecialchars($req->input('tag1'));
-            $beatModel->tag2 = htmlspecialchars($req->input('tag2'));
-            $beatModel->tag3 = htmlspecialchars($req->input('tag3'));
-            $beatModel->tag4 = htmlspecialchars($req->input('tag4'));
-            $beatModel->tag5 = htmlspecialchars($req->input('tag5'));
+
+            // $tagnames = array('tag1');
+            foreach ($tagsSplit as $key => $value) {
+                $beatModel->{'tag' . $key + 1} = $value;
+            }
             $beatModel->key = htmlspecialchars($req->input('selectedKey'));
             $beatModel->description = htmlspecialchars($req->input('description'));
             $beatModel->bpm = htmlspecialchars($req->input('bpm'));

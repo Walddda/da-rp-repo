@@ -4,10 +4,12 @@ use App\Http\Controllers\AxiosController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\SearchController;
 
 
 Route::get('beats',  [AxiosController::class, 'getTracks']);
 Route::post('upload',  [AxiosController::class, 'upload']);
+Route::get('search', [SearchController::class, 'search']);
 
 // Route::middleware(['auth:api'])->group(function () {
 
@@ -41,6 +43,3 @@ Route::get('likeCount/{id}', [AxiosController::class, 'likeCount'])->name('likeC
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-
-Route::get('/beat/search', 'SearchController@search');
