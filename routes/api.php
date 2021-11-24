@@ -9,7 +9,6 @@ use App\Http\Controllers\SearchController;
 
 Route::get('beats',  [AxiosController::class, 'getTracks']);
 Route::post('upload',  [AxiosController::class, 'upload']);
-Route::get('search', [SearchController::class, 'search']);
 
 // Route::middleware(['auth:api'])->group(function () {
 

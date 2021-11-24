@@ -43,9 +43,24 @@ class setupData extends Command
     {
         // $this->line('Display this on the screen');
         $defCover = new Cover;
-        $defCover->name = time() . '_placeholder.jpg';
-        $defCover->cover_path = '/storage/covers/placeholder.jpg';
+        $defCover->name = time() . '_placeholder_1.jpg';
+        $defCover->cover_path = '/storage/covers/placeholder_1.jpg';
         $defCover->save();
+
+        $defCover1 = new Cover;
+        $defCover1->name = time() . '_placeholder_2.jpg';
+        $defCover1->cover_path = '/storage/covers/placeholder_2.jpg';
+        $defCover1->save();
+
+        $defCover2 = new Cover;
+        $defCover2->name = time() . '_placeholder_3.jpg';
+        $defCover2->cover_path = '/storage/covers/placeholder_3.jpg';
+        $defCover2->save();
+
+        $defCover3 = new Cover;
+        $defCover3->name = time() . '_placeholder_4.jpg';
+        $defCover3->cover_path = '/storage/covers/placeholder_4.jpg';
+        $defCover3->save();
 
         $user = new User;
         $user->first_name = 'admin';

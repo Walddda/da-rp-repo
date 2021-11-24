@@ -34,7 +34,7 @@
                 </div>
             </transition>
 
-            <input type="hidden" name="_token" v-bind:value="token" />
+            <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
 
             <div class="custom-file">
                 <input
@@ -251,7 +251,6 @@ export default {
     
     props: {
         route: String,
-        token: String,
         file1: String,
         file2: String,
         logedin: Number,

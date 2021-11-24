@@ -11,9 +11,30 @@ class AxiosController extends Controller
 {
     public function getTracks(Request $request)
     {
-        $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')->get()->toArray();
-        echo (response()->json($files));
-        return response()->json($files);
+        if (!$request->keywords) {
+            $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')->get()->toArray();
+            return response()->json($files);
+        } else {
+            $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
+                ->has('isBeat.fromUser')
+                ->join('beats', function ($join) {
+                    $join->on('beats.id', '=', 'files.beat_id');
+                })
+                ->where('beats.title', 'LIKE', '%' . $request->keywords . '%')
+                ->get()
+                ->toArray();
+            // $res = Beat::where('title', 'LIKE', '%' . $request->keywords . '%')
+            //     ->join('files', function ($join) use ($request) {
+            //         $join->on('beats.id', '=', 'files.beat_id');
+            //     })
+            //     ->get()
+            //     ->toArray();
+            return response()->json($res);
+        }
+    }
+
+    public function search()
+    {
     }
 
     public function likeCount($id, Request $request)

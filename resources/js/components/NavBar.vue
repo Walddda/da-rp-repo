@@ -15,21 +15,29 @@
             <img class="block lg:hidden h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow" />
             <img class="hidden lg:block h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow" />
           </div>
+
+          
           <div class="hidden sm:block sm:ml-6">
             <div class="flex space-x-4">
               <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
             </div>
           </div>
         </div>
+
+        <search :keywords="searchTerm"></search>
         <div v-if="$page.props.auth.user" class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           <button type="button" class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
             <span class="sr-only">View notifications</span>
             <UploadIcon class="h-6 w-6" aria-hidden="true"  @click="this.emitter.emit('openPopupUpload')"/>
           </button>
 
+          
+
             <div>
               <label class="text-gray-400"> {{ $page.props.auth.user.username }} </label>
             </div>
+
+          
 
           <!-- Profile dropdown -->
           <Menu as="div" class="ml-3 relative">
@@ -52,7 +60,7 @@
                 <MenuItem v-slot="{ active }">
                   <a :href="route('logout')" method="post" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Logout</a>
                 </MenuItem>-->
-                <BreezeDropdownLink >
+                <BreezeDropdownLink :href="route('myprofile')" >
                   My Profile 
                 </BreezeDropdownLink>
                 <BreezeDropdownLink>
@@ -79,6 +87,7 @@
       </div>
     </DisclosurePanel>
   </Disclosure>
+  
 </template>
 
 
@@ -93,6 +102,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import BreezeDropdownLink from '@/Components/DropdownLink.vue'
 
 import { UploadIcon, MenuIcon, XIcon } from '@heroicons/vue/outline';
+import Search from '@/Components/Search.vue';
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -118,11 +128,14 @@ export default {
         MenuIcon,
         XIcon,
         BreezeDropdownLink,
+        Search
     },
 
     props: {
         canLogin: Boolean,
         canRegister: Boolean,
+        logedin: Number,
+        searchTerm: String,
     },
 
     data() {

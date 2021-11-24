@@ -42,4 +42,13 @@ class FeedController extends Controller
             'logedIn' => Auth::id(),
         ]);
     }
+
+    public function foreignSearch(Request $req, $log, $reg)
+    {
+        return Inertia::render('Feed', [
+            'canLogin' => $log,
+            'canRegister' => Route::has('register'),
+            'searchTerm' => $req->input('searchTerm'),
+        ]);
+    }
 }

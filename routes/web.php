@@ -4,11 +4,13 @@ use App\Http\Controllers\BeatController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUpload;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +35,16 @@ Route::get('/feed', [FeedController::class, 'show']);
 Route::get('/', function () {
     return Inertia::render('Feed', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register')
+        'canRegister' => Route::has('register'),
+        'token' => csrf_token(),
+    ]);
+});
+Route::post('/', function (Request $req) {
+    return Inertia::render('Feed', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'token' => csrf_token(),
+        'searchTerm' => $req->input('searchTerm'),
     ]);
 });
 // ->middleware('guest')
@@ -42,10 +53,8 @@ Route::get('/', function () {
 Route::get('/feed', [FeedController::class, 'show']);
 
 
-Route::get('/result', [SearchController::class, 'result']);
-
-Route::get('/myprofile', [ProfileController::class, 'show']);
-
+Route::get('/myprofile', [UserController::class, 'show']);
+Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile')->middleware(['auth', 'verified']);
 
 
 // Routes for Auth-Pages
@@ -56,6 +65,10 @@ Route::get('/old', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+});
+
+Route::get('/wallet', function () {
+    return Inertia::render('Wallet', []);
 });
 
 Route::get('/dashboard', function () {

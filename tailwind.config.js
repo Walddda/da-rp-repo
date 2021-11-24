@@ -1,3 +1,5 @@
+
+
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
@@ -9,6 +11,13 @@ module.exports = {
         './resources/js/**/*.vue',
     ],
 
+
+    /*
+    <link rel="stylesheet" href="https://use.typekit.net/rjj3aqh.css">
+
+    */
+
+    
     theme: {
         extend: {
             fontFamily: {

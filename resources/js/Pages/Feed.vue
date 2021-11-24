@@ -1,11 +1,16 @@
 <template>
     <div>
-        <Head title="Test" />
-        <search></search>
+        <Head title="Home" />
+
+        <home-page v-if="!$page.props.auth.user"></home-page>
         
-            <nav-bar :canLogin="canLogin" :canRegister="canRegister"></nav-bar>
+            <nav-bar :canLogin="canLogin" :canRegister="canRegister" :searchTerm="searchTerm"></nav-bar>
+                <audio v-if="files" style="display:none" ref="player"  preload="metadata" >
+                    <source type="audio/mp3"/>
+                </audio>
         <div>
-            {{logedIn}} ---{{this.$page.props.auth.user.id}}
+            <!-- {{$page.props}} -->
+            <!-- {{logedIn}} ---{{this.$page.props.auth.user.id}} -->
             <div v-if="files">
                 <div class="container mb-96 mt-10 flex mx-auto w-full items-center justify-center">
                     <ul class="flex flex-col p-4">
@@ -19,9 +24,9 @@
                             </div>
                         </li> -->
 
-                        <li v-for="(x, k) in files" >
-                            <player v-if="k == currentPlaying" :track="x" :numb="k" :rn="playing" :info="info" current/>
-                            <player v-else :track="x" :numb="k" :info="info" />
+                        <li v-for="(x, k) in files">
+                            <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" current/>
+                            <player v-else :track="x" :numb="k+1" :info="info" />
                         </li>
                     </ul>
                 </div>
@@ -29,49 +34,36 @@
                 
                 
             </div>
-            <div v-if="files" class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
-                <audio v-if="files" style="display:none" ref="player"  preload="metadata" >
-                        <source :src="files[currentPlaying].file_path" type="audio/mp3" v-if="loadedBeats" />
-                </audio>
+            <div v-else-if="!files & !loading & !searchEmpty">Sowwy there are no files</div>
+            <div v-if="searchEmpty">Sowwy there are no files with that search</div>
+
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
+
+
+
+            <div v-if="currentPlaying" class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
                 <div class="w-5/12 flex flex-row items-center"> 
-                    <img  v-if="files" class="box-border h-28 w-28 border-2 border-black" :src="files[currentPlaying].is_beat.get_cover.cover_path" alt="Album Pic">
+                    <img class="box-border h-28 w-28 border-2 border-black" :src="files[currentPlaying-1].is_beat.get_cover.cover_path" alt="Album Pic">
                     <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
                     <div class="w-10/12 px-5 flex flex-col items-center">
-                        <div class="w-full" v-if="files">{{files[currentPlaying].is_beat.title}} - {{files[currentPlaying].is_beat.from_user.username}}</div>
+                        <div class="w-full" v-if="files">{{files[currentPlaying-1].is_beat.title}} - {{files[currentPlaying-1].is_beat.from_user.username}}</div>
                         <slider2 v-if="files" class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick"/>
                         <div v-if="files" class="flex justify-between items-center w-full">
                             <span>{{audio.curLength.min}}:<span v-if="audio.curLength.sec <= 9">0</span>{{audio.curLength.sec}}</span>
                             <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="flex justify-around items-center mt-8 w-full">
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z"/></svg>
-                    </div>
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5h3v10H4V5zm12 0v10l-9-5 9-5z"/></svg>
-                    </div>
                     <div class="text-white p-8 rounded-full bg-red-light shadow-lg" @click="play" >
                         <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
                         <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
                     </div>
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>
-                    </div>
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
-                    </div>
                 </div>
             </div>
-            <div v-else class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
-                <audio style="display:none" ref="player"  preload="metadata" >
-                </audio>
+            <!-- <div v-else class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
                 <div class="w-5/12 flex flex-row items-center"> 
-                    <img class="box-border h-28 w-28 border-2 border-black" src="/storage/covers/placeholder.jpg" alt="Album Pic">
+                    <img class="box-border h-28 w-28 border-2 border-black" src="/storage/covers/placeholder.jpg" alt="Album Pic">-->
                     <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
-                    <div class="w-10/12 px-5 flex flex-col items-center">
+                    <!-- <div class="w-10/12 px-5 flex flex-col items-center">
                         <div class="w-full">-</div>
                         <slider2 class="text-center" v-model="audio.curLength.sum" trackColor="#020203"/>
                         <div class="flex justify-between items-center w-full">
@@ -79,27 +71,11 @@
                             <span>00:00</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="flex justify-around items-center mt-8 w-full">
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M6.59 12.83L4.4 15c-.58.58-1.59 1-2.4 1H0v-2h2c.29 0 .8-.2 1-.41l2.17-2.18 1.42 1.42zM16 4V1l4 4-4 4V6h-2c-.29 0-.8.2-1 .41l-2.17 2.18L9.4 7.17 11.6 5c.58-.58 1.59-1 2.41-1h2zm0 10v-3l4 4-4 4v-3h-2c-.82 0-1.83-.42-2.41-1l-8.6-8.59C2.8 6.21 2.3 6 2 6H0V4h2c.82 0 1.83.42 2.41 1l8.6 8.59c.2.2.7.41.99.41h2z"/></svg>
+                    <div class="text-white p-8 rounded-full bg-red-light shadow-lg">
+                        <svg class="w-8 h-8" fill="grey" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
                     </div>
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5h3v10H4V5zm12 0v10l-9-5 9-5z"/></svg>
-                    </div>
-                    <div class="text-white p-8 rounded-full bg-red-light shadow-lg" @click="play" >
-                        <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
-                        <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
-                    </div>
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 5h3v10h-3V5zM4 5l9 5-9 5V5z"/></svg>
-                    </div>
-                    <div class="text-grey-darker">
-                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4a2 2 0 0 0-2 2v6H0l4 4 4-4H5V6h7l2-2H5zm10 4h-3l4-4 4 4h-3v6a2 2 0 0 1-2 2H6l2-2h7V8z"/></svg>
-                    </div>
-                </div>
-            </div>
+                </div> 
+            </div>-->
         </div>
             <upload v-if="showPopupUpload"></upload>
     </div>
@@ -109,12 +85,12 @@
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import Player from '@/Components/Player.vue';
-  import Slider from '@vueform/slider'
-  import Slider2 from "vue3-slider"
+import Slider from '@vueform/slider'
+import Slider2 from "vue3-slider"
 import axios from 'axios';
 import NavBar from '@/Components/NavBar.vue'
 import Upload from '@/Components/PopupUpload.vue'
-import Search from '@/Components/Search.vue'
+import HomePage from '@/Components/HomePage.vue'
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
 // import 'vue-slider-component/dist-css/vue-slider-component.css'
@@ -128,7 +104,7 @@ export default {
         Slider2,
         NavBar,
         Upload,
-        Search
+        HomePage,
     },
 
     props: { 
@@ -137,6 +113,7 @@ export default {
         canLogin: Boolean,
         canRegister: Boolean,
         logedIn: Number,
+        searchTerm: {type: String, default: ''},
     },
 
     data() {
@@ -145,7 +122,7 @@ export default {
             loadedBeats: false,
             rendered: false,
             playing: false,
-            currentPlaying: 0,
+            currentPlaying: null,
             audio: {
                 length: {min:0,sec:0, sum:1},
                 curLength: {min:0,sec:0, sum:0},
@@ -154,20 +131,32 @@ export default {
             value: 20,
             showPopupUpload: false,
             info: null,
+            loading: true,
+            searchEmpty: false,
+            searchFocus: false,
         };
     },
     created() {
     },
     methods: {
-        getTracks(){
-            console.log('start');
-            axios.get('/api/beats')
+        getTracks(term = this.searchTerm){
+            this.searchEmpty = false;
+            console.info('start');
+            axios.get('/api/beats', { params: { keywords: term } })
             .then(response => {
-                this.files = response.data
-                console.log('finish: ');
-                console.log(response.data);
-                this.loadedBeats = true;
-                console.log(this.$refs.player)
+                if(!response.data.length){
+                    console.info('empty')
+                    this.searchEmpty = true;
+                    this.loading = false;
+                }else{
+                    this.files = response.data
+                    console.info('finish: ');
+                    console.info(response.data);
+                    this.loadedBeats = true;
+                    console.info(this.$refs.player)
+                    this.loading = false;
+
+                }
             })
         },
         play(){
@@ -176,10 +165,17 @@ export default {
             this.getLength()
         },
 
-        toggleAudio(){
-            var audio = this.$refs.player;
-            if (audio.paused) {audio.play()}
-            else {audio.pause()}
+        toggleAudio(){         
+            var player = this.$refs.player;
+            player.volume = 1.0;
+            console.warn(player.getAttribute("src"))
+            try {
+                if (player.paused) {player.play()}
+            else {player.pause()}
+            } catch (err) {
+                console.error(err);
+                console.error('r182 - sooooowy')
+            }
         },
 
         getLength(){
@@ -214,37 +210,35 @@ export default {
                 }  
             }
         },
-
         updateCurTime($event){
             // console.log($event);
             this.$refs.player.currentTime = $event;
             // this.getCurrentTime()
         },
-
         testClick($event){
-            console.log($event)
-            console.log($event.layerX);
-            console.log($event.srcElement.offsetParent.clientWidth);
-            console.log(this.audio.length.sum);
+            // console.log($event)
+            // console.log($event.layerX);
+            // console.log($event.srcElement.offsetParent.clientWidth);
+            // console.log(this.audio.length.sum);
             var disc = $event.srcElement.offsetParent.clientWidth/this.audio.length.sum;
             // console.log('disc '+disc)
             var calc = $event.layerX/disc
             // console.log('spould '+calc)
             this.$refs.player.currentTime = calc;
-            console.log(this.$refs.player);
-            console.log('--------------------------'+calc)
+            // console.log(this.$refs.player);
+            // console.log('--------------------------'+calc)
         },
         changeCurTime(value){
             // this.audio.curLength.sum += value;
             this.$refs.player.currentTime += value;
-            console.log('yeha')
+            // console.log('r239')
         }
     },
     mounted() {    
-        this.$nextTick(function () {
-            this.rendered = true;
-        })
-        this.getTracks();
+        // this.$nextTick(function () {
+        //     this.rendered = true;
+        // })
+        this.getTracks(this.searchTerm);
 
         this.getCurrentTime();
         setInterval(this.getCurrentTime, 100);
@@ -263,56 +257,108 @@ export default {
             }
         });
         this.emitter.on("play-pause", numb => {
-            this.getLength()
-            if(this.currentPlaying == numb || !this.playing){
+            if(this.currentPlaying === null){
+                // console.log('r266')
+                this.currentPlaying = numb;
+            }
+            else if(this.currentPlaying == numb || !this.playing){
+                this.currentPlaying = numb;
                 this.playing = !this.playing;
                 this.toggleAudio();
+                // console.log('r273')
             }
             this.currentPlaying = numb;
+            this.getLength()
             // console.log(text);
         });
         this.emitter.on("closePopupUpload", () => {
             this.showPopupUpload = false;
-            console.log('cl')
+            console.info('cl')
         });
         this.emitter.on("openPopupUpload", () => {
             this.showPopupUpload = true;
-            console.log('op')
+            console.info('op')
         });
+        this.emitter.on('upload-success',() =>{
+            this.getTracks();
+        })
+
+        this.emitter.on("search", term => {
+            this.files = null
+            this.loading = true;
+            this.getTracks(term);
+            // console.log(text);
+        });
+        this.emitter.on("focus", bool =>{
+            this.searchFocus = bool;
+        })
+
         this.$watch('currentPlaying', () => {
                 this.getLength()
-                if(this.$refs.player){
-                this.$refs.player.load()}
-                console.log('heyy');
-                this.playing = true;
-                this.toggleAudio();
+                // console.log('r301')
+                if(this.currentPlaying){
+                    console.warn(this.currentPlaying);
+                    this.$refs.player.src = this.files[this.currentPlaying-1].file_path;
+                    this.$refs.player.load()
+                    // console.log('r305');
+                    this.playing = true;
+                    this.toggleAudio();
+                    // console.log('r308')
+                }
+
             });
-        this.$watch('loadedBeats', () => {
-                if(this.rendered){
-                this.$refs.player.load()
-                console.log('heyy222');
-                this.getLength()}
-            })
-        this.$watch('rendered', () => {
-                if(this.loadedBeats){
-                this.$refs.player.load()
-                console.log('heyy3332');
-                this.getLength()}
-            })
+        // this.$watch('loadedBeats', () => {
+        //         if(this.rendered && this.$refs.player){
+        //         this.$refs.player.load()
+        //         console.log('r315');
+        //         this.getLength()}
+        //     })
+        // this.$watch('rendered', () => {
+        //         if(this.loadedBeats){
+        //         this.$refs.player.load()
+        //         console.log('r321');
+        //         this.getLength()}
+        //     })
 
         
         window.addEventListener('keydown', (e) => {
-            // console.log(e.key +' - '+ e.keyCode);
-        if (e.key === 'Spacebar' || e.keyCode === 32) {
-            this.play();
-        }else if (e.key === 'ArrowLeft' || e.keyCode === 37) {
-            this.changeCurTime(-10);
-        }else if (e.key === 'ArrowRight' || e.keyCode === 39) {
-            this.changeCurTime(10);
-        }
+            // console.log(e.key +' - '+ e.keyCode); 
+            if(!this.searchFocus && !this.showPopupUpload && this.currentPlaying){
+                if (e.key === 'Spacebar' || e.keyCode === 32) {
+                        this.play();
+                }else if (e.key === 'ArrowLeft' || e.keyCode === 37) {
+                    this.changeCurTime(-10);
+                }else if (e.key === 'ArrowRight' || e.keyCode === 39) {
+                    this.changeCurTime(10);
+                }
+            }
         });
     }
 };
 </script>
 
 <style src="@vueform/slider/themes/default.css"></style>
+
+<style scoped>
+.loader {
+  border-top-color: #3498db;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.testFont {
+    font-family: basic-sans,sans-serif;
+    font-weight: 900;
+    font-style: italic;
+}
+</style>

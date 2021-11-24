@@ -16,7 +16,6 @@ class FileUpload extends Controller
         // return view('file-upload');
         return Inertia::render('FileUpload', [
             'route' => route('fileUpload'),
-            'token' => csrf_token(),
             'logedin' => Auth::id(),
         ]);
     }
@@ -72,7 +71,6 @@ class FileUpload extends Controller
                 'success' => 'File has been uploaded.',
                 'file1' => htmlspecialchars($fileName),
                 'file2' => htmlspecialchars($coverName),
-                'token' => csrf_token(),
                 'logedin' => Auth::id(),
             ]);
         }

@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "build": "postcss tailwind.source.css -o public/build/tailwind.css",
         "dev": "npm run development",
         "development": "mix",
         "watch": "mix watch",
@@ -46,8 +47,10 @@
         "vue-advanced-cropper": "^2.6.3",
         "vue-headless-ui": "0.0.16-alpha.1",
         "vue-material": "^1.0.0-beta-15",
+        "vue-metamask": "^2.1.0",
         "vue-slider-component": "^3.2.15",
         "vue3-slider": "^1.6.6",
-        "vuelidate": "^0.7.6"
+        "vuelidate": "^0.7.6",
+        "web3": "^1.6.1"
     }
 }
