@@ -38,15 +38,24 @@
                 <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"  />
             </div>
 
+            <div class="flex mt-6">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox" v-model="wallet" name="wallet">
+                    <span class="ml-2">Connect <span class="underline"><a href="https://metamask.io/" target="_blank">Metamask Wallet</a></span></span>
+                </label>
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
                     Already registered?
                 </Link>
 
-                <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <BreezeButton @click="loginWeb3" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Register
                 </BreezeButton>
             </div>
+
+            
         </form>
     </div>
 </template>
@@ -57,7 +66,8 @@ import BreezeGuestLayout from '@/Layouts/Guest.vue'
 import BreezeInput from '@/Components/Input.vue'
 import BreezeLabel from '@/Components/Label.vue'
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue'
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link, useForm } from '@inertiajs/inertia-vue3'
+import Web3 from 'web3/dist/web3.min.js'
 
 export default {
     layout: BreezeGuestLayout,
@@ -81,7 +91,8 @@ export default {
                 password: 'Hallo123',
                 password_confirmation: 'Hallo123',
                 terms: false,
-            })
+            }),
+            wallet: false,
         }
     },
 
@@ -90,6 +101,25 @@ export default {
             this.form.post(this.route('register'), {
                 onFinish: () => this.form.reset('password', 'password_confirmation'),
             })
+        },
+        async loginWeb3() {
+            if (this.wallet) {
+                if (! window.ethereum) {
+                    alert('MetaMask not detected. Please try again from a MetaMask enabled browser.')
+                }
+
+                const web3 = new Web3(window.ethereum);
+
+                const message = [
+                    "I have read and accept the terms and conditions of this app.",
+                    "Please sign me in!"
+                ].join("\n")
+
+                const address = (await web3.eth.requestAccounts())[0]
+                const signature = await web3.eth.personal.sign(message, address)
+
+                return useForm({ message, address, signature }).post(this.route('wallet'))
+            }
         }
     }
 }

@@ -2,12 +2,12 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <div class="bg-blurr" @click="close()">
         <div class="popup" @click.stop>
-            {{$page.props.auth.user}}
+            <!-- {{$page.props.auth.user}} -->
             <div class="container" style="margin-top: 50px">
         <!-- <form v-if="logedin" :action="route" method="post" enctype="multipart/form-data">upload -->
-            <form v-if="$page.props.auth.user" @submit="upload" enctype="multipart/form-data">
-            <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
-                <h3>Upload File</h3>
+            <form class="main-form" v-if="$page.props.auth.user" @submit="upload" enctype="multipart/form-data">
+                <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
+                <h3>Upload</h3>
                 
                 <transition name="fade">
                     <div v-if="!isHidden && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -36,18 +36,16 @@
                     </div>
                 </transition>
 
-                <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
-
-                <div class="custom-file">
+                <div class="">
+                <label class="custom-text-label" for="title">Title</label>
                     <input
                         type="text"
                         name="beatTitle"
-                        class="custom-text-input"
+                        class="custom-text-input main-text-input half"
                         id="title"
                         required
                         v-model="title"
                     />
-                    <label class="custom-text-label" for="title">Title</label>
                 </div>
 
                 <div class="block">
@@ -316,8 +314,8 @@ export default {
                             currentObj.error = response.data.error
                             currentObj.success = null
                             console.log(currentObj.error)
-                            this.emitter.emit('upload-success');
                         }else if (response.data.success) {
+                            currentObj.emitter.emit('upload-success');
                             currentObj.success = response.data.success
                             currentObj.error = null
                             console.log(currentObj.success)

@@ -1,0 +1,28 @@
+.fullPlayer {
+    display: flex;
+    flex-direction: row;
+    margin: 38.5px;
+    box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 20px;
+    background-color: #e6e6e6;
+    width: min-content;
+}
+.playerControl {
+    background-color: #e6e6e6;
+    border-radius: 0px 20px 20px 0px;
+}
+.playerInfo {
+    background-color: #e6e6e6;
+    border-radius: 0px 20px 20px 0px;
+}
+.playerImgBox {
+}
+.playerImg {
+    border-radius: 20px 0px 0px 20px;
+}
+.artistName {
+    font-size: 20px;
+}
+.trackName {
+    font-size: 24px;
+}

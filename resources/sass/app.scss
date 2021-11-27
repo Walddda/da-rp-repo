@@ -1,8 +1,79 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+// @import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
+
+@import "player";
+@import "form";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+// @import "~bootstrap/scss/bootstrap";
+
+// // @import "node_modules/foundation-sites/assets/foundation.scss";
+
+* {
+    font-family: $font-family;
+    font-weight: $font-weight;
+}
+
+.nav-temp {
+    position: fixed;
+    top: 0;
+}
+
+/* SCROLLBAR FÜR ALLES AUSSER FIREFOX */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #e7e7e7;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* SCROLLBAR FÜR  FIREFOX */
+
+/*-------------------------------------------------------*/
+.background-image {
+    background-image: url($main-bg);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.background-image > div {
+    padding-left: 150px;
+    // z-index: 1;
+}
+.background-image > div > div {
+    // z-index: -1;
+}
+
+.but-main {
+    border-radius: 15px;
+    padding: 10px 30px;
+    font-size: 44px;
+    font-weight: $regular;
+}
+
+.cta-main {
+    background-color: $rp-purple;
+    color: white;
+}
+
+.heading-feed {
+    font-size: 133px;
+    font-weight: $semibold;
+    color: white;
+}
+
+.nav-link {
+    font-size: 32px;
+    font-weight: $regular;
+    color: white;
+}

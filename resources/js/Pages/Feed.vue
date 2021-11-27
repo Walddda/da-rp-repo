@@ -1,19 +1,34 @@
+<style lang="scss">
+    // @import './app.scss';
+</style>
 <template>
     <div>
         <Head title="Home" />
 
-        <home-page v-if="!$page.props.auth.user"></home-page>
+        <div class="background-image "><!-- Foto von Dmitry Demidov von Pexels -->
+            <div class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
+                <div :style="{opacity: (1-backgroundOp)}">
+                <p class="heading-feed">Start selling<br>
+                your beats now</p>
+                <button class="cta-main but-main mt-4">get started</button>
+                </div>
+            </div>
+        </div>
+        <!-- <home-page v-if="!$page.props.auth.user"></home-page> -->
         
-            <nav-bar :canLogin="canLogin" :canRegister="canRegister" :searchTerm="searchTerm"></nav-bar>
-                <audio v-if="files" style="display:none" ref="player"  preload="metadata" >
-                    <source type="audio/mp3"/>
-                </audio>
+        <nav-bar-new :backgroundOp="backgroundOp"></nav-bar-new>
+
+            <!-- <nav-bar :canLogin="canLogin" :canRegister="canRegister" :searchTerm="searchTerm"></nav-bar> -->
+
+            <audio v-if="files" style="display:none" ref="player"  preload="metadata" >
+                <source type="audio/mp3"/>
+            </audio>
         <div>
             <!-- {{$page.props}} -->
             <!-- {{logedIn}} ---{{this.$page.props.auth.user.id}} -->
             <div v-if="files">
                 <div class="container mb-96 mt-10 flex mx-auto w-full items-center justify-center">
-                    <ul class="flex flex-col p-4">
+                    <ul class="flex flex-col p-4 grid justify-items-center">
                         <!-- <li 
                             v-for="x in files" 
                             class="border-gray-400 flex flex-row my-5">
@@ -89,6 +104,7 @@ import Slider from '@vueform/slider'
 import Slider2 from "vue3-slider"
 import axios from 'axios';
 import NavBar from '@/Components/NavBar.vue'
+import NavBarNew from '@/Components/NavBarNew.vue'
 import Upload from '@/Components/PopupUpload.vue'
 import HomePage from '@/Components/HomePage.vue'
 //   import VueSlider from 'vue-slider-component'
@@ -103,6 +119,7 @@ export default {
         Slider,
         Slider2,
         NavBar,
+        NavBarNew,
         Upload,
         HomePage,
     },
@@ -134,9 +151,14 @@ export default {
             loading: true,
             searchEmpty: false,
             searchFocus: false,
+        backgroundOp: 0,
         };
     },
-    created() {
+    created () {
+        window.addEventListener('scroll', this.onScroll);
+    },
+    destroyed () {
+        window.removeEventListener('scroll', this.onScroll);
     },
     methods: {
         getTracks(term = this.searchTerm){
@@ -232,7 +254,23 @@ export default {
             // this.audio.curLength.sum += value;
             this.$refs.player.currentTime += value;
             // console.log('r239')
-        }
+        },
+        onScroll (event) {
+            if(window.scrollY <= 840){
+                // if(window.scrollY > this.lastScroll){
+                //     this.backgroundOp += 0.01
+                // }else{
+                //     this.backgroundOp -= 0.01
+                // }
+                this.backgroundOp = scrollY/840;
+            }else{
+                this.backgroundOp = 1;
+            }
+            this.lastScroll = window.scrollY
+            console.log('---------------------------')
+            console.log(window.scrollY)
+        },
+
     },
     mounted() {    
         // this.$nextTick(function () {
@@ -281,6 +319,7 @@ export default {
         });
         this.emitter.on('upload-success',() =>{
             this.getTracks();
+            console.log('yeeeah')
         })
 
         this.emitter.on("search", term => {
@@ -356,9 +395,4 @@ export default {
   100% { transform: rotate(360deg); }
 }
 
-.testFont {
-    font-family: basic-sans,sans-serif;
-    font-weight: 900;
-    font-style: italic;
-}
 </style>

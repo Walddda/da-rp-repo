@@ -10,10 +10,11 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
-use App\Http\Controllers\Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\EmailChangeNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\Rules;
 
 
 class UserController extends Controller
@@ -91,13 +92,14 @@ class UserController extends Controller
         $request->validate(['first_name' => 'required|string|max:255']);
         $request->validate(['last_name' => 'required|string|max:255']);
         $request->validate(['email' => 'required|string|email|max:255|unique:users,email, ' . $request->id]);
+        $request->validate(['password' => ['required', 'confirmed', Rules\Password::defaults()]]);
 
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'username' => $request->username,
-            //'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password),
         ]);
 
         return redirect('/myprofile');

@@ -1,7 +1,7 @@
 <template>
     <div class="text-center pt-4 pb-8 border-b border-gray-200">
         <BreezeButton class="ml-4" @click="loginWeb3">
-            Login with MetaMask
+            Connect Wallet
         </BreezeButton>
     </div>
 </template>
@@ -31,7 +31,7 @@ import BreezeButton from '@/Components/Button.vue'
                 const web3 = new Web3(window.ethereum);
 
                 const message = [
-                    "I have read and accept the terms and conditions (https://example.org/tos) of this app.",
+                    "I have read and accept the terms and conditions of this app.",
                     "Please sign me in!"
                 ].join("\n")
 
@@ -40,8 +40,7 @@ import BreezeButton from '@/Components/Button.vue'
 
                 return useForm({ message, address, signature }).post(this.route('myprofile'))
             }
-        }
-        
+        }    
     }
 </script>
 

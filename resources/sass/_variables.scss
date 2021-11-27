@@ -1,10 +1,22 @@
+@import url("https://use.typekit.net/rjj3aqh.css");
+
 // Body
 $body-bg: #f8fafc;
 
 // Typography
-$font-family-sans-serif: "Nunito", sans-serif;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$font-family: basic-sans;
+$font-weight: 400;
+
+$thin: 100;
+$extralight: 200;
+$light: 300;
+$regular: 400;
+$semibold: 600;
+$bold: 700;
+$black: 900;
+
+//images
+$main-bg: "/storage/assets/BEATCHAIN_BACKGR.png";
 
 // Colors
 $blue: #3490dc;

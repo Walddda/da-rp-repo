@@ -40,6 +40,14 @@ class HandleInertiaRequests extends Middleware
 
             'tokens' => [
                 'csrf' => csrf_token(),
+            ],
+            'text' => [
+                'nav' => [],
+                'feed' => [
+                    'main' => 'Start selling \nyour Beats now',
+                    'button-cta' => 'get started',
+                    'to-scroll' => 'explore',
+                ]
             ]
         ]);
     }

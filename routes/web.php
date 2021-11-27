@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUpload;
+use App\Http\Controllers\WalletController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,6 +57,11 @@ Route::get('/feed', [FeedController::class, 'show']);
 Route::get('/myprofile', [UserController::class, 'show']);
 Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile')->middleware(['auth', 'verified']);
 
+Route::post('/wallet', [WalletController::class, 'save'])->name('wallet')->middleware(['auth', 'verified']);
+
+Route::get('/settings', function () {
+    return Inertia::render('Settings');
+});
 
 // Routes for Auth-Pages
 Route::get('/old', function () {
@@ -67,8 +73,8 @@ Route::get('/old', function () {
     ]);
 });
 
-Route::get('/wallet', function () {
-    return Inertia::render('Wallet', []);
+Route::get('/share', function () {
+    return Inertia::render('Share');
 });
 
 Route::get('/dashboard', function () {
