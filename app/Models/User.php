@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->morphedByMany(Beat::class, 'likeable')->whereDeletedAt(null);
     }
+
+    public function hasBeat()
+    {
+        return $this->hasMany(Beat::class, 'user_id');
+    }
 }

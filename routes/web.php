@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use SebastianBergmann\Environment\Console;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,14 +55,14 @@ Route::post('/', function (Request $req) {
 Route::get('/feed', [FeedController::class, 'show']);
 
 
-Route::get('/myprofile', [UserController::class, 'show']);
+Route::get('/settings', function () {
+    return Inertia::render('Settings', []);
+});
+Route::get('/myprofile/{username}', [UserController::class, 'show']);
 Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile')->middleware(['auth', 'verified']);
 
-Route::post('/wallet', [WalletController::class, 'save'])->name('wallet')->middleware(['auth', 'verified']);
+//Route::post('/wallet', [WalletController::class, 'save'])->name('wallet')->middleware(['auth', 'verified']);
 
-Route::get('/settings', function () {
-    return Inertia::render('Settings');
-});
 
 // Routes for Auth-Pages
 Route::get('/old', function () {

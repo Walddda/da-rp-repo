@@ -1,8 +1,8 @@
 <template>
     <div class="pt-4 pb-8 border-b border-gray-200">
-        <BreezeButton class="ml-4" @click="loginWeb3">
-            Connect Wallet
-        </BreezeButton>
+            <Button class="ml-4 cta-main but-main" @click="loginWeb3">
+                Connect Wallet
+            </Button>
     </div>
 </template>
 

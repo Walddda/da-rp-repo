@@ -38,13 +38,6 @@
                 <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"  />
             </div>
 
-            <div class="flex mt-6">
-                <label class="flex items-center">
-                    <input type="checkbox" class="form-checkbox" v-model="wallet" name="wallet">
-                    <span class="ml-2">Connect <span class="underline"><a href="https://metamask.io/" target="_blank">Metamask Wallet</a></span></span>
-                </label>
-            </div>
-
             <div class="flex items-center justify-end mt-4">
                 <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
                     Already registered?

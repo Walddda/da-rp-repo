@@ -114,6 +114,8 @@ class AxiosController extends Controller
 
             $beatModel->title = htmlspecialchars($req->input('title'));
             $beatModel->type = htmlspecialchars($req->input('type'));
+            $beatModel->feature = htmlspecialchars($req->input('feature'));
+
 
             // $tagnames = array('tag1');
             foreach ($tagsSplit as $key => $value) {
@@ -126,6 +128,7 @@ class AxiosController extends Controller
             $beatModel->archive = 0;
             $beatModel->user_id = htmlspecialchars($req->input('userID'));
             $beatModel->cover_id = $coverId;
+
 
             $fileModel->save();
             $beatModel->save();

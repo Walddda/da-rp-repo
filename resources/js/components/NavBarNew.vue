@@ -12,7 +12,7 @@
             <!-- [item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-6 py-3 rounded-md text-4xl font-medium']" 
             :aria-current="item.current ? 'page' : undefined" -->
             <!--  :@click="item.click" -->
-            <search :keywords="searchTerm" v-if="showSearch"></search>
+            <search :keywords="searchTerm" v-if="showSearch || searchTerm "></search>
             <div class="pr-8">
                 <img src="/storage/assets/logo_w.png" class="h-44 w-auto"/>
             </div>
@@ -53,9 +53,9 @@ export default {
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch },
                     ],
         navigationLoged: [
-                    { name: 'You shouldn\'t be logged in lol', href: '/myprofile', current: false, click: '' },
+                    { name: 'You shouldn\'t be logged in lol', href: '/myprofile/' + this.$page.props.auth.user.username, current: false, click: '' },
                     { name: 'Upload', href: '#', current: false, click: this.toggleUpload },
-                    { name: 'Wallet', href: '/wallet', current: false, click: '' },
+                    { name: 'Wallet', href: '#', current: false, click: this.toggleWallet },
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch },
                     ],
         lastScroll: 0,
@@ -68,6 +68,9 @@ export default {
         
         toggleUpload(){
             this.emitter.emit('openPopupUpload')
+        },
+        toggleWallet(){
+            this.emitter.emit('openPopupWallet')
         },
         test(){
             console.log('lol')

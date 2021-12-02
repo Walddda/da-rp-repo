@@ -2,9 +2,10 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <div class="container" style="margin-top: 50px">
+        <upload></upload>
         <!-- Logedin: {{ logedin }}; -->
         <!-- <form v-if="logedin" :action="route" method="post" enctype="multipart/form-data">upload -->
-        <form v-if="logedin" @submit="upload" enctype="multipart/form-data">
+        <!-- <form v-if="logedin" @submit="upload" enctype="multipart/form-data">
             <h3>Upload File</h3>
             
             <transition name="fade">
@@ -113,7 +114,7 @@
                 <label class="custom-file-label" for="chooseFile"
                     >Select Beat</label
                 >
-            </div>
+            </div> -->
             <!-- <div class="custom-file">
                 <input
                     type="file"
@@ -126,7 +127,7 @@
                 >
             </div> -->
 
-            <div class="flex mt-6">
+            <!-- <div class="flex mt-6">
                 <label class="flex items-center">
                     <input type="checkbox" class="form-checkbox" v-model="coverType" name="coverType">
                     <span class="ml-2">I wish to use a <span class="underline">custom cover</span></span>
@@ -167,7 +168,7 @@
                 </div>
             </div>
 
-            <input type="submit" name="submit" />
+            <input type="submit" name="submit" /> -->
             <!-- <button @click="upload">Axios-Upload</button> -->
             <!-- <cropper
                 class="cropper"
@@ -177,14 +178,14 @@
                 }"
                 @change="change"
             ></cropper> -->
-            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
-        </form>
+            <!-- <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
+        </form> -->
 
-        <div v-else>
+        <!-- <div v-else>
             Please log in in order to upload <br>
             <a href="/login">Login</a> or 
             <a href="/register" >Register</a>
-        </div>
+        </div> -->
 
         
 </div>
@@ -194,6 +195,7 @@ import { Head } from "@inertiajs/inertia-vue3";
 import VueTagsInput from "@sipec/vue3-tags-input";
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css';
+import Upload from '@/Components/PopupUpload.vue'
 
 function getMimeType(file, fallback = null) {
 	const byteArray = (new Uint8Array(file)).subarray(0, 4);
@@ -222,6 +224,7 @@ export default {
     components: {
         VueTagsInput,
         Cropper,
+        Upload,
 
     },
     data() {

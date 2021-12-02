@@ -4,21 +4,132 @@
     padding: 20px;
 }
 
+.main-form-row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+}
+
 input.main-text-input {
     width: 100%;
     border-radius: 15px;
-    height: 60px;
+    height: 45px;
     background-color: #e6e1eb;
 }
 
-.main-text-input:focus {
-    border-color: linear-gradient(
+input.main-text-input:focus {
+    background: linear-gradient(
         90deg,
-        rgba(143, 53, 232, 1) 0%,
-        rgba(226, 0, 0, 1) 100%
+        rgba(143, 53, 232, 0.4) 0%,
+        rgba(226, 0, 0, 0.4) 100%
     );
+    border-color: rgb(143, 53, 232);
 }
 
-.main-text-input.half {
+select.main-select-input {
+    width: 100%;
+    border-radius: 15px;
+    height: 45px;
+    background-color: #e6e6e6;
+}
+select.main-select-input:focus {
+    background: linear-gradient(
+        90deg,
+        rgba(143, 53, 232, 0.2) 0%,
+        rgba(226, 0, 0, 0.2) 100%
+    );
+    border-color: rgb(143, 53, 232);
+}
+
+.main-form-element {
+    padding: 0px 13px;
+    width: 100%;
+}
+
+.main-form-element.half {
     width: 50%;
+}
+.main-form-element.third {
+    width: 33%;
+}
+.main-form-element.two-third {
+    width: 66%;
+}
+
+.main-form-element.ein-fünftel {
+    width: 20%;
+}
+.main-form-element.vier-fünftel {
+    width: 80%;
+}
+.main-form-row div.main-tag-input .ti-input {
+    width: 100%;
+    border-radius: 15px;
+    height: 45px;
+    background-color: #e6e1eb;
+    border-color: #6b7280;
+}
+.main-form-row div.main-tag-input .ti-new-tag-input {
+    background-color: inherit;
+    --tw-ring-color: 0;
+    padding-top: 0.5rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+}
+.main-form-row div.main-tag-input .ti-new-tag-input-wrapper {
+    margin: 0;
+    padding: 0;
+}
+.main-form-row div.main-tag-input .ti-input:focus-within {
+    background: linear-gradient(
+        90deg,
+        rgba(143, 53, 232, 0.4) 0%,
+        rgba(226, 0, 0, 0.4) 100%
+    );
+    border-color: rgb(143, 53, 232);
+}
+
+.main-tag-input ul.ti-tags {
+    align-items: center;
+    display: flex;
+}
+
+.main-tag-input li.ti-tag {
+    border-radius: 14px;
+    background-color: #bebdbd;
+    // font-size: 18px;
+    color: black;
+    height: 28px;
+    justify-content: center;
+    margin-left: 7px;
+}
+
+li.ti-tag .ti-actions {
+    background-color: #ffffff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+}
+
+li.ti-tag .ti-actions .ti-icon-close {
+    color: black;
+    text-align: center;
+}
+
+label.main-file-label-box {
+    display: block;
+    width: 117px;
+    height: 20px;
+    background-color: #e6e6e6;
+    border-radius: 15px;
+}
+
+label.main-file-label-box.checked {
+    background: linear-gradient(
+        90deg,
+        rgba(143, 53, 232, 0.4) 0%,
+        rgba(226, 0, 0, 0.4) 100%
+    );
 }

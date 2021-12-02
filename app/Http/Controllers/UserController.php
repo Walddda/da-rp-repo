@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Rules\Password;
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -56,11 +57,33 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($username)
     {
+
+        $res = User::with('hasBeat')
+            ->where('username', '=', $username)
+            ->get();
+
+        // $res = User::where('username', '=', $username)
+        //     ->get()
+        //     ->toArray();
+
         //
+        // $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
+        //     ->has('isBeat.fromUser')
+        //     ->join('beats', function ($join) {
+        //         $join->on('beats.id', '=', 'files.beat_id');
+        //     })
+        //     ->join('users', function ($join) {
+        //         $join->on('user_id', '=', 'users.id');
+        //     })
+        //     ->where('users.username', '=', $username)
+        //     ->get()
+        //     ->toArray();
         return Inertia::render('Profile', [
             'logedIn' => Auth::id(),
+            'userData' => $res[0],
+
         ]);
     }
 

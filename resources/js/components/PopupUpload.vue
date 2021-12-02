@@ -1,5 +1,5 @@
 <template>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <div class="bg-blurr" @click="close()">
         <div class="popup" @click.stop>
             <!-- {{$page.props.auth.user}} -->
@@ -7,7 +7,7 @@
         <!-- <form v-if="logedin" :action="route" method="post" enctype="multipart/form-data">upload -->
             <form class="main-form" v-if="$page.props.auth.user" @submit="upload" enctype="multipart/form-data">
                 <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
-                <h3>Upload</h3>
+                <div class="popup-title">Upload</div>
                 
                 <transition name="fade">
                     <div v-if="!isHidden && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -36,157 +36,193 @@
                     </div>
                 </transition>
 
-                <div class="">
-                <label class="custom-text-label" for="title">Title</label>
-                    <input
-                        type="text"
-                        name="beatTitle"
-                        class="custom-text-input main-text-input half"
-                        id="title"
-                        required
-                        v-model="title"
-                    />
-                </div>
-
-                <div class="block">
-                <span class="text-gray-700">Type</span>
-                <div class="mt-2">
-                    <div>
-                    <label class="inline-flex items-center">
+                <div class="main-form-row">
+                    <div class="main-form-element vier-fünftel">
+                        <label class="custom-text-label" for="title">Title</label><br>
                         <input
-                        type="radio"
-                        class="form-radio"
-                        name="beatType"
-                        value="beat"
-                        v-model="type"
-                        required
+                            type="text"
+                            name="beatTitle"
+                            class="custom-text-input main-text-input"
+                            id="title"
+                            required
+                            v-model="title"
                         />
-                        <span class="ml-2">Beat</span>
-                    </label>
                     </div>
-                    <div>
-                    <label class="inline-flex items-center">
-                        <input
-                        type="radio"
-                        class="form-radio"
-                        name="beatType"
-                        value="sample"
-                        v-model="type"
-                        />
-                        <span class="ml-2">Sample</span>
-                    </label>
-                    </div>
-                </div>
-                </div>
 
-
-                <div class="">
-                    <input
-                        type="text"
-                        name="beatBPM"
-                        class="custom-text-input"
-                        id="bpm"
-                        required
-                        v-model="bpm"
-                        v-on:keypress="NumbersOnly"
-                    />
-                    <label class="custom-text-label" for="title">BPM</label>
-                </div>
-
-                <div>
-                    <select class="form-control" @change="changeKey($event)">
-                        <option value="" selected disabled>Select Key</option>
-                        <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
-                    </select>
-                </div>
-
-                <div class="custom-file">
-                    <input
-                        type="file"
-                        name="file"
-                        class="custom-file-input"
-                        id="chooseFile"
-                        accept="audio/mp3"
-                        v-on:change="onBeatChange"
-                        
-                    />
-                    <label class="custom-file-label" for="chooseFile"
-                        >Select Beat</label
-                    >
-                </div>
-                <!-- <div class="custom-file">
-                    <input
-                        type="file"
-                        name="file2"
-                        class="custom-file-input"
-                        id="chooseFile"
-                    />
-                    <label class="custom-file-label" for="chooseFile"
-                        >Select Cover</label
-                    >
-                </div> -->
-
-                <div class="flex mt-6">
-                    <label class="flex items-center">
-                        <input type="checkbox" class="form-checkbox" v-model="coverType" name="coverType">
-                        <span class="ml-2">I wish to use a <span class="underline">custom cover</span></span>
-                    </label>
-                </div>
-
-                <div v-if="coverType" class="upload-example">
-                    <div class="button-wrapper">
-                            <input type="file" ref="file" name="file2" @change="loadImage($event)" accept="image/*" required>
-                            Load image
-                    </div>
-                    <!-- <cropper
-                        ref="cropper"
-                        class="upload-example-cropper max-w-7xl max-h-7xl block overflow-hidden"
-                        imageClass="cropImg"
-                        :stencil-props="{
-                            aspectRatio: 10/10
-                        }"
-                        :src="image.src"
-                    /> -->
-                </div>
-
-                <div>
-                    <vue-tags-input
-                    v-model="tag"
-                    :tags="tags"
-                    @tags-changed="newTags => tags = newTags"
-                    :max-tags="5"
-                    />
-                </div>
-
-                <div class="flex flex-wrap -mx-3 mb-6">
-                    <div class="w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="description">
-                            Description
+                    <div class="main-form-element ein-fünftel flex flex-col items-end justify-end ">
+                        <label class="inline-flex items-center">
+                            <span class="ml-2">Beat </span>
+                            <input
+                            type="radio"
+                            class="form-radio"
+                            name="beatType"
+                            value="beat"
+                            v-model="type"
+                            required
+                            />
+                        </label><br>
+                        <label class="inline-flex items-center">
+                            <span class="ml-2">Sample </span>
+                            <input
+                            type="radio"
+                            class="form-radio"
+                            name="beatType"
+                            value="sample"
+                            v-model="type"
+                            />
                         </label>
-                        <textarea v-model="description" name="description" class="no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none" id="description"></textarea>
                     </div>
                 </div>
+
+                <div class="main-form-row">
+                    <div class="main-form-element">
+                        <label class="custom-text-label" for="feature">Featured Artists</label><br>
+                            <input
+                            type="text"
+                            name="featArtist"
+                            class="custom-text-input main-text-input"
+                            id="feature"
+                            v-model="feature"
+                        />
+                    </div>
+                </div>
+
+                <div class="main-form-row">
+                    <div class="main-form-element half">  
+                        <label class="custom-text-label" for="bpm">BPM</label><br>
+                        <input
+                            type="text"
+                            name="beatBPM"
+                            class="custom-text-input main-text-input"
+                            id="bpm"
+                            required
+                            v-model="bpm"
+                            v-on:keypress="NumbersOnly"
+                        />
+                    </div>
+
+                    <div class="main-form-element half">
+                        <label class="custom-text-label" for="key">Key</label><br>
+                        <select class="form-control main-select-input" id="key" @change="changeKey($event)">
+                            <option value="" selected disabled>Select Key</option>
+                            <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="main-form-row">
+                    <div class="main-form-element">
+                        <label class="custom-text-label" for="description">Description</label><br>
+                            <input
+                            type="text"
+                            name="description"
+                            class="custom-text-input main-text-input"
+                            id="description"
+                            v-model="description"
+                        />
+                    </div>
+                </div>
+
+                <div class="main-form-row">
+                    <div class="main-form-element">
+                        <label class="custom-text-label" for="tags">Tags</label><br>
+                        <vue-tags-input
+                        v-model="tag"
+                        :tags="tags"
+                        @tags-changed="newTags => tags = newTags"
+                        :max-tags="5"
+                        class="main-tag-input"
+                        placeholder=""
+                        id="tags"
+                        >
+                            <div>
+
+                            </div>
+                        </vue-tags-input>
+                    </div>
+                </div>
+
+                
+                <div class="main-form-row flex justify-between">
+                    <div class="main-form-element ein-fünftel">
+                        <label class="custom-text-label" for="chooseFile">Track</label><br>
+                        <label v-if="beat" class="main-file-label-box checked" for="chooseFile"></label>
+                        <label v-else class="main-file-label-box" for="chooseFile"></label>
+                            <input
+                            type="file"
+                            name="file"
+                            class="custom-file-input"
+                            id="chooseFile"
+                            accept="audio/mp3"
+                            v-on:change="onBeatChange"
+                            style="display:none"
+                        />
+                    </div>
+                    <div class="main-form-element ein-fünftel">
+                        <label class="custom-text-label" for="cover">Custom Cover</label><br>
+                        <label v-if="cover" class="main-file-label-box checked" for="cover"></label>
+                        <label v-else class="main-file-label-box" for="cover"></label>
+                        <input 
+                            type="file" 
+                            ref="file" 
+                            name="file2" 
+                            @change="loadImage($event)" 
+                            accept="image/*" 
+                            required
+                            id="cover"
+                            style="display:none"
+                        />
+
+
+                    </div>
+                </div>
+
+                <div class="main-form-row">
+                    <div class="custom-file">
+                        <input
+                            type="file"
+                            name="file"
+                            class="custom-file-input"
+                            id="chooseFile"
+                            accept="audio/mp3"
+                            v-on:change="onBeatChange"
+                            
+                        />
+                        <label class="custom-file-label" for="chooseFile"
+                            >Select Beat</label
+                        >
+                    </div>
+                </div>
+
+                <div class="main-form-row">
+                    <div class="flex mt-6">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="form-checkbox" v-model="coverType" name="coverType">
+                            <span class="ml-2">I wish to use a <span class="underline">custom cover</span></span>
+                        </label>
+                    </div>
+
+                    <div v-if="coverType" class="upload-example">
+                        <div class="button-wrapper">
+                                <input type="file" ref="file" name="file2" @change="loadImage($event)" accept="image/*" required>
+                                Load image
+                        </div>
+                        <!-- <cropper
+                            ref="cropper"
+                            class="upload-example-cropper max-w-7xl max-h-7xl block overflow-hidden"
+                            imageClass="cropImg"
+                            :stencil-props="{
+                                aspectRatio: 10/10
+                            }"
+                            :src="image.src"
+                        /> -->
+                    </div>
+                </div>
+
 
                 <input type="submit" name="submit" />
-                <!-- <button @click="upload">Axios-Upload</button> -->
-                <!-- <cropper
-                    class="cropper"
-                    src="/storage/covers/placeholder.jpg"
-                    :stencil-props="{
-                    aspectRatio: 10/10
-                    }"
-                    @change="change"
-                ></cropper> -->
                 <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
             </form>
-
-            <div v-else>
-                Please log in in order to upload <br>
-                <a href="/login">Login</a> or 
-                <a href="/register" >Register</a>
-            </div>
-
-            
         </div>
         </div>
     </div>
@@ -247,6 +283,7 @@ export default {
             selectedKey: '',
             type: 'beat',
             description: '',
+            feature: '',
             error: '',
             success: null,
             isHidden: false,
@@ -304,6 +341,8 @@ export default {
             formData.append('selectedKey', this.selectedKey);
             formData.append('type', this.type);
             formData.append('description', this.description);
+            formData.append('feature', this.feature);
+
 
             axios.post('/api/upload', formData, config)
                     .then(function (response) {

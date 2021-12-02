@@ -12,7 +12,9 @@
 						<div class="flex justify-between">
 							<div>
 								<h1 class="trackName">{{track.is_beat.title}}</h1>
-								<p class="artistName">{{track.is_beat.from_user.username}}</p>
+								<a :href="'/myprofile/' + track.is_beat.from_user.username"><p class="artistName">{{track.is_beat.from_user.username}}</p></a>
+								<a v-if="track.is_beat.feature" :href="'/myprofile/' + track.is_beat.feature"><p class="featName">Feat. {{track.is_beat.feature}}</p></a>
+
 
 							</div>
 							<div class="text-red-lighter">

@@ -45,6 +45,7 @@
     height: 100vh;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-size: cover;
 }
 .background-image > div {
     padding-left: 150px;
@@ -76,4 +77,12 @@
     font-size: 32px;
     font-weight: $regular;
     color: white;
+}
+
+input.search-text-input {
+    border-radius: 15px;
+}
+
+button.search-button {
+    background-color: red;
 }

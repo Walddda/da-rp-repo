@@ -33,6 +33,11 @@ class Beat extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // public function feature()
+    // {
+    //     return $this->hasOne(User::class, 'id', 'feature');
+    // }
+
     public function getCover()
     {
         return $this->belongsTo(Cover::class, 'cover_id');

@@ -16,7 +16,7 @@
         </div>
         <!-- <home-page v-if="!$page.props.auth.user"></home-page> -->
         
-        <nav-bar-new :backgroundOp="backgroundOp"></nav-bar-new>
+        <nav-bar-new :backgroundOp="backgroundOp" :searchTerm="searchTerm"></nav-bar-new>
 
             <!-- <nav-bar :canLogin="canLogin" :canRegister="canRegister" :searchTerm="searchTerm"></nav-bar> -->
 
@@ -93,6 +93,11 @@
             </div>-->
         </div>
             <upload v-if="showPopupUpload"></upload>
+            <popup-wallet v-if="showPopupWallet"></popup-wallet>
+            <!-- <PopupWallet :showing="walletPopup" @close="WalletPopup = false">
+                <p>Would You like to connect your wallet?</p>
+                <wallet/>
+            </PopupWallet> -->
     </div>
 </template>
 
@@ -107,6 +112,7 @@ import NavBar from '@/Components/NavBar.vue'
 import NavBarNew from '@/Components/NavBarNew.vue'
 import Upload from '@/Components/PopupUpload.vue'
 import HomePage from '@/Components/HomePage.vue'
+import PopupWallet from '@/Components/PopupWallet.vue'
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
 // import 'vue-slider-component/dist-css/vue-slider-component.css'
@@ -122,6 +128,8 @@ export default {
         NavBarNew,
         Upload,
         HomePage,
+        // Wallet,
+        PopupWallet,
     },
 
     props: { 
@@ -147,12 +155,14 @@ export default {
             },
             value: 20,
             showPopupUpload: false,
+            showPopupWallet: false,
             info: null,
             loading: true,
             searchEmpty: false,
             searchFocus: false,
-        backgroundOp: 0,
-        };
+            backgroundOp: 0,
+            walletPopup: true,
+        }
     },
     created () {
         window.addEventListener('scroll', this.onScroll);
@@ -317,6 +327,17 @@ export default {
             this.showPopupUpload = true;
             console.info('op')
         });
+
+
+        this.emitter.on("closePopupWallet", () => {
+            this.showPopupWallet = false;
+            console.info('cl')
+        });
+        this.emitter.on("openPopupWallet", () => {
+            this.showPopupWallet = true;
+            console.info('op')
+        });
+
         this.emitter.on('upload-success',() =>{
             this.getTracks();
             console.log('yeeeah')
