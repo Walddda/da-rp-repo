@@ -107,6 +107,9 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
+
+        // dd($request);
+
         //
         $user = User::where('id', $request->id);
         //'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -123,9 +126,11 @@ class UserController extends Controller
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
+            'location' => $request->location,
+            'description' => $request->desc,
         ]);
 
-        return redirect('/myprofile');
+        return "/myprofile/{$request->username}";
     }
 
     /**

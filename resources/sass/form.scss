@@ -1,7 +1,6 @@
 .main-form {
-    width: 33vw;
     height: 100%;
-    padding: 20px;
+    // padding: 20px;
 }
 
 .main-form-row {
@@ -15,15 +14,13 @@ input.main-text-input {
     border-radius: 15px;
     height: 45px;
     background-color: #e6e1eb;
+    border: none;
 }
 
 input.main-text-input:focus {
-    background: linear-gradient(
-        90deg,
-        rgba(143, 53, 232, 0.4) 0%,
-        rgba(226, 0, 0, 0.4) 100%
-    );
-    border-color: rgb(143, 53, 232);
+    background: $gradient-04;
+    border: 1px solid rgb(143, 53, 232);
+    --tw-ring-color: 0;
 }
 
 select.main-select-input {
@@ -38,7 +35,8 @@ select.main-select-input:focus {
         rgba(143, 53, 232, 0.2) 0%,
         rgba(226, 0, 0, 0.2) 100%
     );
-    border-color: rgb(143, 53, 232);
+    border: 1px solid rgb(143, 53, 232);
+    --tw-ring-color: 0;
 }
 
 .main-form-element {
@@ -59,6 +57,12 @@ select.main-select-input:focus {
 .main-form-element.ein-fünftel {
     width: 20%;
 }
+.main-form-element.zwei-fünftel {
+    width: 40%;
+}
+.main-form-element.drei-fünftel {
+    width: 60%;
+}
 .main-form-element.vier-fünftel {
     width: 80%;
 }
@@ -67,7 +71,7 @@ select.main-select-input:focus {
     border-radius: 15px;
     height: 45px;
     background-color: #e6e1eb;
-    border-color: #6b7280;
+    border: none;
 }
 .main-form-row div.main-tag-input .ti-new-tag-input {
     background-color: inherit;
@@ -82,12 +86,8 @@ select.main-select-input:focus {
     padding: 0;
 }
 .main-form-row div.main-tag-input .ti-input:focus-within {
-    background: linear-gradient(
-        90deg,
-        rgba(143, 53, 232, 0.4) 0%,
-        rgba(226, 0, 0, 0.4) 100%
-    );
-    border-color: rgb(143, 53, 232);
+    background: $gradient-04;
+    border: 1px solid rgb(143, 53, 232);
 }
 
 .main-tag-input ul.ti-tags {
@@ -127,9 +127,76 @@ label.main-file-label-box {
 }
 
 label.main-file-label-box.checked {
-    background: linear-gradient(
-        90deg,
-        rgba(143, 53, 232, 0.4) 0%,
-        rgba(226, 0, 0, 0.4) 100%
-    );
+    background: $gradient-04;
+}
+label.main-file-label-box.checked:hover {
+    background: $gradient-06;
+}
+
+input.main-form-checkbox {
+    background-color: #e6e1eb;
+    border-radius: 3px;
+    margin-left: 5px;
+    border: none;
+}
+input.main-form-checkbox:checked {
+    background: $gradient-04;
+    --tw-ring-color: 0;
+}
+input.main-form-checkbox:active {
+    --tw-ring-color: 0;
+}
+input.main-form-checkbox:focus {
+    --tw-ring-color: 0;
+}
+input.main-form-checkbox:checked:hover {
+    background: $gradient-06;
+}
+input.main-form-checkbox:checked:focus {
+    background: $gradient-06;
+}
+
+input.main-form-radio {
+    background-color: #e6e1eb;
+    margin-left: 5px;
+    border: none;
+}
+input.main-form-radio:checked {
+    background: $gradient-04;
+    --tw-ring-color: 0;
+}
+input.main-form-radio:active {
+    --tw-ring-color: 0;
+}
+input.main-form-radio:focus {
+    --tw-ring-color: 0;
+}
+input.main-form-radio:checked:hover {
+    background: $gradient-06;
+}
+input.main-form-radio:checked:focus {
+    background: $gradient-06;
+}
+
+input.main-text-input.error {
+    border: 3px solid $rp-red;
+}
+input.main-form-radio.error {
+    border: 3px solid $rp-red;
+}
+input.main-form-check.error {
+    border: 3px solid $rp-red;
+}
+select.main-select-input.error {
+    border: 3px solid $rp-red;
+}
+.main-form-row div.main-tag-input.error .ti-input {
+    border: 3px solid $rp-red;
+}
+label.main-file-label-box.error {
+    border: 3px solid $rp-red;
+}
+
+.main-form-error-msg {
+    color: $rp-red;
 }

@@ -32,3 +32,14 @@ $cyan: #6cb2eb;
 
 $rp-purple: #8f35e8;
 $rp-red: #e20000;
+
+$gradient-04: linear-gradient(
+    90deg,
+    rgba(143, 53, 232, 0.4) 0%,
+    rgba(226, 0, 0, 0.4) 100%
+);
+$gradient-06: linear-gradient(
+    90deg,
+    rgba(143, 53, 232, 0.6) 0%,
+    rgba(226, 0, 0, 0.6) 100%
+);
