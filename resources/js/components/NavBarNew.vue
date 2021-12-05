@@ -3,8 +3,22 @@
     <div class="mx-auto px-2">
         <div class="relative flex justify-between h-32 pt-8">
             <!-- <div class="flex items-center  space-x-4 h-16 pl-5" :style="[backgroundOp >= 1 ? {color: 'black'} : {color:'rgb('+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+')'} ]"> -->
-            <div class="flex items-center  space-x-4 h-16 pl-5" v-if="$page.props.auth.user">
-                <a v-for="item in navigationLoged" :key="item.name" :href="item.href" @click="item.click" class="nav-link pl-10" >{{ item.name }}</a>
+            <div class="flex items-center space-x-4 h-16 pl-5" v-if="$page.props.auth.user">
+                <a v-for="item in navigationLoged" :key="item.name" :href="item.href" @click="item.click" @mouseover="item.mouseEnter" class="nav-link pl-10" >{{ item.name }}</a>
+                <div v-if="showDrop" class="absolute w-40 bg-opacity-0 mt-48" @mouseleave="mouseLeave">
+                    <a href="/" class="nav-link">
+                        Home
+                    </a>
+                    <a :href="'/myprofile/' + this.$page.props.auth.user.username" class="nav-link">
+                        Profile
+                    </a>
+                    <a href="/settings" class="nav-link">
+                        Settings
+                    </a>
+                    <a href="#" class="nav-link">
+                        Logout
+                    </a>
+                </div>
             </div>
             <div class="flex items-center  space-x-4 h-16 pl-5" v-else>
                 <a v-for="item in navigation" :key="item.name" :href="item.href" @click="item.click" class="nav-link pl-10" >{{ item.name }}</a>
@@ -23,8 +37,22 @@
     <div class="mx-auto px-2">
         <div class="relative flex justify-between h-32 pt-8">
             <!-- <div class="flex items-center  space-x-4 h-16 pl-5" :style="[backgroundOp >= 1 ? {color: 'black'} : {color:'rgb('+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+')'} ]"> -->
-            <div class="flex items-center  space-x-4 h-16 pl-5" v-if="$page.props.auth.user">
-                <a v-for="item in navigationLoged" :key="item.name" :href="item.href" @click="item.click" class="nav-link pl-10" >{{ item.name }}</a>
+            <div class="flex items-center space-x-4 h-16 pl-5" v-if="$page.props.auth.user">
+                <a v-for="item in navigationLoged" :key="item.name" :href="item.href" @click="item.click" @mouseover="item.mouseEnter" class="nav-link pl-10" >{{ item.name }}</a>
+                <div v-show="showDrop" class="absolute w-40 bg-black mt-48" @mouseleave="mouseLeave">
+                    <a href="/" class="nav-link">
+                        Home
+                    </a>
+                    <a :href="'/myprofile/' + this.$page.props.auth.user.username" class="nav-link">
+                        Profile
+                    </a>
+                    <a href="/settings" class="nav-link">
+                        Settings
+                    </a>
+                    <a href="#" class="nav-link">
+                        Logout
+                    </a>
+                </div>
             </div>
             <div class="flex items-center  space-x-4 h-16 pl-5" v-else>
                 <a v-for="item in navigation" :key="item.name" :href="item.href" @click="item.click" class="nav-link pl-10" >{{ item.name }}</a>
@@ -67,13 +95,15 @@ export default {
       return {
         show: false,
         showSearch: false,
+        showDrop: false,
+        mouseLeave: this.mouseLeave,
         navigation: [
                     { name: 'Sign in', href: '/login', current: false, click: '' },
                     { name: 'Sign up', href: '/register', current: false, click: '' },
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch },
                     ],
         navigationLoged: [
-                    { name: 'You shouldn\'t be logged in lol', href: '/myprofile/' + this.$page.props.auth.user.username, current: false, click: '' },
+                    { name: 'You shouldn\'t be logged in lol', href: '/myprofile/' + this.$page.props.auth.user.username, current: false, click: '' , mouseEnter: this.mouseEnter, mouseLeave: this.mouseLeave},
                     { name: 'Upload', href: '#', current: false, click: this.toggleUpload },
                     { name: 'Wallet', href: '#', current: false, click: this.toggleWallet },
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch },
@@ -91,6 +121,12 @@ export default {
         },
         toggleWallet(){
             this.emitter.emit('openPopupWallet')
+        },
+        mouseEnter() {
+            this.showDrop = !this.showDrop;
+        },
+        mouseLeave() {
+            this.showDrop = false;
         },
         test(){
             console.log('lol')

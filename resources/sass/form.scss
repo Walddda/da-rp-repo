@@ -178,6 +178,36 @@ input.main-form-radio:checked:focus {
     background: $gradient-06;
 }
 
+.main-select-custom-options {
+    position: fixed;
+    z-index: 1;
+    // background: linear-gradient( 90deg, rgba(143, 53, 232, 0.6) 0%, rgba(226, 0, 0, 0.6) 100% );
+    border-radius: 15px;
+    width: auto;
+    border: #8f35e8 solid 2px;
+    background-color: #e6e1eb;
+    margin-top: 10px;
+    max-height: 350px;
+    overflow: auto;
+    width: 100px;
+}
+.main-select-custom-options p {
+}
+.main-select-custom-options p span {
+    border-bottom: 1px #8f35e8 solid;
+    display: block;
+    margin: 0px 10px;
+    padding: 5px 5px;
+}
+.main-select-custom-options p:hover {
+    background: linear-gradient(
+        90deg,
+        rgba(143, 53, 232, 0.6) 0%,
+        rgba(226, 0, 0, 0.6) 100%
+    );
+    cursor: pointer;
+}
+
 input.main-text-input.error {
     border: 3px solid $rp-red;
 }

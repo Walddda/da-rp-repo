@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <nav-bar :canLogin="canLogin" :canRegister="canRegister"></nav-bar> -->
+        <nav-bar-new/>
         <BreezeValidationErrors class="mb-4" />
 
         <wallet></wallet>
@@ -23,16 +23,16 @@
 
 <script>
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import NavBar from '@/Components/NavBar.vue';
 import Wallet from '@/Components/Wallet.vue';
 import { CogIcon } from '@heroicons/vue/outline';
+import NavBarNew from '@/Components/NavBarNew.vue'
 
 export default {
     
     components: {
         Head,
         Link,
-        NavBar,
+        NavBarNew,
         Wallet,
         CogIcon,
     },

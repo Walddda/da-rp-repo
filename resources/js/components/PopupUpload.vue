@@ -45,6 +45,7 @@
                             id="title"
                             required
                             v-model="title"
+                            @click="clickTitle"
                         />
                     </div>
 
@@ -102,12 +103,40 @@
                         />
                     </div>
 
-                    <div class="main-form-element half">
+                    <div class="main-form-element half"
+                        @mouseleave="mouseInpf(false)"
+                        @mouseover="mouseInpf(true)"
+                    >
                         <label class="custom-text-label" for="key">Key</label><br>
-                        <select :class="[error.key ? 'error' : '','form-control main-select-input']" id="key" @change="changeKey($event)">
+                        <input
+                            type="text"
+                            name="key"
+                            :class="[error.key ? 'error' : '', 'custom-text-input main-text-input']"
+                            id="key"
+                            required
+                            v-model="selectedKey"
+                            @keypress="keyClick = false"
+                            @focus="selectFocus = true"
+                            @blur="leave('blur')"
+                            ref="keyInp"
+                        />
+                        <div class="main-select-custom-options" 
+                            v-if="selectFocus && !keyClick"
+                            @mouseleave="mouseOptf(false)"
+                            @mouseover="mouseOptf(true)"
+                        >
+                            <p v-for="k in keys">
+                                <span v-if="!selectedKey || k.toUpperCase().includes(selectedKey.toUpperCase())"
+                                    @click="selectedKey = k; $refs.keyInp.focus(); keyClick = true">
+                                    {{k}}
+                                </span>
+                            </p>
+                        </div>
+                        <!-- <select :class="[error.key ? 'error' : '','form-control main-select-input']" id="key" @change="changeKey($event)">
                             <option value="" selected></option>
                             <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
-                        </select>
+                        </select> -->
+                        <!-- <v-select :options="[{country: 'Canada', code: 'CA'},]"></v-select> -->
                     </div>
                 </div>
                 
@@ -213,6 +242,7 @@
 
 <script>
 import VueTagsInput from "@sipec/vue3-tags-input";
+// import vSelect from 'vue-select';
 
 export default {
 
@@ -220,6 +250,7 @@ export default {
 
     components: {
         VueTagsInput,
+        // vSelect,
     },
 
     data() {
@@ -241,7 +272,12 @@ export default {
             isHidden: false,
             loading: false,
             coverCheckBool: false,
+            selectFocus:false,
             errors: {title: '', bpm: ''},
+            clickTitle:false,
+            mouseOpt: false,
+            mouseInp: false,
+            keyClick: false,
         }
     },
     
@@ -351,6 +387,20 @@ export default {
             this.selectedKey = event.target.value
             // this.selectedKey = event.target.options[event.target.options.selectedIndex].text
         }, 
+        leave(x){
+            if(!this.mouseOpt && !this.mouseInp){
+                this.selectFocus = false;
+                this.keyClick = false;
+            }
+            console.log(x)
+
+        },
+        mouseOptf(a){
+            this.mouseOpt = a;
+        },
+        mouseInpf(a){
+            this.mouseInp = a;
+        },
     }, 
 };
 </script>
