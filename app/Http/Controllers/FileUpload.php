@@ -15,7 +15,6 @@ class FileUpload extends Controller
     {
         // return view('file-upload');
         return Inertia::render('FileUpload', [
-            'route' => route('fileUpload'),
             'logedin' => Auth::id(),
         ]);
     }

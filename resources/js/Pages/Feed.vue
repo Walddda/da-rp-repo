@@ -6,24 +6,32 @@
         <Head title="Home" />
 
         <div class="background-image "><!-- Foto von Dmitry Demidov von Pexels -->
-            <div class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
+            <div v-if="!$page.props.auth.user" class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
                 <div :style="{opacity: (1-backgroundOp)}">
                 <p class="heading-feed">Start selling<br>
                 your beats now</p>
                 <button class="cta-main but-main mt-4">get started</button>
                 </div>
             </div>
+            <div v-else class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
+                <div :style="{opacity: (1-backgroundOp)}">
+                <p class="heading-feed">Find exactly<br>
+                what you need</p>
+                <search :keywords="searchTerm" loc="feed" feed></search>
+                <!-- <button class="cta-main but-main mt-4">get started</button> -->
+                </div>
+            </div>
         </div>
         <!-- <home-page v-if="!$page.props.auth.user"></home-page> -->
         
-        <nav-bar-new :backgroundOp="backgroundOp" :searchTerm="searchTerm"></nav-bar-new>
+        <nav-bar-new :backgroundOp="backgroundOp" :searchTerm="searchTerm" feed></nav-bar-new>
 
-            <!-- <nav-bar :canLogin="canLogin" :canRegister="canRegister" :searchTerm="searchTerm"></nav-bar> -->
+            <!-- <nav-bar :searchTerm="searchTerm"></nav-bar> -->
 
             <audio v-if="files" style="display:none" ref="player"  preload="metadata" >
                 <source type="audio/mp3"/>
             </audio>
-        <div>
+        <div ref="feedDiv">
             <!-- {{$page.props}} -->
             <!-- {{logedIn}} ---{{this.$page.props.auth.user.id}} -->
             <div v-if="files">
@@ -56,9 +64,9 @@
 
 
 
-            <div v-if="currentPlaying" class="border-t-2 border-black pt-7 pb-7 fixed w-full bottom-0 flex flex-col items-center bg-white">
+            <div v-if="currentPlaying" class="border-t-2 border-black pt-3 pb-3 fixed w-full bottom-0 flex flex-col items-center bg-white">
                 <div class="w-5/12 flex flex-row items-center"> 
-                    <img class="box-border h-28 w-28 border-2 border-black" :src="files[currentPlaying-1].is_beat.get_cover.cover_path" alt="Album Pic">
+                    <img class="box-border h-28 w-28 border-2 border-black" loading="lazy" :src="files[currentPlaying-1].is_beat.get_cover.cover_path" alt="Album Pic">
                     <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
                     <div class="w-10/12 px-5 flex flex-col items-center">
                         <div class="w-full" v-if="files">{{files[currentPlaying-1].is_beat.title}} - {{files[currentPlaying-1].is_beat.from_user.username}}</div>
@@ -68,7 +76,7 @@
                             <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
                         </div>
                     </div>
-                    <div class="text-white p-8 rounded-full bg-red-light shadow-lg" @click="play" >
+                    <div class="text-white p-5 rounded-full bg-red-light shadow-lg" @click="play" >
                         <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
                         <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
                     </div>
@@ -94,6 +102,7 @@
         </div>
             <upload v-if="showPopupUpload"></upload>
             <popup-wallet v-if="showPopupWallet"></popup-wallet>
+            <popup-payment v-if="showPopupPayment && files" :song="paymentTrack"></popup-payment>
             <!-- <PopupWallet :showing="walletPopup" @close="WalletPopup = false">
                 <p>Would You like to connect your wallet?</p>
                 <wallet/>
@@ -113,6 +122,9 @@ import NavBarNew from '@/Components/NavBarNew.vue'
 import Upload from '@/Components/PopupUpload.vue'
 import HomePage from '@/Components/HomePage.vue'
 import PopupWallet from '@/Components/PopupWallet.vue'
+import PopupPayment from '@/Components/PopupPayment.vue'
+import Search from '@/Components/Search.vue';
+
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
 // import 'vue-slider-component/dist-css/vue-slider-component.css'
@@ -130,15 +142,15 @@ export default {
         HomePage,
         // Wallet,
         PopupWallet,
+        PopupPayment,
+        Search,
     },
 
     props: { 
         // files: Array,
         paths: Array,
-        canLogin: Boolean,
-        canRegister: Boolean,
         logedIn: Number,
-        searchTerm: {type: String, default: ''},
+        givenSearchTerm: {type: String, default: ''},
     },
 
     data() {
@@ -156,12 +168,15 @@ export default {
             value: 20,
             showPopupUpload: false,
             showPopupWallet: false,
+            showPopupPayment: false,
+            paymentTrack: null,
             info: null,
             loading: true,
             searchEmpty: false,
             searchFocus: false,
             backgroundOp: 0,
             walletPopup: true,
+            searchTerm : this.givenSearchTerm,
         }
     },
     created () {
@@ -187,6 +202,19 @@ export default {
                     this.loadedBeats = true;
                     console.info(this.$refs.player)
                     this.loading = false;
+                    console.log(term)
+                    if(term){
+                        // this.$refs.feedDiv.scrollIntoView()
+                        window.scrollTo({
+                            top: 840,
+                            behaviour: "smooth",
+                        })
+                        // if(window.pageYOffset >= 840){
+                        //     window.scrollY = 840
+                        // }else{
+                        //     window.scrollY = window.pageYOffset
+                        // }
+                    }
 
                 }
             })
@@ -276,9 +304,9 @@ export default {
             }else{
                 this.backgroundOp = 1;
             }
-            this.lastScroll = window.scrollY
-            console.log('---------------------------')
-            console.log(window.scrollY)
+            // this.lastScroll = window.scrollY
+            // console.log('---------------------------')
+            // console.log(window.scrollY)
         },
 
     },
@@ -290,6 +318,7 @@ export default {
 
         this.getCurrentTime();
         setInterval(this.getCurrentTime, 100);
+        // setInterval(()=>{this.emitter.emit("reload")}, 5000);
 
 
         this.getLength();
@@ -338,6 +367,16 @@ export default {
             console.info('op')
         });
 
+        this.emitter.on("closePopupPayment", () => {
+            this.showPopupPayment = false;
+            console.info('cl')
+        });
+        this.emitter.on("openPopupPayment", track => {
+            this.paymentTrack = track;
+            this.showPopupPayment = true;
+            console.info('op')
+        });
+
         this.emitter.on('upload-success',() =>{
             this.getTracks();
             console.log('yeeeah')
@@ -346,6 +385,7 @@ export default {
         this.emitter.on("search", term => {
             this.files = null
             this.loading = true;
+            this.searchTerm = term
             this.getTracks(term);
             // console.log(text);
         });

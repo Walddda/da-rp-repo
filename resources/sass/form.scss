@@ -23,6 +23,12 @@ input.main-text-input:focus {
     --tw-ring-color: 0;
 }
 
+input.main-text-input.price-input {
+    padding-left: 70px;
+    padding-right: 25px;
+    text-align: right;
+}
+
 select.main-select-input {
     width: 100%;
     border-radius: 15px;
@@ -52,6 +58,12 @@ select.main-select-input:focus {
 }
 .main-form-element.two-third {
     width: 66%;
+}
+.main-form-element.max {
+    width: max-content;
+}
+.main-form-element.min {
+    width: min-content;
 }
 
 .main-form-element.ein-fünftel {
@@ -139,6 +151,10 @@ input.main-form-checkbox {
     margin-left: 5px;
     border: none;
 }
+.main-form-checkbox.left {
+    margin-left: 0px;
+    margin-right: 5px;
+}
 input.main-form-checkbox:checked {
     background: $gradient-04;
     --tw-ring-color: 0;
@@ -177,7 +193,6 @@ input.main-form-radio:checked:hover {
 input.main-form-radio:checked:focus {
     background: $gradient-06;
 }
-
 .main-select-custom-options {
     position: fixed;
     z-index: 1;
@@ -191,8 +206,8 @@ input.main-form-radio:checked:focus {
     overflow: auto;
     width: 100px;
 }
-.main-select-custom-options p {
-}
+// .main-select-custom-options p {
+// }
 .main-select-custom-options p span {
     border-bottom: 1px #8f35e8 solid;
     display: block;
@@ -229,4 +244,62 @@ label.main-file-label-box.error {
 
 .main-form-error-msg {
     color: $rp-red;
+}
+
+.arrow {
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    margin-left: 5px;
+    margin-top: -4px;
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+.main-form-input-select {
+    width: 60px;
+    position: absolute;
+    border-radius: 14px;
+    background-color: #bebdbd;
+    // font-size: 18px;
+    color: black;
+    height: 28px;
+    justify-content: center;
+    margin-left: 7px;
+    margin-top: 8px;
+    padding: 4px 9px;
+    align-items: center;
+    display: flex;
+}
+.main-form-input-select.open.bottom {
+    border-radius: 0px 0px 14px 14px;
+    padding-top: 6px;
+    margin-top: 34px;
+    border-top: 1px solid #8f35e8;
+}
+
+.main-form-input-select.open.top {
+    border-radius: 14px 14px 0px 0px;
+}
+
+.currency-icon {
+    position: absolute;
+    margin-left: 163px;
+    margin-top: 10px;
+}
+.currency-icon .doller-sign {
+    padding-left: 5px;
+}
+.currency-icon .ETH-sign {
+    padding-top: 4px;
+}
+
+.main-file-name {
+    font-size: 12px;
+}
+.main-file-name.cover {
+    text-align: right;
 }

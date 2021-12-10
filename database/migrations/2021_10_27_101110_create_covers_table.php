@@ -17,7 +17,6 @@ class CreateCoversTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('cover_path')->nullable();
-            $table->integer('beat_id');
             $table->timestamps();
         });
     }

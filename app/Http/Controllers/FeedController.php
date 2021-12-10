@@ -37,18 +37,14 @@ class FeedController extends Controller
     public function showAxios()
     {
         return Inertia::render('Feed', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
             'logedIn' => Auth::id(),
         ]);
     }
 
-    public function foreignSearch(Request $req, $log, $reg)
-    {
-        return Inertia::render('Feed', [
-            'canLogin' => $log,
-            'canRegister' => Route::has('register'),
-            'searchTerm' => $req->input('searchTerm'),
-        ]);
-    }
+    // public function foreignSearch(Request $req, $log, $reg)
+    // {
+    //     return Inertia::render('Feed', [
+    //         'givenSearchTerm' => $req->input('searchTerm'),
+    //     ]);
+    // }
 }

@@ -131,8 +131,6 @@ export default {
     },
 
     props: {
-        canLogin: Boolean,
-        canRegister: Boolean,
         logedin: Number,
         searchTerm: String,
     },

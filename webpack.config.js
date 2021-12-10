@@ -7,4 +7,11 @@ module.exports = {
             '~~': path.resolve('resources/sass'),
         },
     },
+    stats: {
+        children: true,
+        warningsFilter: [
+          /\-\-underline\-color/,
+        ]
+      },
+  
 };

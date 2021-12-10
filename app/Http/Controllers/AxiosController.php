@@ -12,7 +12,9 @@ class AxiosController extends Controller
     public function getTracks(Request $request)
     {
         if (!$request->keywords) {
-            $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')->get()->toArray();
+            $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')
+                ->orderBy('created_at', 'desc')
+                ->get()->toArray();
             return response()->json($files);
         } else {
             $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
@@ -21,6 +23,7 @@ class AxiosController extends Controller
                     $join->on('beats.id', '=', 'files.beat_id');
                 })
                 ->where('beats.title', 'LIKE', '%' . $request->keywords . '%')
+                ->orderBy('beats.created_at', 'desc')
                 ->get()
                 ->toArray();
             // $res = Beat::where('title', 'LIKE', '%' . $request->keywords . '%')
@@ -60,6 +63,7 @@ class AxiosController extends Controller
             'beat' => 'required|max:10240',
             'cover' => 'mimes:png,jpg',
             'title' => 'required|max:255',
+            'ethPrice' => 'required',
             'type' => array('required', 'regex:/(sample|beat)/'),
             'bpm' => array('required', 'regex:/\d+/'),
         ]);
@@ -124,7 +128,7 @@ class AxiosController extends Controller
             $beatModel->key = htmlspecialchars($req->input('selectedKey'));
             $beatModel->description = htmlspecialchars($req->input('description'));
             $beatModel->bpm = htmlspecialchars($req->input('bpm'));
-            $beatModel->price = 1;
+            $beatModel->price = htmlspecialchars($req->input('ethPrice'));
             $beatModel->archive = 0;
             $beatModel->user_id = htmlspecialchars($req->input('userID'));
             $beatModel->cover_id = $coverId;

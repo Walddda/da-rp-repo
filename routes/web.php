@@ -36,19 +36,15 @@ Route::get('/feed', [FeedController::class, 'show']);
 // Route::get('/fed', [FeedController::class, 'showAxios']);
 Route::get('/', function () {
     return Inertia::render('Feed', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
         'token' => csrf_token(),
     ]);
 });
 Route::post('/', function (Request $req) {
     return Inertia::render('Feed', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
         'token' => csrf_token(),
         'searchTerm' => $req->input('searchTerm'),
     ]);
-});
+})->name('home');
 // ->middleware('guest')
 // ->name('register');
 
@@ -61,14 +57,12 @@ Route::get('/settings', function () {
 Route::get('/myprofile/{username}', [UserController::class, 'show']);
 Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile')->middleware(['auth', 'verified']);
 
-//Route::post('/wallet', [WalletController::class, 'save'])->name('wallet')->middleware(['auth', 'verified']);
+Route::post('/wallet', [WalletController::class, 'save'])->name('wallet')->middleware(['auth', 'verified']);
 
 
 // Routes for Auth-Pages
 Route::get('/old', function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);

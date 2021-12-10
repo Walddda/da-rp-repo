@@ -9,6 +9,7 @@
 @import "form";
 @import "popup";
 @import "loader";
+@import "page-form";
 
 // Bootstrap
 // @import "~bootstrap/scss/bootstrap";
@@ -54,9 +55,9 @@
     padding-left: 150px;
     // z-index: 1;
 }
-.background-image > div > div {
-    // z-index: -1;
-}
+// .background-image > div > div {
+//     // z-index: -1;
+// }
 
 .but-main {
     border-radius: 15px;
@@ -82,8 +83,54 @@
     color: white;
 }
 
-input.search-text-input {
-    border-radius: 15px;
+form.main-search-form {
+    height: 110px;
+}
+i.main-search-icon {
+    position: absolute;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    padding-left: 25px;
+}
+
+input.search-text-input-feed {
+    border-radius: 15px 0px 0px 15px;
+    font-size: 34px;
+    width: 730px;
+    height: 110px;
+    padding-left: 100px;
+}
+input.search-text-input-feed:focus {
+    --tw-ring-color: 0;
+    border: none;
+}
+input.search-text-input-nav {
+    border-radius: 15px 0px 0px 15px;
+    font-size: 20px;
+    height: 60px;
+    width: 300px;
+}
+input.search-text-input-nav:focus {
+    --tw-ring-color: 0;
+    border: none;
+}
+button.search-button-input-feed {
+    background-color: $rp-purple;
+    color: white;
+    border-radius: 0px 15px 15px 0px;
+    font-size: 34px;
+    height: 110px;
+    width: 180px;
+}
+
+button.search-button-input-nav {
+    background-color: $rp-purple;
+    color: white;
+    border-radius: 0px 15px 15px 0px;
+    font-size: 34px;
+    height: 60px;
+    width: 50px;
 }
 
 button.search-button {

@@ -1,8 +1,8 @@
 <template>
 <div class="fullPlayer">
 	<div class="playerImgBox">
-		<img class="block h-52 w-52 max-w-none playerImg" @error="defaultCover = true" v-if="!defaultCover" :src="track.is_beat.get_cover.cover_path" ref="cover"/>
-		<img class="block h-52 w-52 max-w-none playerImg" v-if="defaultCover" src="/storage/covers/Default-cover.png" ref="cover"/>
+		<img class="block h-52 w-52 max-w-none playerImg" loading="lazy" @error="defaultCover = true" v-if="!defaultCover" :src="track.is_beat.get_cover.cover_path" ref="cover"/>
+		<img class="block h-52 w-52 max-w-none playerImg" loading="lazy" v-if="defaultCover" src="/storage/covers/Default-cover.png" ref="cover"/>
 	</div>
 	<div class="playerControl h-52" style="width: 45rem !important;">
 		<div class="flex items-center justify-center">
@@ -30,6 +30,9 @@
 							</div>
 							<div @click="infoEmit" >
 								INFO
+							</div>
+							<div @click="paymentEmit">
+								{{ this.dollarPrice }} $
 							</div>
 						</div>
 					</div>
@@ -78,12 +81,18 @@ export default {
 			likeCount: this.track.is_beat.likes2.length,
 			showInfo: false,
 			workaround: ", ",
+			dollarPrice: 0,
 		}
 	},
 	created() {
 	},
 	mounted(){
 		this.liked()
+		this.convert()
+		this.emitter.on("reload", () => {
+            this.convert();
+            console.log('reload');
+        });
 	},
 	methods: {
 		testEmit() {
@@ -92,6 +101,9 @@ export default {
 		},
 		infoEmit() {
 			this.emitter.emit("show-info", this.numb);
+		},
+		paymentEmit() {
+			this.emitter.emit("openPopupPayment", this.track);
 		},
 		liked(){
 			if(this.$page.props.auth.user){
@@ -102,7 +114,25 @@ export default {
 				});
 			}
 		},
-		likeUnlike(){
+
+		convert() {
+			let currentObj = this;
+            axios.get('https://api.coinbase.com/v2/exchange-rates')
+            .then(res => {
+				console.log(this.track.is_beat.price)
+				console.log(currentObj.track.is_beat.price)
+
+              currentObj.dollarPrice = (Math.round(((currentObj.track.is_beat.price / res.data.data.rates.ETH) + Number.EPSILON) * 100) / 100).toFixed(2)
+            })
+        },
+
+		likeUnlike(e){
+			console.log(e)
+			if(this.likedColor == 'black'){
+					this.likedColor = 'red'
+				}else{
+					this.likedColor = 'black'
+					}
             axios.get('/api/beat/like/'+this.track.beat_id+'/'+this.$page.props.auth.user.id)
             .then(response => {
                 console.info('liked: ');

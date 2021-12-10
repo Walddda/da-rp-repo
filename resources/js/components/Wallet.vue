@@ -1,6 +1,6 @@
 <template>
     <div class="pt-4 pb-8 border-b border-gray-200">
-            <Button class="ml-4 cta-main but-main" @click="loginWeb3">
+            <Button class="ml-4 cta-main but-main" @click="connect(); close()">
                 Connect Wallet
             </Button>
     </div>
@@ -23,22 +23,21 @@ import BreezeButton from '@/Components/Button.vue'
             submit() {
 
             },
-            async loginWeb3() {
-                if (! window.ethereum) {
+
+            async connect() {
+                if (typeof window.ethereum !== 'undefined') {
+
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+                    const address = accounts[0]
+
+                    return useForm({ address }).post(this.route('wallet'))
+                } else {
                     alert('MetaMask not detected. Please try again from a MetaMask enabled browser.')
                 }
+            },
 
-                const web3 = new Web3(window.ethereum);
-
-                const message = [
-                    "I have read and accept the terms and conditions of this app.",
-                    "Please sign me in!"
-                ].join("\n")
-
-                const address = (await web3.eth.requestAccounts())[0]
-                const signature = await web3.eth.personal.sign(message, address)
-
-                return useForm({ message, address, signature }).post(this.route('wallet'))
+            close() {
+                this.emitter.emit('closePopupWallet');
             }
         }    
     }

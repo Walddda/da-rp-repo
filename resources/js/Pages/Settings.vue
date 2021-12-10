@@ -115,13 +115,13 @@ export default {
         submit(e) {
             console.log('lezzgo')
             e.preventDefault();
-                let currentObj = this;
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    },
-                }
+            let currentObj = this;
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+            }
 
             let formData = new FormData();
             formData.append('username', this.form.username);
@@ -136,15 +136,15 @@ export default {
 
 
             axios.post('/myprofile', formData, config)
-                    .then(function (response) {
-                        console.log(response);
-                        window.location.href= response.data;
-                    })
-                    .catch(error => {
-                        console.log(error.response.data); // logs an object to the console
+                .then(function (response) {
+                    console.log(response);
+                    window.location.href= response.data;
+                })
+                .catch(error => {
+                    console.log(error.response.data); // logs an object to the console
 
-                        // Do something with error data
-                    });
+                    // Do something with error data
+            });
 
 
 
@@ -156,32 +156,32 @@ export default {
         upload(e){
             console.log('lezzgo')
             e.preventDefault();
-                let currentObj = this;
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    },
-                }
+            let currentObj = this;
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+            }
 
             let formData = new FormData();
             formData.append('form', this.form);
 
 
             axios.post('/myprofile', formData, config)
-                    .then(function (response) {
-                        console.log(response);
-                        if (response.data.error) {
-                            console.log(currentObj.error)
-                        }else if (response.data.success) {
-                            console.log(currentObj.success)
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error.response.data); // logs an object to the console
+                .then(function (response) {
+                    console.log(response);
+                    if (response.data.error) {
+                        console.log(currentObj.error)
+                    }else if (response.data.success) {
+                        console.log(currentObj.success)
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response.data); // logs an object to the console
 
-                        // Do something with error data
-                    });
+                    // Do something with error data
+                });
         },
     }, 
     

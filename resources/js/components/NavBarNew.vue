@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="backgroundOp || backgroundOp == 0" class="fixed top-0 h-32 w-full" :style="[backgroundOp >= 1 ? {backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'} :'' ]" ref="nav">
+  <nav v-if="backgroundOp || backgroundOp == 0" class="fixed top-0 h-32 w-full" :style="[backgroundOp >= 1 ? {backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'} :'' ]">
     <div class="mx-auto px-2">
         <div class="relative flex justify-between h-32 pt-8">
             <!-- <div class="flex items-center  space-x-4 h-16 pl-5" :style="[backgroundOp >= 1 ? {color: 'black'} : {color:'rgb('+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+')'} ]"> -->
@@ -15,9 +15,11 @@
                     <a href="/settings" class="nav-link">
                         Settings
                     </a>
-                    <a href="#" class="nav-link">
-                        Logout
-                    </a>
+                    <a :href="route('logout')" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-link">Logout</a>
+
+                    <form id="logout-form" :action="route('logout')" method="POST" style="display: none;">
+                        <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
+                    </form>
                 </div>
             </div>
             <div class="flex items-center  space-x-4 h-16 pl-5" v-else>
@@ -26,9 +28,9 @@
             <!-- [item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-6 py-3 rounded-md text-4xl font-medium']" 
             :aria-current="item.current ? 'page' : undefined" -->
             <!--  :@click="item.click" -->
-            <search :keywords="searchTerm" v-if="showSearch || searchTerm "></search>
+            <search :keywords="searchTerm" v-if="showSearch || searchTerm " loc="nav" :feed="feed"></search>
             <div class="pr-8">
-                <img src="/storage/assets/logo_w.png" class="h-44 w-auto"/>
+                <img src="/storage/assets/logo_w.png" loading="lazy" class="h-44 w-auto"/>
             </div>
         </div>
     </div>
@@ -39,20 +41,6 @@
             <!-- <div class="flex items-center  space-x-4 h-16 pl-5" :style="[backgroundOp >= 1 ? {color: 'black'} : {color:'rgb('+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+')'} ]"> -->
             <div class="flex items-center space-x-4 h-16 pl-5" v-if="$page.props.auth.user">
                 <a v-for="item in navigationLoged" :key="item.name" :href="item.href" @click="item.click" @mouseover="item.mouseEnter" class="nav-link pl-10" >{{ item.name }}</a>
-                <div v-show="showDrop" class="absolute w-40 bg-black mt-48" @mouseleave="mouseLeave">
-                    <a href="/" class="nav-link">
-                        Home
-                    </a>
-                    <a :href="'/myprofile/' + this.$page.props.auth.user.username" class="nav-link">
-                        Profile
-                    </a>
-                    <a href="/settings" class="nav-link">
-                        Settings
-                    </a>
-                    <a href="#" class="nav-link">
-                        Logout
-                    </a>
-                </div>
             </div>
             <div class="flex items-center  space-x-4 h-16 pl-5" v-else>
                 <a v-for="item in navigation" :key="item.name" :href="item.href" @click="item.click" class="nav-link pl-10" >{{ item.name }}</a>
@@ -60,9 +48,9 @@
             <!-- [item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-6 py-3 rounded-md text-4xl font-medium']" 
             :aria-current="item.current ? 'page' : undefined" -->
             <!--  :@click="item.click" -->
-            <search :keywords="searchTerm" v-if="showSearch || searchTerm "></search>
+            <search :keywords="searchTerm" v-if="showSearch || searchTerm "  loc="nav" :feed="feed"></search>
             <div class="pr-8">
-                <img src="/storage/assets/logo_w.png" class="h-44 w-auto"/>
+                <img src="/storage/assets/logo_w.png" loading="lazy" class="h-44 w-auto"/>
             </div>
         </div>
     </div>
@@ -89,6 +77,7 @@ export default {
     props:{
         searchTerm: {type: String, required: false},
         backgroundOp: {type: Number, required: false},
+        feed: Boolean,
     },
 
     data() {
@@ -103,7 +92,7 @@ export default {
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch },
                     ],
         navigationLoged: [
-                    { name: 'You shouldn\'t be logged in lol', href: '/myprofile/' + this.$page.props.auth.user.username, current: false, click: '' , mouseEnter: this.mouseEnter, mouseLeave: this.mouseLeave},
+                    { name: 'You shouldn\'t be logged in lol', href: '#', current: false, click: '' , mouseEnter: this.mouseEnter, mouseLeave: this.mouseLeave},
                     { name: 'Upload', href: '#', current: false, click: this.toggleUpload },
                     { name: 'Wallet', href: '#', current: false, click: this.toggleWallet },
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch },
@@ -135,6 +124,7 @@ export default {
     mounted(){
         if(this.$page.props.auth.user){
             this.navigationLoged[0].name = this.$page.props.auth.user.username
+            this.navigationLoged[0].href = '/myprofile/'+this.$page.props.auth.user.username
         }
     }
 

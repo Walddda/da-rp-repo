@@ -25,10 +25,12 @@ class CreateBeatsTable extends Migration
             $table->string('tag5')->nullable();
             $table->text('description')->nullable();
             $table->integer('bpm');
-            $table->integer('key_signatures_id');
-            $table->integer('price');
+            $table->string('key');
+            $table->double('price');
             $table->boolean('archive');
             $table->integer('user_id');
+            $table->string('cover_id');
+            $table->string('feature')->nullable();
             $table->timestamps();
         });
     }

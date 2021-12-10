@@ -59,6 +59,12 @@ input.main-text-input:focus {
   --tw-ring-color: 0;
 }
 
+input.main-text-input.price-input {
+  padding-left: 70px;
+  padding-right: 25px;
+  text-align: right;
+}
+
 select.main-select-input {
   width: 100%;
   border-radius: 15px;
@@ -87,6 +93,18 @@ select.main-select-input:focus {
 
 .main-form-element.two-third {
   width: 66%;
+}
+
+.main-form-element.max {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+
+.main-form-element.min {
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
 }
 
 .main-form-element.ein-fünftel {
@@ -180,6 +198,11 @@ input.main-form-checkbox {
   border-radius: 3px;
   margin-left: 5px;
   border: none;
+}
+
+.main-form-checkbox.left {
+  margin-left: 0px;
+  margin-right: 5px;
 }
 
 input.main-form-checkbox:checked {
@@ -283,6 +306,68 @@ label.main-file-label-box.error {
   color: #e20000;
 }
 
+.arrow {
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  margin-left: 5px;
+  margin-top: -4px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.main-form-input-select {
+  width: 60px;
+  position: absolute;
+  border-radius: 14px;
+  background-color: #bebdbd;
+  color: black;
+  height: 28px;
+  justify-content: center;
+  margin-left: 7px;
+  margin-top: 8px;
+  padding: 4px 9px;
+  align-items: center;
+  display: flex;
+}
+
+.main-form-input-select.open.bottom {
+  border-radius: 0px 0px 14px 14px;
+  padding-top: 6px;
+  margin-top: 34px;
+  border-top: 1px solid #8f35e8;
+}
+
+.main-form-input-select.open.top {
+  border-radius: 14px 14px 0px 0px;
+}
+
+.currency-icon {
+  position: absolute;
+  margin-left: 163px;
+  margin-top: 10px;
+}
+
+.currency-icon .doller-sign {
+  padding-left: 5px;
+}
+
+.currency-icon .ETH-sign {
+  padding-top: 4px;
+}
+
+.main-file-name {
+  font-size: 12px;
+}
+
+.main-file-name.cover {
+  text-align: right;
+}
+
 .popup-main {
   background-color: white;
   width: 33vw;
@@ -373,6 +458,57 @@ label.main-file-label-box.error {
   opacity: 0;
 }
 
+.main-page-form-div {
+  height: 100vh;
+}
+
+.main-page-form-heading {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 60px 0px 30px;
+  height: 25%;
+}
+
+.main-page-form-heading .heading-title {
+  font-size: 133px;
+  font-weight: 600;
+}
+
+.main-page-form-content {
+  display: flex;
+  flex-direction: row;
+  height: 75%;
+}
+
+.main-page-form-content div {
+  width: 33vw;
+}
+
+.main-page-form-content .content-back {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.main-page-form-cta {
+  border-radius: 15px;
+  color: white;
+  font-size: 27px;
+}
+
+.main-page-form-cta.back {
+  background-color: #e20000;
+  width: 110px;
+  height: 66px;
+  margin-left: 60px;
+  margin-bottom: 50px;
+}
+
+.main-page-form-cta.submit {
+  background-color: #8f35e8;
+  padding: 10px 15px;
+}
+
 * {
   font-family: basic-sans;
   font-weight: 400;
@@ -439,8 +575,59 @@ label.main-file-label-box.error {
   color: white;
 }
 
-input.search-text-input {
-  border-radius: 15px;
+form.main-search-form {
+  height: 110px;
+}
+
+i.main-search-icon {
+  position: absolute;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  padding-left: 25px;
+}
+
+input.search-text-input-feed {
+  border-radius: 15px 0px 0px 15px;
+  font-size: 34px;
+  width: 730px;
+  height: 110px;
+  padding-left: 100px;
+}
+
+input.search-text-input-feed:focus {
+  --tw-ring-color: 0;
+  border: none;
+}
+
+input.search-text-input-nav {
+  border-radius: 15px 0px 0px 15px;
+  font-size: 20px;
+  height: 60px;
+  width: 300px;
+}
+
+input.search-text-input-nav:focus {
+  --tw-ring-color: 0;
+  border: none;
+}
+
+button.search-button-input-feed {
+  background-color: #8f35e8;
+  color: white;
+  border-radius: 0px 15px 15px 0px;
+  font-size: 34px;
+  height: 110px;
+  width: 180px;
+}
+
+button.search-button-input-nav {
+  background-color: #8f35e8;
+  color: white;
+  border-radius: 0px 15px 15px 0px;
+  font-size: 34px;
+  height: 60px;
+  width: 50px;
 }
 
 button.search-button {

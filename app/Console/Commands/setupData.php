@@ -75,6 +75,42 @@ class setupData extends Command
         $this->info('The command was successful!');
         // $this->error('Something went wrong!');
 
+        // $defCover = Cover::create([
+        //     'name' => time() . '_default_cover.png',
+        //     'cover_path' => '/storage/covers/Default-cover.png',
+        // ]);
+        // $defCover1 = Cover::create([
+        //     'name' => time() . '_default_cover_silver.png',
+        //     'cover_path' => '/storage/covers/Default-cover_silver.png',
+        // ]);
+        // $defCover2 = Cover::create([
+        //     'name' => time() . '_default_cover_gold.png',
+        //     'cover_path' => '/storage/covers/Default-cover_gold.png',
+        // ]);
+        // $defCover3 = Cover::create([
+        //     'name' => time() . '_default_cover_diamond.png',
+        //     'cover_path' => '/storage/covers/Default-cover_diamond.png',
+        // ]);
+
+
+
+        // $user = User::create([
+        //     'first_name' => 'admin',
+        //     'last_name' => 'admin',
+        //     'email' => 'beatchainbeatchain@gmail.com',
+        //     'email_verified_at' => Carbon::now()->toDateTimeString(),
+        //     'username' => 'admin',
+        //     'password' => Hash::make('VwW2KPh^fA4oy@8yTBsWW')
+        // ]);
+        // $user2 = User::create([
+        //     'first_name' => 'test',
+        //     'last_name' => 'user',
+        //     'email' => 'samuel.g.anmeldung@gmail.com',
+        //     'email_verified_at' => Carbon::now()->toDateTimeString(),
+        //     'username' => 'adam',
+        //     'password' => Hash::make('VwW2KPh^fA4oy@8yTBsWW')
+        // ]);
+
         return Command::SUCCESS;
     }
 }

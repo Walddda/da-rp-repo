@@ -253,7 +253,6 @@ export default {
     },
     
     props: {
-        route: String,
         file1: String,
         file2: String,
         logedin: Number,
