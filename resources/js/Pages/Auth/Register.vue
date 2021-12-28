@@ -4,14 +4,15 @@
             <div class="heading-title">
                 Register
             </div>
-            <div class="heading-logo">
+            <div class="heading-logo"><a href="/">
                 <img src="/storage/assets/logo.png" class="h-44 w-auto"/>
+                </a>
             </div>
         </div>
         <div class="main-page-form-content">
             <div class="content-back">
                 <!--  bg-yellow-500 -->
-                <button class="main-page-form-cta back">Back</button>
+                <button class="main-page-form-cta back" @click="back">Back</button>
             </div>
             <div class="content-form ">
                 <!-- bg-red-400 -->
@@ -321,6 +322,9 @@ export default {
         },
         mouseInpf(a){
             this.mouseInp = a;
+        },
+        back(){
+history.back()
         },
     }
 }

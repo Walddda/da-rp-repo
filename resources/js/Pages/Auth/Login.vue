@@ -4,8 +4,8 @@
             <div class="heading-title">
                 Login
             </div>
-            <div class="heading-logo">
-                <img src="/storage/assets/logo.png" class="h-44 w-auto"/>
+            <div class="heading-logo"><a href="/">
+                <img src="/storage/assets/logo.png" class="h-44 w-auto"/></a>
             </div>
         </div>
         <div class="main-page-form-content">

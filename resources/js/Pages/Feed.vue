@@ -10,7 +10,7 @@
                 <div :style="{opacity: (1-backgroundOp)}">
                 <p class="heading-feed">Start selling<br>
                 your beats now</p>
-                <button class="cta-main but-main mt-4">get started</button>
+                <a href="/register"><button class="cta-main but-main mt-4">get started</button></a>
                 </div>
             </div>
             <div v-else class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
@@ -34,34 +34,35 @@
         <div ref="feedDiv">
             <!-- {{$page.props}} -->
             <!-- {{logedIn}} ---{{this.$page.props.auth.user.id}} -->
-            <div v-if="files">
-                <div class="container mb-96 mt-10 flex mx-auto w-full items-center justify-center">
-                    <ul class="flex flex-col p-4 grid justify-items-center">
-                        <!-- <li 
-                            v-for="x in files" 
-                            class="border-gray-400 flex flex-row my-5">
-                            <div class="select-none flex flex-1 items-center p-4 transition duration-500 ease-in-out transform hover:-translate-y-2 rounded-2xl border-2 p-6 hover:shadow-2xl border-red-400">
-                                <div class="flex-1 pl-1">
-                                        <player :track="x"/>
+            <div class="main-feed-div flex items-center justify-center">
+                <div v-if="files">
+                    <div class="container flex mx-auto w-full items-center justify-center">
+                        <ul class="flex flex-col p-4 grid justify-items-center">
+                            <!-- <li 
+                                v-for="x in files" 
+                                class="border-gray-400 flex flex-row my-5">
+                                <div class="select-none flex flex-1 items-center p-4 transition duration-500 ease-in-out transform hover:-translate-y-2 rounded-2xl border-2 p-6 hover:shadow-2xl border-red-400">
+                                    <div class="flex-1 pl-1">
+                                            <player :track="x"/>
+                                    </div>
                                 </div>
-                            </div>
-                        </li> -->
+                            </li> -->
 
-                        <li v-for="(x, k) in files">
-                            <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" current/>
-                            <player v-else :track="x" :numb="k+1" :info="info" />
-                        </li>
-                    </ul>
+                            <li v-for="(x, k) in files">
+                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" current/>
+                                <player v-else :track="x" :numb="k+1" :info="info" />
+                            </li>
+                        </ul>
+                    </div>
+
+                    
+                    
                 </div>
+                <div v-else-if="!files & !loading & !searchEmpty">Be the first one, to upload your work at Beatchain.</div>
+                <div v-if="searchEmpty">Your search "{{searchTerm}}" had no result.</div>
 
-                
-                
+                <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
             </div>
-            <div v-else-if="!files & !loading & !searchEmpty">Sowwy there are no files</div>
-            <div v-if="searchEmpty">Sowwy there are no files with that search</div>
-
-            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
-
 
 
             <div v-if="currentPlaying" class="border-t-2 border-black pt-3 pb-3 fixed w-full bottom-0 flex flex-col items-center bg-white">
@@ -189,12 +190,17 @@ export default {
         getTracks(term = this.searchTerm){
             this.searchEmpty = false;
             console.info('start');
+                    window.scrollTo({
+                            top: 840,
+                            behaviour: "smooth",
+                        })
             axios.get('/api/beats', { params: { keywords: term } })
             .then(response => {
                 if(!response.data.length){
                     console.info('empty')
                     this.searchEmpty = true;
                     this.loading = false;
+                    this.searchTerm = term
                 }else{
                     this.files = response.data
                     console.info('finish: ');
@@ -203,18 +209,18 @@ export default {
                     console.info(this.$refs.player)
                     this.loading = false;
                     console.log(term)
-                    if(term){
-                        // this.$refs.feedDiv.scrollIntoView()
-                        window.scrollTo({
-                            top: 840,
-                            behaviour: "smooth",
-                        })
-                        // if(window.pageYOffset >= 840){
-                        //     window.scrollY = 840
-                        // }else{
-                        //     window.scrollY = window.pageYOffset
-                        // }
-                    }
+                    // if(term){
+                    //     // this.$refs.feedDiv.scrollIntoView()
+                    //     window.scrollTo({
+                    //         top: 840,
+                    //         behaviour: "smooth",
+                    //     })
+                    //     // if(window.pageYOffset >= 840){
+                    //     //     window.scrollY = 840
+                    //     // }else{
+                    //     //     window.scrollY = window.pageYOffset
+                    //     // }
+                    // }
 
                 }
             })
@@ -307,6 +313,7 @@ export default {
             // this.lastScroll = window.scrollY
             // console.log('---------------------------')
             // console.log(window.scrollY)
+            console.log(this.backgroundOp)
         },
 
     },
@@ -318,7 +325,7 @@ export default {
 
         this.getCurrentTime();
         setInterval(this.getCurrentTime, 100);
-        // setInterval(()=>{this.emitter.emit("reload")}, 5000);
+        // setInterval(()=>{this.emitter.emit("reload")}, 20000);
 
 
         this.getLength();

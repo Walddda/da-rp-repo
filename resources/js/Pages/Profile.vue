@@ -1,9 +1,9 @@
 <template>
     <div>
-        <nav-bar-new/>
+        <nav-bar-new profile/>
         <BreezeValidationErrors class="mb-4" />
-
-        <wallet></wallet>
+        <div>
+            <wallet></wallet>
     
             <label> Username: {{form.username}} </label> <br>
             <label> First Name: {{form.first_name}} </label> <br>
@@ -17,7 +17,7 @@
                 <a href="/settings">Settings</a><br>
                 <a href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a>
             </div> 
-
+        </div>
     </div>
 </template>
 

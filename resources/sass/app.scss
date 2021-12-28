@@ -136,3 +136,9 @@ button.search-button-input-nav {
 button.search-button {
     background-color: red;
 }
+.main-feed-div {
+    min-height: calc(100vh - 125px);
+}
+.nav-search-div {
+    height: min-content;
+}

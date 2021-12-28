@@ -65,7 +65,7 @@ export default {
                       {
                       from: this.$page.props.auth.user.eth_address,
                       to: this.song.is_beat.from_user.eth_address,
-                      value: web3.utils.toWei(String(this.song.is_beat.price), 'ether'),
+                      value: parseInt(web3.utils.toWei(String(this.song.is_beat.price), 'ether')).toString(16),
                       },
                   ],
               })
