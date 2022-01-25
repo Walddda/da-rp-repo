@@ -1,44 +1,56 @@
 <template>
     <div>
 
-
-
         <nav-bar-new profile/>
         <!-- <BreezeValidationErrors class="mb-4" /> -->
         <div class="main-profile-content">
             <!-- <wallet></wallet> -->
             <div>
-                <img src="/storage/assets/PROFILE_BG.jpg" class="profile-bg"/>
+                <img src="/storage/assets/PROFILE_BG_cut1.jpg" class="profile-bg"/>
                 <div class="profile-avatar">
                     <img src="/storage/covers/1638883713_1_2631819_15.png"/>
                 </div>
             </div>
     
-            <div class="profile-details">
-                <label class="pd-username">{{form.username}} <a v-if="own" href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a></label>
-                <br>
-                <label class="pd-email">{{form.email}} </label> <br>
-                <label class="pd-location">{{form.location}} </label> <br>
-                <label class="pd-joined">joined {{form.joined}} </label> <br>
-                <label class="pd-desc">{{form.description}} </label> <br>
+            <div class="profile-details flex flex-row justify-between">
+                <div class="profile-details-left">
+                    <label class="pd-username">{{form.username}} 
+                        <a v-if="own" href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a>
+                    </label>
+                    <br>
+                    <label class="pd-email">{{form.email}} </label> <br><br>
+                    <label class="pd-location">{{form.location}} </label> <br>
+                    <label class="pd-joined">joined {{form.joined}} </label>
+                </div>
+                <div class="profile-details-right">
+                    <label class="pd-desc">{{form.description}} </label>
+                </div>
             </div>
 
             <!-- {{userData.username}} -->
 
             <!-- MyProfile, sehen andere nicht -->
-            <div v-if="own">
-                <a href="/settings">Settings</a><br>
-                <a href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a>
-                <button>Purchased Tracks</button>
-            </div> 
+            <div v-if="own" class="main-toggle-own-tracks flex justify-center">
+                <div class="flex justify-center">
+                    <!-- <a href="/settings">Settings</a><br>
+                    <a href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a> -->
+                    <button @click="purchased = !purchased; myTracks = !myTracks" class="toggle-option left" :class="[purchased ? 'active' : '']">purchased tracks</button>
+                    <button @click="myTracks = !myTracks; purchased = !purchased" class="toggle-option right" :class="[myTracks ? 'active' : '']">my tracks</button>
+                </div>
+            </div>
             
-            <tracks :attr="{loc: 'feed'}"></tracks>
+            <div v-if="myTracks">
+                <tracks :attr="{loc: 'prof', id: form.id}"></tracks>
+            </div>
 
-            <li v-for="(x, k) in purchasedFiles">
-                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" current/>
-                <player v-else :track="x" :numb="k+1"/>
-            </li>
+            <div v-if="purchased">
+                <li v-for="(x, k) in purchasedFiles">
+                    <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" current/>
+                    <player v-else :track="x" :numb="k+1"/>
+                </li>
+            </div>
             
+            <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
         </div>
     </div>
 </template>
@@ -50,6 +62,7 @@ import { CogIcon } from '@heroicons/vue/outline';
 import NavBarNew from '@/Components/NavBarNew.vue'
 import Tracks from '@/Components/Tracks.vue';
 import Player from '@/Components/Player.vue';
+import PopupEdit from '@/Components/PopupEdit.vue'
 
 
 const countries = require('i18n-iso-countries')
@@ -65,6 +78,7 @@ export default {
         CogIcon,
         Tracks,
         Player,
+        PopupEdit,
     },
 
     props: {
@@ -92,11 +106,15 @@ export default {
                 id: this.userData.id,
             }),
             own: this.currentUser(this.userData.id),
+            myTracks: true,
+            purchased: false,
             files: null,
             allFiles: null,
             transactions: [],
             purchasedTracks: [],
             purchasedFiles: [],
+            showPopupEdit: false,
+            editTrack: null,
         }
     },
 
@@ -172,6 +190,19 @@ export default {
         this.getSongs()
         this.getTransactions()
     },
+    mounted() {
+        this.emitter.on("closePopupEdit", () => {
+            this.showPopupEdit = false;
+            console.info('cl')
+        });
+
+        this.emitter.on("openPopupEdit", track => {
+            console.log(track)
+            this.showPopupEdit = true;
+            this.editTrack = track;
+            console.info('op')
+        });
+    }
 
 }
 </script>

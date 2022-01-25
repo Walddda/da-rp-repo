@@ -14,7 +14,7 @@
                         <ul class="flex flex-col p-4 grid justify-items-center">
 
                             <li v-for="(x, k) in files">
-                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum"/>
+                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)"/>
                                 <player v-else :track="x" :numb="k+1" :info="info" />
                             </li>
                         </ul>
@@ -97,13 +97,22 @@ export default {
     },
     methods: {
         getTracks(term = this.searchTerm){
+            let profile = {}
+            if(this.attr.loc == 'prof'){
+                profile = {
+                    act: true,
+                    id: this.attr.id,
+                }
+            }
             this.searchEmpty = false;
             console.info('start');
-                    window.scrollTo({
-                            top: 840,
-                            behaviour: "smooth",
-                        })
-            axios.get('/api/beats', { params: { keywords: term } })
+            if(term){
+                window.scrollTo({
+                    top: 840,
+                    behaviour: "smooth",
+                })
+            }
+            axios.get('/api/beats', { params: { keywords: term, profile} })
             .then(response => {
                 if(!response.data.length){
                     console.info('empty')
@@ -195,6 +204,9 @@ export default {
             this.$refs.player.currentTime += value;
             // console.log('r239')
         },
+        volChange(x){
+            console.log("new vol:"+x);
+        }
 
     },
     mounted() {    

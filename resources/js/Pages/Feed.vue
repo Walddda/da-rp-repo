@@ -102,6 +102,7 @@
             </div>-->
         </div>
             <upload v-if="showPopupUpload"></upload>
+            <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
             <popup-wallet v-if="showPopupWallet"></popup-wallet>
             <popup-payment v-if="showPopupPayment && files" :song="paymentTrack"></popup-payment>
             <!-- <PopupWallet :showing="walletPopup" @close="WalletPopup = false">
@@ -124,6 +125,7 @@ import Upload from '@/Components/PopupUpload.vue'
 import HomePage from '@/Components/HomePage.vue'
 import PopupWallet from '@/Components/PopupWallet.vue'
 import PopupPayment from '@/Components/PopupPayment.vue'
+import PopupEdit from '@/Components/PopupEdit.vue'
 import Search from '@/Components/Search.vue';
 
 //   import VueSlider from 'vue-slider-component'
@@ -144,6 +146,7 @@ export default {
         // Wallet,
         PopupWallet,
         PopupPayment,
+        PopupEdit,
         Search,
     },
 
@@ -170,6 +173,8 @@ export default {
             showPopupUpload: false,
             showPopupWallet: false,
             showPopupPayment: false,
+            showPopupEdit: false,
+            editTrack: null,
             paymentTrack: null,
             info: null,
             loading: true,
@@ -313,7 +318,7 @@ export default {
             // this.lastScroll = window.scrollY
             // console.log('---------------------------')
             // console.log(window.scrollY)
-            console.log(this.backgroundOp)
+            // console.log(this.backgroundOp)
         },
 
     },
@@ -361,6 +366,18 @@ export default {
         });
         this.emitter.on("openPopupUpload", () => {
             this.showPopupUpload = true;
+            console.info('op')
+        });
+        
+        this.emitter.on("closePopupEdit", () => {
+            this.showPopupEdit = false;
+            console.info('cl')
+        });
+
+        this.emitter.on("openPopupEdit", track => {
+            console.log(track)
+            this.showPopupEdit = true;
+            this.editTrack = track;
             console.info('op')
         });
 

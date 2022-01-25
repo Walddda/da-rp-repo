@@ -258,12 +258,12 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                first_name: 'Roman',
-                last_name: 'Stimpfl',
-                email: 'beatchainbeatchain@gmail.com',
-                username: 'test01',
-                password: 'Hallo123',
-                password_confirmation: 'Hallo123',
+                first_name: '',
+                last_name: '',
+                email: '',
+                username: '',
+                password: '',
+                password_confirmation: '',
                 terms: false,
                 description: '',
                 location: '',

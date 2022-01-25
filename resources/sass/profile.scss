@@ -3,8 +3,8 @@
 }
 .profile-bg {
     width: 100%;
-    clip-path: polygon(0% 22%, 100% 22%, 100% 52%, 0% 52%);
-    margin-top: -15%;
+    // clip-path: polygon(0% 22%, 100% 22%, 100% 400px, 0% 400px);
+    // margin-top: -15%;
     position: fixed;
 }
 
@@ -14,18 +14,20 @@
     height: max-content;
     // position: fixed;
     position: absolute;
-    padding: 1.5vw;
+    padding: 1vw;
     border-radius: 50%;
     width: 20vw;
     // top: 30%;
     left: calc(50vw - 10vw);
-    margin-top: 10%;
+    margin-top: 5%;
 }
 .profile-avatar img {
     border-radius: 50%;
 }
 .profile-details {
     padding-top: 20%;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 .pd-username {
     font-size: 40px;
@@ -33,4 +35,28 @@
 }
 .pd-username svg {
     display: inline;
+}
+
+.main-toggle-own-tracks {
+}
+.main-toggle-own-tracks div {
+    border-radius: 20px;
+    background-color: #e6e6e6;
+    // width: 500px;
+}
+.main-toggle-own-tracks div button {
+    width: 150px;
+    padding: 3px 10px;
+}
+.main-toggle-own-tracks .active {
+    background-color: $rp-purple;
+    color: white;
+}
+.toggle-option.left {
+    border-radius: 20px 0 0 20px;
+    text-align: right;
+}
+.toggle-option.right {
+    border-radius: 0 20px 20px 0;
+    text-align: left;
 }

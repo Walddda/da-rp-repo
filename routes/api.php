@@ -9,8 +9,10 @@ use App\Http\Controllers\SearchController;
 
 Route::get('beats',  [AxiosController::class, 'getTracks']);
 Route::post('upload',  [AxiosController::class, 'upload']);
+Route::post('edit', [AxiosController::class, 'edit']);
 Route::post('transaction',  [AxiosController::class, 'transaction']);
 Route::get('transactions',  [AxiosController::class, 'getTransactions']);
+Route::post('counter', [AxiosController::class, 'downloadCounter']);
 
 // Route::middleware(['auth:api'])->group(function () {
 

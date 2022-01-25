@@ -304,7 +304,7 @@ export default {
             coverType: '',
             title: '',
             tag: '',
-            tags: [],
+            tags: ['test1', 'test23', 'abcde'],
             bpm: '',
             keys: ["C", "Cm", "Db", "C#m", "D", "Dm", "Eb", "D#m", "E", "Em", "F", "Fm", "Gb", "F#m", "G", "Gm", "Ab", "G#m", "A", "Am", "Bb", "A#m", "B", "Bm"],
             selectedKey: '',
@@ -440,12 +440,18 @@ export default {
                         }
                     })
                     .catch(error => {
+                        if(error.response){
                         console.log(error)
                         currentObj.error = error.response.data.errors
                         currentObj.success = null
                         console.log(error.response.data);
                         currentObj.processing = false; // logs an object to the console
-
+                        }else{
+                            currentObj.success = null
+                            currentObj.processing = false
+                            console.log('help')
+                            currentObj.close();
+                        }
                         // Do something with error data
                     });
         },

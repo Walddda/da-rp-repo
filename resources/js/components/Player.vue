@@ -44,6 +44,8 @@
 							<div @click="infoEmit" class="main-info-button">
 								i
 							</div>
+
+							<!-- {{own}} -->
 							<!-- <div @click="paymentEmit">
 								{{ this.dollarPrice }} $
 							</div> -->
@@ -52,6 +54,12 @@
 								<svg class="w-6 h-6" @click="likeUnlike" :fill="likedColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/></svg>
 								
 							</div>
+
+							
+						</div>
+						
+						<div v-if="own" @click="this.emitter.emit('openPopupEdit', this.track)">
+								<h1> edit </h1>
 						</div>
 					</div>
 					<div class="playerInfo ">
@@ -140,14 +148,17 @@ export default {
 			volumeX: 100,
 			volumeOn: false,
 			volumeOff: false,
+			own: this.currentUser(this.track.is_beat.from_user.id),
 		}
 	},
 	created() {
 	},
 	mounted(){
+		// console.log('mount')
 		// console.log(this.$page.props)
 		this.liked()
 		this.convert()
+		// console.log('conv')
 		this.emitter.on("reload", () => {
             this.convert();
             console.log('reload');
@@ -165,6 +176,11 @@ export default {
 			if(perc < 0){perc = 0}
 			this.emitter.emit('slide', {id: this.numb, timeP: perc})
 		},
+        currentUser(x){
+            if(this.$page.props.auth.user){
+                return this.$page.props.auth.user.id == this.track.is_beat.from_user.id
+            } return false
+        },
 		testEmit() {
 
 			// console.log('yaay');
@@ -195,9 +211,11 @@ export default {
 		},
 
 		convert() {
+			// console.log('test')
 			let currentObj = this;
             axios.get('https://api.coinbase.com/v2/exchange-rates')
             .then(res => {
+				// console.log(res)
 				// console.log(this.track.is_beat.price)
 				// console.log(currentObj.track.is_beat.price)
 
@@ -240,7 +258,7 @@ export default {
 							val = ''
 							break;
 					}
-					this.$refs.cover.src = "storage/covers/Default-cover"+val+".png"
+					this.$refs.cover.src = "/storage/covers/Default-cover"+val+".png"
 					// console.info(this.$refs.cover)
 				}
 				// this.refreshLikeCount()
@@ -262,9 +280,6 @@ export default {
 		toggleVol(){
 			this.volumeOn = !this.volumeOn;
 		},
-	},
-	mounted() {
-		console.log(this.volume);
 	},
 }
 </script>

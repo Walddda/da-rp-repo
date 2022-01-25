@@ -13,7 +13,19 @@ class AxiosController extends Controller
 {
     public function getTracks(Request $request)
     {
-        if (!$request->keywords && !$request->user) {
+        // var_dump(sizeOf(json_decode($request->profile)));
+        if (strlen($request->profile) > 2) {
+            $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
+                ->has('isBeat.fromUser')
+                ->join('beats', function ($join) {
+                    $join->on('beats.id', '=', 'files.beat_id');
+                })
+                ->where('beats.user_id', '=', json_decode($request->profile)->id)
+                ->orderBy('beats.created_at', 'desc')
+                ->get()
+                ->toArray();
+            return response()->json($res);
+        } else if (!$request->keywords && !$request->user) {
             $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')
                 ->orderBy('created_at', 'desc')
                 ->get()->toArray();
@@ -189,5 +201,18 @@ class AxiosController extends Controller
     {
         $transactions = DB::table('transactions')->get();
         return response()->json($transactions);
+    }
+
+    public function downloadCounter(Request $request)
+    {
+        Beat::where('id', $request->input('beat_id'))
+            ->update(['download_count' => DB::raw('download_count + 1')]);
+        return response()->json([
+            'success' => 'Download saved',
+        ]);
+    }
+
+    public function edit(Request $request)
+    {
     }
 }

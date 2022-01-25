@@ -57,6 +57,7 @@
         <div v-if="download"><a :href="song.file_path" download>Download</a></div>
         
         </div>
+
     </div>
 
     
@@ -133,11 +134,14 @@ export default {
                       },
                   }
                 
-                return axios.post('/api/transaction', formData, config);
-                }
-              )
-              .then(response => {
-                console.log(response)
+                return axios.post('/api/transaction', formData, config)
+                  .then(response => {
+                    let formCount = new FormData();
+                    formCount.append('beat_id', this.song.is_beat.id)
+                    formCount.append('download_count', this.counter)
+
+                    return axios.post('/api/counter', formCount)
+                  })
               })
               .catch((error) => console.error)
         },
@@ -148,8 +152,6 @@ export default {
               this.transactions = response.data
               this.transactions.forEach((transaction) => {
                 if (transaction.buyer_id === this.$page.props.auth.user.id && transaction.beat_id == this.song.is_beat.id) {
-                  console.log(transaction.beat_id)
-                  console.log(this.song.is_beat.id)
                   this.download = true
                 }
               })
