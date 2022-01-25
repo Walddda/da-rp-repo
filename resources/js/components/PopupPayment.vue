@@ -1,8 +1,7 @@
 <template>
-    <div class="relative bg-blurr fixed inset-0 flex items-center justify-center bg-semi-75" @click="close()">
+    <div v-if="song.is_beat.from_user.id === $page.props.auth.user.id" class="relative bg-blurr fixed inset-0 flex items-center justify-center bg-semi-75" @click="close()">
         <div class="popup text-center" @click.stop>
         {{ song.is_beat.title }}<br>-<br>
-        {{ song.is_beat.from_user.username }}
 
         {{song.is_beat.from_user.eth_address}}
         
@@ -10,25 +9,65 @@
 
         price: {{ this.calculating ? 'Loading...' : this.dollarPrice }} $<br>-<br>
         ether price: {{ song.is_beat.price }} ETH
+<!-- 
+        {{song.is_beat.id}}<br>
+        -<br>
+        {{$page.props.auth.user.id}} -->
 
         
         <div class="popup-footer">
             <button class="popup-cta back" @click="close()">Cancel</button>
-            <button class="popup-cta submit" @click="pay()">Purchase</button>
+            <button class="popup-cta submit" @click="pay()" disabled>Purchase</button>
         </div>
+
+        <div v-if="download">You already bought this beat</div>
+
+        <div v-if="hash">{{hash}}</div>
+
+        <a :href="song.file_path" download>Download</a>
         
         </div>
     </div>
+
+    <div v-else class="relative bg-blurr fixed inset-0 flex items-center justify-center bg-semi-75" @click="close()">
+        <div class="popup text-center" @click.stop>
+        {{ song.is_beat.title }}<br>-<br>
+
+        {{song.is_beat.from_user.eth_address}}
+        
+        <span v-if="song.is_beat.feature"> feat. {{ song.is_beat.feature }} </span> <br>-<br>
+
+        price: {{ this.calculating ? 'Loading...' : this.dollarPrice }} $<br>-<br>
+        ether price: {{ song.is_beat.price }} ETH
+<!-- 
+        {{song.is_beat.id}}<br>
+        -<br>
+        {{$page.props.auth.user.id}} -->
+
+        
+        <div class="popup-footer">
+            <button class="popup-cta back" @click="close()">Cancel</button>
+            <button class="popup-cta submit" @click="pay()" :disabled="download">Purchase</button>
+        </div>
+
+        <div v-if="download">You already bought this beat</div>
+
+        <div v-if="hash">{{hash}}</div>
+
+        <div v-if="download"><a :href="song.file_path" download>Download</a></div>
+        
+        </div>
+    </div>
+
+    
 </template>
 <script>
 import web3 from 'web3/dist/web3.min.js'
-import { ethers } from "ethers"
 
 export default {
     name: 'Payment',
     
     components: {
-        ethers,
         web3,
     },
 
@@ -40,6 +79,9 @@ export default {
         return {
             dollarPrice: 0,
             calculating: true,
+            hash: '',
+            download: false,
+            transactions: [],
         }
     },
 
@@ -69,19 +111,61 @@ export default {
                       },
                   ],
               })
-              .then((txHash) => console.log(txHash))
-              .catch((error) => console.error);
+              .then(
+                (txHash) => {
+                  console.log(txHash)
+                  this.hash = txHash
+                  this.download = true
+
+                  let formData = new FormData();
+                  console.log('transaction')
+                  console.log(this.song.is_beat.from_user.id)
+                  console.log(this.$page.props.auth.user.id)
+                  formData.append('seller_id', this.song.is_beat.from_user.id);
+                  formData.append('buyer_id', this.$page.props.auth.user.id);
+                  formData.append('hash', this.hash);
+                  formData.append('beat_id', this.song.is_beat.id)
+
+                  const config = {
+                      headers: {
+                          'content-type': 'multipart/form-data',
+                          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                      },
+                  }
+                
+                return axios.post('/api/transaction', formData, config);
+                }
+              )
+              .then(response => {
+                console.log(response)
+              })
+              .catch((error) => console.error)
+        },
+
+        getTransactions() {
+          axios.get('api/transactions')
+            .then(response => {
+              this.transactions = response.data
+              this.transactions.forEach((transaction) => {
+                if (transaction.buyer_id === this.$page.props.auth.user.id && transaction.beat_id == this.song.is_beat.id) {
+                  console.log(transaction.beat_id)
+                  console.log(this.song.is_beat.id)
+                  this.download = true
+                }
+              })
+            })
+            .catch((error) => console.error)
         },
     }, 
     
     mounted() {
       this.convert()
+      this.getTransactions()
       this.emitter.on("reload", () => {
               this.convert();
               // console.log(text);
           });
-      },
-    
+      }, 
 } 
 </script>
 

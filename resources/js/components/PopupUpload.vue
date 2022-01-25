@@ -328,6 +328,7 @@ export default {
             beatFileName: '',
             coverFileName: '',
             showPopupCrop: '',
+            length: null,
         }
     },
     
@@ -335,6 +336,8 @@ export default {
         file1: String,
         file2: String,
         logedin: Number,
+    },
+    created(){
     },
 	methods: {
         focus(bool){
@@ -376,16 +379,17 @@ export default {
             }
             console.log('lezzgo')
             this.loading = true;
-                let currentObj = this;
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    },
-                }
+            let currentObj = this;
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+            }
 
             let formData = new FormData();
             formData.append('beat', this.beat);
+            formData.append('length', this.length);
 
             if (this.coverType) {
                 formData.append('cover', this.cover);
@@ -446,7 +450,21 @@ export default {
                     });
         },
         onBeatChange(e) {
-                this.beat = e.target.files[0];
+            this.beat = e.target.files[0];
+            // var audio = document.createElement('audio');
+            // console.log(e)
+            // audio.src = e.target.result
+            // audio.addEventListener('loadedmetadata', function(){
+                // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
+                // this.length = audio.duration;
+            
+                // example 12.3234 seconds
+                // console.log("The duration of the song is of: " + this.length + " seconds");
+                // Alternatively, just display the integer value with
+                // parseInt(duration)
+                // 12 seconds
+            // },false);
+            // console.log(this.length)
             if(e.target.files[0]){
                 this.beatFileName = e.target.files[0].name;
             }else{
@@ -548,6 +566,43 @@ export default {
             this.showPopupCrop = false;
             console.info('cl')
         });
+        var audio = document.createElement('audio');
+        let diese = this;
+        document.getElementById("chooseFile").addEventListener('change', function(event){
+            var target = event.currentTarget;
+            var file = target.files[0];
+            var reader = new FileReader();
+        
+            if (target.files && file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    audio.src = e.target.result;
+                    audio.addEventListener('loadedmetadata', function(){
+                        // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
+                        var duration = audio.duration;
+                        diese.length = audio.duration;
+                    
+                        // example 12.3234 seconds
+                        console.log("The duration of the song is of: " + duration + " seconds");
+                        // Alternatively, just display the integer value with
+                        // parseInt(duration)
+                        // 12 seconds
+                    },false);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }, false); 
+        
+        // var aud = document.getElementById("chooseFile")
+        // if(aud) {
+        //     aud.addEventListener('change', function(event){
+        //         console.log('yes')
+        //         console.log(event)
+        //         console.log(event.target.result)
+        //     })
+        // }
     }
 };
 </script>

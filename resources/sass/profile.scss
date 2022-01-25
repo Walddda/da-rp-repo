@@ -1,0 +1,36 @@
+.main-profile-content {
+    margin-top: 128px;
+}
+.profile-bg {
+    width: 100%;
+    clip-path: polygon(0% 22%, 100% 22%, 100% 52%, 0% 52%);
+    margin-top: -15%;
+    position: fixed;
+}
+
+.profile-avatar {
+    background-color: white;
+    width: max-content;
+    height: max-content;
+    // position: fixed;
+    position: absolute;
+    padding: 1.5vw;
+    border-radius: 50%;
+    width: 20vw;
+    // top: 30%;
+    left: calc(50vw - 10vw);
+    margin-top: 10%;
+}
+.profile-avatar img {
+    border-radius: 50%;
+}
+.profile-details {
+    padding-top: 20%;
+}
+.pd-username {
+    font-size: 40px;
+    font-weight: $semibold;
+}
+.pd-username svg {
+    display: inline;
+}

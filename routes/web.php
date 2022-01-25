@@ -7,6 +7,7 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUpload;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\FileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,6 +26,10 @@ use SebastianBergmann\Environment\Console;
 |
 */
 
+Route::get('/storage/{any}', function () {
+    return Inertia::render('Error', []);
+});
+
 // Routes for File Upload
 Route::get('/upload', [FileUpload::class, 'createForm']);
 
@@ -33,6 +38,11 @@ Route::post('/upload', [FileUpload::class, 'fileUpload'])->name('fileUpload');
 //Routes for our pages
 
 Route::get('/feed', [FeedController::class, 'show']);
+Route::get('/feeed', function () {
+    return Inertia::render('FeedNew', [
+        'token' => csrf_token(),
+    ]);
+});
 // Route::get('/fed', [FeedController::class, 'showAxios']);
 Route::get('/', function () {
     return Inertia::render('Feed', [

@@ -22,6 +22,6 @@ class WalletController extends Controller
             'eth_address' => $request->address
         ]);
 
-        return redirect('/');
+        return back();
     }
 }

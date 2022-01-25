@@ -16,6 +16,14 @@
 .playerControl {
   background-color: #e6e6e6;
   border-radius: 0px 20px 20px 0px;
+  height: inherit;
+}
+
+.playerControl-flex {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2.5% 2.5% 0 2.5%;
 }
 
 .playerInfo {
@@ -33,6 +41,58 @@
 
 .trackName {
   font-size: 24px;
+}
+
+.main-slider-small {
+  height: 10px;
+  width: 100%;
+  transition: height 0.5s;
+  background-color: #e6e6e6;
+}
+
+.main-slider-big {
+  display: flex;
+  flex: auto;
+}
+
+.main-slider-container {
+  height: 20px;
+  background: linear-gradient(90deg, rgba(143, 53, 232, 0.4) 0%, rgba(226, 0, 0, 0.4) 100%);
+  display: flex;
+  flex-direction: column;
+  border-radius: 0px 0px 20px 0px;
+  overflow: hidden;
+}
+
+.main-slider-container:hover .main-slider-small {
+  height: 0px;
+  transition: height 0.2s;
+}
+
+.main-slider-hider {
+  background-color: #e6e6e6;
+  flex: auto;
+  height: 100%;
+}
+
+.main-info-button {
+  background-color: black;
+  color: white;
+  width: 31px;
+  height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  margin: 15px;
+  font-size: larger;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.main-like svg {
+  display: inline;
 }
 
 .main-form {
@@ -507,6 +567,51 @@ label.main-file-label-box.error {
 .main-page-form-cta.submit {
   background-color: #8f35e8;
   padding: 10px 15px;
+}
+
+.main-profile-content {
+  margin-top: 128px;
+}
+
+.profile-bg {
+  width: 100%;
+  -webkit-clip-path: polygon(0% 22%, 100% 22%, 100% 52%, 0% 52%);
+          clip-path: polygon(0% 22%, 100% 22%, 100% 52%, 0% 52%);
+  margin-top: -15%;
+  position: fixed;
+}
+
+.profile-avatar {
+  background-color: white;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  position: absolute;
+  padding: 1.5vw;
+  border-radius: 50%;
+  width: 20vw;
+  left: 40vw;
+  margin-top: 10%;
+}
+
+.profile-avatar img {
+  border-radius: 50%;
+}
+
+.profile-details {
+  padding-top: 20%;
+}
+
+.pd-username {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.pd-username svg {
+  display: inline;
 }
 
 * {

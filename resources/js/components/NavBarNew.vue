@@ -9,7 +9,7 @@
                 </div>
                 <div v-else>
                     <a v-for="item in navigationLoged" :key="item.name" :href="item.href" @click="item.click" @mouseover="item.mouseEnter" class="nav-link pl-10" :style="item.style" >{{ item.name }}</a>
-                    <div v-if="showDrop" class="absolute w-40 bg-opacity-0 mt-48" @mouseleave="mouseLeave">
+                    <div v-if="showDrop" class="absolute w-40 bg-opacity-0 mt-48" @mouseleave="mouseLeavesMeth">
                         <a href="/" class="nav-link">
                             Home
                         </a>
@@ -39,7 +39,7 @@
             <div class="pr-8">
                 <!-- <img src="/storage/assets/logo_w.png" loading="lazy" class="h-44 w-auto"/> -->
                 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1245.94 693.88" class="h-44 w-auto"
-                    :style="[backgroundOp >= 1 || !backgroundOp ? {marginTop: '-95px'} : [backgroundOp >= 0.88 ? {marginTop: ((-83.6+95*backgroundOp)/-0.12)+'px'} : '']]"
+                    :style="[backgroundOp >= 1 || (!backgroundOp && backgroundOp != 0) ? {marginTop: '-95px'} : [backgroundOp >= 0.88 ? {marginTop: ((-83.6+95*backgroundOp)/-0.12)+'px'} : '']]"
                 >
                     <defs>
                         <linearGradient id="linear-gradient" x1="28.38" y1="511.63" x2="1249.68" y2="511.63" gradientUnits="userSpaceOnUse">
@@ -162,14 +162,14 @@ export default {
         show: false,
         showSearch: false,
         showDrop: false,
-        mouseLeave: this.mouseLeave,
+        mouseLeaves: this.mouseLeaves,
         navigation: [
                     { name: 'Sign in', href: '/login', current: false, click: '' },
                     { name: 'Sign up', href: '/register', current: false, click: '' },
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch },
                     ],
         navigationLoged: [
-                    { name: 'You shouldn\'t be logged in lol', href: '#', current: false, click: '' , mouseEnter: this.mouseEnter, mouseLeave: this.mouseLeave},
+                    { name: 'You shouldn\'t be logged in lol', href: '#', current: false, click: '' , mouseEnter: this.mouseEnter},
                     { name: 'Upload', href: '#', current: false, click: this.toggleUpload },
                     { name: 'Wallet', href: '#', current: false, click: this.toggleWallet },
                     { name: 'Search', href: '#', current: false, click: this.toggleSearch, style:[this.backgroundOp <= 0.9 ? {opacity: 0} : this.backgroundOp <= 1 ?  {opacity: (-4+(this.backgroundOp/0.2))} : ''] },
@@ -197,7 +197,7 @@ export default {
         mouseEnter() {
             this.showDrop = !this.showDrop;
         },
-        mouseLeave() {
+        mouseLeavesMeth() {
             this.showDrop = false;
         },
         test(){

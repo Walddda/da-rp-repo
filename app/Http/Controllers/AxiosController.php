@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Beat;
 use App\Models\Cover;
 use App\Models\File;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AxiosController extends Controller
 {
     public function getTracks(Request $request)
     {
-        if (!$request->keywords) {
+        if (!$request->keywords && !$request->user) {
             $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')
                 ->orderBy('created_at', 'desc')
                 ->get()->toArray();
             return response()->json($files);
-        } else {
+        } else if ($request->keywords) {
             $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
                 ->has('isBeat.fromUser')
                 ->join('beats', function ($join) {
@@ -32,6 +34,17 @@ class AxiosController extends Controller
             //     })
             //     ->get()
             //     ->toArray();
+            return response()->json($res);
+        } else if ($request->user) {
+            $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
+                ->has('isBeat.fromUser')
+                ->join('beats', function ($join) {
+                    $join->on('beats.id', '=', 'files.beat_id');
+                })
+                ->where('beats.user_id', '=', $request->user)
+                ->orderBy('beats.created_at', 'desc')
+                ->get()
+                ->toArray();
             return response()->json($res);
         }
     }
@@ -90,6 +103,11 @@ class AxiosController extends Controller
 
             // return var_dump($req->file('beat')->getClientOriginalExtension());
             $beat_id = $beatModel->getNextId();
+
+            $exiFile = File::where('beat_id', $beat_id)->first();
+            if ($exiFile) {
+                $exiFile->delete();
+            }
             $path_name = time() . '_' . $req->input('userID') . '_' . rand(1000000, 9999999) . '_' . $beat_id;
 
             $filePath = $req->file('beat')->storePubliclyAs('uploads', $path_name . '.' . $req->file('beat')->getClientOriginalExtension(), 'public');
@@ -132,9 +150,11 @@ class AxiosController extends Controller
             $beatModel->archive = 0;
             $beatModel->user_id = htmlspecialchars($req->input('userID'));
             $beatModel->cover_id = $coverId;
+            $beatModel->length = $req->input('length');
 
 
             $fileModel->save();
+            // dd('test');
             $beatModel->save();
             return response()->json([
                 'path' => $filePath,
@@ -147,5 +167,27 @@ class AxiosController extends Controller
                 'error' => $errorMsg[$errorKey],
             ]);
         }
+    }
+
+    public function transaction(Request $req)
+    {
+        // dd($req);
+        // var_dump($req);
+        $transaction = new Transaction();
+
+        $transaction->hash = $req->input('hash');
+        $transaction->buyer_id = $req->input('buyer_id');
+        $transaction->seller_id = $req->input('seller_id');
+        $transaction->beat_id = $req->input('beat_id');
+        $transaction->save();
+        return response()->json([
+            'success' => 'Transaction saved',
+        ]);
+    }
+
+    public function getTransactions(Request $request)
+    {
+        $transactions = DB::table('transactions')->get();
+        return response()->json($transactions);
     }
 }

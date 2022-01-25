@@ -48,7 +48,8 @@ class HandleInertiaRequests extends Middleware
                     'button-cta' => 'get started',
                     'to-scroll' => 'explore',
                 ]
-            ]
+            ],
+            'tracks' => [],
         ]);
     }
 }
