@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUpload;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,15 +39,21 @@ Route::post('/upload', [FileUpload::class, 'fileUpload'])->name('fileUpload');
 
 //Routes for our pages
 
+Route::get('/admin', function () {
+    return Inertia::render('Admin', [
+        'token' => csrf_token(),
+    ]);
+});
+
 Route::get('/feed', [FeedController::class, 'show']);
 Route::get('/feeed', function () {
-    return Inertia::render('FeedNew', [
+    return Inertia::render('Feed', [
         'token' => csrf_token(),
     ]);
 });
 // Route::get('/fed', [FeedController::class, 'showAxios']);
 Route::get('/', function () {
-    return Inertia::render('Feed', [
+    return Inertia::render('FeedNew', [
         'token' => csrf_token(),
     ]);
 });
@@ -58,11 +66,15 @@ Route::post('/', function (Request $req) {
 // ->middleware('guest')
 // ->name('register');
 
-Route::get('/feed', [FeedController::class, 'show']);
+// Route::get('/feed', [FeedController::class, 'show']);
 
 
 Route::get('/settings', function () {
     return Inertia::render('Settings', []);
+});
+
+Route::get('/wave', function () {
+    return Inertia::render('Wave', []);
 });
 Route::get('/myprofile/{username}', [UserController::class, 'show']);
 Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile')->middleware(['auth', 'verified']);
@@ -115,6 +127,11 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/profile', function () {
     // Only verified users may access this route...
 })->middleware('verified');
+
+Route::get('/unreadNotifications', [NotificationController::class, 'unreadNotifications']);
+Route::get('/markNotificationsAsRead', [NotificationController::class, 'markAsRead']);
+
+
 
 
 // Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);

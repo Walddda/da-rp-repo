@@ -69,6 +69,7 @@ class setupData extends Command
         $user->email_verified_at = Carbon::now()->toDateTimeString();
         $user->username = 'admin';
         $user->password = Hash::make('VwW2KPh^fA4oy@8yTBsWW');
+        $user->isadmin = 1;
         $user->save();
         // $this->line('Display this on the screen2');
 

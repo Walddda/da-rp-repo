@@ -118,13 +118,13 @@ export default {
                   this.hash = txHash
                   this.download = true
 
-                  let formData = new FormData();
+                  let formData = new FormData()
                   console.log('transaction')
                   console.log(this.song.is_beat.from_user.id)
                   console.log(this.$page.props.auth.user.id)
-                  formData.append('seller_id', this.song.is_beat.from_user.id);
-                  formData.append('buyer_id', this.$page.props.auth.user.id);
-                  formData.append('hash', this.hash);
+                  formData.append('seller_id', this.song.is_beat.from_user.id)
+                  formData.append('buyer_id', this.$page.props.auth.user.id)
+                  formData.append('hash', this.hash)
                   formData.append('beat_id', this.song.is_beat.id)
 
                   const config = {
@@ -138,6 +138,7 @@ export default {
                   .then(response => {
                     let formCount = new FormData();
                     formCount.append('beat_id', this.song.is_beat.id)
+                    formCount.append('seller_id', this.song.is_beat.from_user.id)
                     formCount.append('download_count', this.counter)
 
                     return axios.post('/api/counter', formCount)

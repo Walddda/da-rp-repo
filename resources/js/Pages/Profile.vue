@@ -7,14 +7,26 @@
             <!-- <wallet></wallet> -->
             <div>
                 <img src="/storage/assets/PROFILE_BG_cut1.jpg" class="profile-bg"/>
-                <div class="profile-avatar">
+                <div 
+                    class="profile-avatar" 
+                    :class="[toggleScrollView ? 'toggleScrollView' : '']"
+                    :style="[!toggleScrollView 
+                    ? {
+                        'width': ((400 - scrollY)/20)+'vw',
+                        'left': 'calc( 50vw - '+ ((400 - scrollY)/40)+'vw',
+                        'padding': (-0.0025 * scrollY +1)+'vw',
+                        'margin-top': (-0.0125 * scrollY +5)+'%',
+                        }
+                    : {'width': '10vw', 'padding':'0.5vw',
+                    'margin-top': '2.5%'} ]"
+                >
                     <img src="/storage/covers/1638883713_1_2631819_15.png"/>
                 </div>
             </div>
     
             <div class="profile-details flex flex-row justify-between">
                 <div class="profile-details-left">
-                    <label class="pd-username">{{form.username}} 
+                    <label class="pd-username">{{form.username}} {{toggleScrollView}}
                         <a v-if="own" href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a>
                     </label>
                     <br>
@@ -115,10 +127,22 @@ export default {
             purchasedFiles: [],
             showPopupEdit: false,
             editTrack: null,
+            toggleScrollView: false,
+            scrollY: 0,
         }
     },
 
     methods: {
+        onScroll (event) {
+            console.log(window.scrollY);
+            this.scrollY = window.scrollY;
+            if(window.scrollY <= 200){
+                this.toggleScrollView = false;
+            }else{
+                this.toggleScrollView = true;
+            }
+            // console.log(this.backgroundOp)
+        },
         submit() {
             this.form.post(this.route('myprofile'), {
                 onFinish: () => this.form.reset('password', 'password_confirmation'),
@@ -189,6 +213,7 @@ export default {
     created(){
         this.getSongs()
         this.getTransactions()
+        window.addEventListener('scroll', this.onScroll);
     },
     mounted() {
         this.emitter.on("closePopupEdit", () => {
@@ -202,7 +227,10 @@ export default {
             this.editTrack = track;
             console.info('op')
         });
-    }
+    },
+    destroyed () {
+        window.removeEventListener('scroll', this.onScroll);
+    },
 
 }
 </script>

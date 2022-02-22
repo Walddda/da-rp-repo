@@ -12,10 +12,13 @@
                 <div v-if="files">
                     <div class="container flex mx-auto w-full items-center justify-center">
                         <ul class="flex flex-col p-4 grid justify-items-center">
-
-                            <li v-for="(x, k) in files">
+                            <li v-for="(x, k) in files" v-if="attr.loc == 'wave'">
                                 <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)"/>
                                 <player v-else :track="x" :numb="k+1" :info="info" />
+                            </li>
+                            <li v-for="(x, k) in files" v-else>
+                                <player-wave v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)"/>
+                                <player-wave v-else :track="x" :numb="k+1" :info="info" />
                             </li>
                         </ul>
                     </div>
@@ -52,6 +55,7 @@
 
 <script>
 import Player from '@/Components/Player.vue';
+import PlayerWave from '@/Components/PlayerWave.vue';
 import Slider from '@vueform/slider'
 import Slider2 from "vue3-slider"
 import axios from 'axios';
@@ -62,6 +66,7 @@ export default {
         Player,
         Slider,
         Slider2,
+        PlayerWave,
     },
 
     props: { 
@@ -69,6 +74,7 @@ export default {
         paths: Array,
         logedIn: Number,
         givenSearchTerm: {type: String, default: ''},
+        sum: {type: Number, default: 0},
     },
 
     data() {
@@ -97,6 +103,7 @@ export default {
     },
     methods: {
         getTracks(term = this.searchTerm){
+            //for profile site, to get only tracks from one profile 
             let profile = {}
             if(this.attr.loc == 'prof'){
                 profile = {
@@ -120,7 +127,11 @@ export default {
                     this.loading = false;
                     this.searchTerm = term
                 }else{
-                    this.files = response.data
+                    if(this.sum){
+                        this.files = response.data.slice(0,this.sum)
+                    }else{
+                        this.files = response.data
+                    }
                     console.info('finish: ');
                     console.info(response.data);
                     this.loadedBeats = true;

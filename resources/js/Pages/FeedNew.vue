@@ -31,6 +31,7 @@
         <tracks :attr="{loc: 'feed'}"></tracks>
 
         <upload v-if="showPopupUpload"></upload>
+        <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
         <popup-wallet v-if="showPopupWallet"></popup-wallet>
         <popup-payment v-if="showPopupPayment" :song="paymentTrack"></popup-payment>
         <!-- <PopupWallet :showing="walletPopup" @close="WalletPopup = false">
@@ -50,6 +51,7 @@ import PopupWallet from '@/Components/PopupWallet.vue'
 import PopupPayment from '@/Components/PopupPayment.vue'
 import Search from '@/Components/Search.vue';
 import Tracks from '@/Components/Tracks.vue';
+import PopupEdit from '@/Components/PopupEdit.vue'
 
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
@@ -65,6 +67,7 @@ export default {
         PopupPayment,
         Search,
         Tracks,
+        PopupEdit,
     },
 
     props: { 
@@ -84,6 +87,8 @@ export default {
             backgroundOp: 0,
             walletPopup: true,
             searchTerm : this.givenSearchTerm,
+            showPopupEdit: false,
+            editTrack: null,
         }
     },
     created () {
@@ -145,6 +150,17 @@ export default {
         this.emitter.on("focus", bool =>{
             this.searchFocus = bool;
         })
+        this.emitter.on("closePopupEdit", () => {
+            this.showPopupEdit = false;
+            console.info('cl')
+        });
+
+        this.emitter.on("openPopupEdit", track => {
+            console.log(track)
+            this.showPopupEdit = true;
+            this.editTrack = track;
+            console.info('op')
+        });
     }
 };
 </script>

@@ -5,11 +5,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SearchController;
-
+use App\Http\Controllers\UserController;
 
 Route::get('beats',  [AxiosController::class, 'getTracks']);
+Route::get('alluser',  [AxiosController::class, 'getUser']);
 Route::post('upload',  [AxiosController::class, 'upload']);
-Route::post('edit', [AxiosController::class, 'edit']);
+Route::post('edit/{id}', [AxiosController::class, 'edit']);
+Route::post('delete/{id}', [AxiosController::class, 'deleteTrack']);
+Route::post('deleteUser/{id}', [UserController::class, 'deleteUser']);
 Route::post('transaction',  [AxiosController::class, 'transaction']);
 Route::get('transactions',  [AxiosController::class, 'getTransactions']);
 Route::post('counter', [AxiosController::class, 'downloadCounter']);

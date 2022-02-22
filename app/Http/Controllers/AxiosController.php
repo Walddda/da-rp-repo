@@ -6,8 +6,13 @@ use App\Models\Beat;
 use App\Models\Cover;
 use App\Models\File;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\PaymentNotification;
+use App\Notifications\DownloadCountNotification;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class AxiosController extends Controller
 {
@@ -60,6 +65,14 @@ class AxiosController extends Controller
             return response()->json($res);
         }
     }
+    public function getUser(Request $request)
+    {
+        // dd(auth()->id());
+        $users = User::where('id', '!=', auth()->id())->get();
+        return response()->json($users);
+    }
+
+
 
     public function search()
     {
@@ -181,6 +194,58 @@ class AxiosController extends Controller
         }
     }
 
+    public function edit($id, Request $req)
+    {
+
+        $errorMsg = [
+            "titleMpty" => 'Please set a title',
+            "authMpty" => 'Please log in?',
+            "type" => 'Please select a Type',
+            "bpm" => 'Please select a BPM',
+            "other" => 'Something other went wrong',
+        ];
+        $errorKey = 'other';
+
+        $req->validate([
+            'title' => 'required|max:255',
+            'type' => array('required', 'regex:/(sample|beat)/'),
+            'bpm' => array('required', 'regex:/\d+/'),
+        ]);
+
+        $tagsSplit = explode(',', $req->input('tagsArr'));
+
+        foreach ($tagsSplit as $key => $value) {
+            Beat::where('id', $id)
+                ->update(['tag' . $key + 1 => $value]);
+        }
+        for ($i = 5; $i > sizeOf($tagsSplit); $i--) {
+            echo ($i);
+            Beat::where('id', $id)
+                ->update(['tag' . $i => null]);
+        }
+        // dd(sizeOf($tagsSplit));
+        Beat::where('id', $id)
+            ->update([
+                'title' => htmlspecialchars($req->input('title')),
+                'type' => htmlspecialchars($req->input('type')),
+                'feature' => htmlspecialchars($req->input('feature')),
+                'key' => htmlspecialchars($req->input('selectedKey')),
+                'description' => htmlspecialchars($req->input('description')),
+                'bpm' => $req->input('bpm'),
+            ]);
+
+        // 'type' => 'required|regex:(sample|beat)',
+        // 'bpm' => 'required|regex:(\d*)',
+
+        return response()->json([
+            'success' => 'Track saved',
+        ]);
+    }
+
+
+
+
+
     public function transaction(Request $req)
     {
         // dd($req);
@@ -192,6 +257,13 @@ class AxiosController extends Controller
         $transaction->seller_id = $req->input('seller_id');
         $transaction->beat_id = $req->input('beat_id');
         $transaction->save();
+
+        $receiver = User::where('id', '=', $req->input('seller_id'))->first();
+        $user = User::where('id', '=', $req->input('buyer_id'))->first();
+        $beat = Beat::where('id', '=', $req->input('beat_id'))->first();
+
+        Notification::send($receiver, new PaymentNotification($user, $beat));
+
         return response()->json([
             'success' => 'Transaction saved',
         ]);
@@ -205,14 +277,45 @@ class AxiosController extends Controller
 
     public function downloadCounter(Request $request)
     {
+        $downloadCount = Beat::where('id', $request->input('beat_id'))->value('download_count') + 1;
+
         Beat::where('id', $request->input('beat_id'))
-            ->update(['download_count' => DB::raw('download_count + 1')]);
+            ->update(['download_count' => $downloadCount]);
+
+
+
+        $count = Beat::where('id', $request->input('beat_id'))->value('download_count');
+
+        $receiver = User::where('id', '=', $request->input('seller_id'))->first();
+
+        $beat = Beat::where('id', $request->input('beat_id'))->first();
+
+        if ($count == 10) {
+            Notification::send($receiver, new DownloadCountNotification($beat));
+        } elseif ($count == 100) {
+            Notification::send($receiver, new DownloadCountNotification($beat));
+        } elseif ($count == 200) {
+            Notification::send($receiver, new DownloadCountNotification($beat));
+        } elseif ($count == 500) {
+            Notification::send($receiver, new DownloadCountNotification($beat));
+        } elseif ($count == 1000) {
+            Notification::send($receiver, new DownloadCountNotification($beat));
+        }
+
         return response()->json([
             'success' => 'Download saved',
         ]);
     }
 
-    public function edit(Request $request)
+    public function deleteTrack($id, Request $request)
     {
+        Beat::where('id', $id)
+            ->delete();
+    }
+
+    public function unreadNotifications()
+    {
+        $unreadNotifications = Auth::user()->unreadNotifications;
+        return response()->json($unreadNotifications);
     }
 }

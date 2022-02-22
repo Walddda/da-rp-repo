@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use App\Models\Like;
+use App\Models\User;
+use App\Models\Beat;
+use App\Notifications\LikeNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
@@ -34,6 +38,11 @@ class LikeController extends Controller
         //     'success' => 'File has been liked.',
         // ]);
 
+        $receiver_id = Beat::where('id', '=', $id)->value('user_id');
+        $receiver = User::where('id', '=', $receiver_id)->first();
+        $user = User::where('id', '=', $authId)->first();
+        $beat = Beat::where('id', '=', $id)->first();
+
         if (is_null($existing_like)) {
             Like::create([
                 'user_id'       => $authId,
@@ -42,6 +51,9 @@ class LikeController extends Controller
             ]);
             $success = 'Like';
             $del = false;
+            if ($receiver_id != $authId) {
+                Notification::send($receiver, new LikeNotification($user, $beat));
+            }
         } else {
             if (is_null($existing_like->deleted_at)) {
                 $existing_like->delete();
@@ -51,6 +63,9 @@ class LikeController extends Controller
                 $existing_like->restore();
                 $success = 'Like restored';
                 $del = false;
+                if ($receiver_id != $authId) {
+                    Notification::send($receiver, new LikeNotification($user, $beat));
+                }
             }
         }
 

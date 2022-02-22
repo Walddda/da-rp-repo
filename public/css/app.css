@@ -586,12 +586,16 @@ label.main-file-label-box.error {
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  position: absolute;
+  position: fixed;
   padding: 1vw;
   border-radius: 50%;
   width: 20vw;
   left: 40vw;
   margin-top: 5%;
+}
+
+.toggleScrollView {
+  left: 5vw;
 }
 
 .profile-avatar img {
@@ -636,6 +640,31 @@ label.main-file-label-box.error {
 .toggle-option.right {
   border-radius: 0 20px 20px 0;
   text-align: left;
+}
+
+.main-noti {
+  border-radius: 15px;
+  border: #8f35e8 solid 2px;
+  filter: drop-shadow(0 0 0.75rem crimson);
+  padding: 20px;
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  background-color: #e6e1eb;
+  margin-top: 10px;
+  max-height: 350px;
+  overflow: auto;
+}
+
+.main-noti .dropdown-item {
+  border-bottom: 1px #8f35e8 solid;
+  display: block;
+  margin: 0px 10px;
+  padding: 5px 5px;
+}
+
+.main-noti button {
+  padding: 5px 5px;
 }
 
 * {

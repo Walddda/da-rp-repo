@@ -114,12 +114,27 @@ class UserController extends Controller
         $user = User::where('id', $request->id);
         //'password' => ['required', 'confirmed', Rules\Password::defaults()],
 
+
+        if ($request->use == 'admin') {
+            // dd($request);
+            $user->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'username' => $request->username,
+                'location' => $request->location,
+                'description' => $request->desc,
+            ]);
+
+            return response()->json([
+                'success' => 'User saved',
+            ]);
+        }
         $request->validate(['username' => 'required|string|max:255|unique:users,username, ' . $request->id]);
         $request->validate(['first_name' => 'required|string|max:255']);
         $request->validate(['last_name' => 'required|string|max:255']);
         $request->validate(['email' => 'required|string|email|max:255|unique:users,email, ' . $request->id]);
         $request->validate(['password' => ['required', 'confirmed', Rules\Password::defaults()]]);
-
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -142,5 +157,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function deleteUser($id, Request $request)
+    {
+        User::where('id', $id)
+            ->delete();
     }
 }
