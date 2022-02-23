@@ -667,6 +667,13 @@ label.main-file-label-box.error {
   padding: 5px 5px;
 }
 
+.main-wave {
+  margin-top: -15.4rem;
+  z-index: 1;
+  position: absolute;
+  margin-left: 2.4rem;
+}
+
 * {
   font-family: basic-sans;
   font-weight: 400;

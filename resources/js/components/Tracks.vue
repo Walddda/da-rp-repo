@@ -14,6 +14,7 @@
                         <ul class="flex flex-col p-4 grid justify-items-center">
                             <li v-for="(x, k) in files" v-if="attr.loc == 'wave'">
                                 <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)"/>
+                                <canvas id="canvas" ref="canvas" v-if="k == currentPlaying-1" class="main-wave block h-52 w-52 max-w-none"></canvas>
                                 <player v-else :track="x" :numb="k+1" :info="info" />
                             </li>
                             <li v-for="(x, k) in files" v-else>
@@ -83,7 +84,7 @@ export default {
             loadedBeats: false,
             rendered: false,
             playing: false,
-            currentPlaying: null,
+            currentPlaying: 0,
             currentPlayingOld: null,
             wantTime: null,
             audio: {
@@ -102,6 +103,74 @@ export default {
         }
     },
     methods: {
+        wave(first){
+            var audio = this.$refs.player;
+            // var files = this.files;
+            // audio.src = URL.createObjectURL(files[0]);
+            console.log(audio.src)
+            if(first){audio.load();}
+            audio.play();
+            var context = new AudioContext();
+            var src = context.createMediaElementSource(audio);
+            console.log(src)
+            var analyser = context.createAnalyser();
+
+            var canvas = this.$refs.canvas;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            var ctx = canvas.getContext("2d");
+
+            src.connect(analyser);
+            analyser.connect(context.destination);
+
+            analyser.fftSize = 256;
+            console.log(analyser)
+
+            var bufferLength = analyser.frequencyBinCount;
+            console.log(bufferLength);
+
+            var dataArray = new Uint8Array(bufferLength);
+            console.log(dataArray)
+
+            var WIDTH = canvas.width;
+            var HEIGHT = canvas.height;
+
+            var barWidth = (WIDTH / bufferLength) * 2.5;
+            console.log(barWidth)
+            var barHeight;
+            var x = 0;
+
+            function renderFrame() {
+            requestAnimationFrame(renderFrame);
+
+            x = 0;
+
+            analyser.getByteFrequencyData(dataArray);
+            //console.log(dataArray)
+
+            // ctx.fillStyle = "#000";
+            // ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            ctx.clearRect(0,0,WIDTH,HEIGHT);
+
+            for (var i = 0; i < bufferLength; i++) {
+                barHeight = dataArray[i];
+                //console.log(i)
+                //console.log(barHeight)
+                
+                var r = barHeight + (25 * (i/bufferLength));
+                var g = 250 * (i/bufferLength);
+                var b = 50;
+
+                ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+                ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+
+                x += barWidth + 1;
+                }
+            }
+
+            audio.play();
+            renderFrame();
+        },
         getTracks(term = this.searchTerm){
             //for profile site, to get only tracks from one profile 
             let profile = {}
@@ -132,6 +201,7 @@ export default {
                     }else{
                         this.files = response.data
                     }
+                    // this.currentPlaying = 1
                     console.info('finish: ');
                     console.info(response.data);
                     this.loadedBeats = true;
@@ -152,7 +222,7 @@ export default {
             player.volume = 1.0;
             console.warn(player.getAttribute("src"))
             try {
-                if (player.paused) {player.play()}
+                if (player.paused) {this.wave()}
             else {player.pause()}
             } catch (err) {
                 console.error(err);
@@ -253,6 +323,7 @@ export default {
                 this.currentPlaying = numb;
                 this.playing = !this.playing;
                 this.toggleAudio();
+                // this.wave();
                 // console.log('r273')
             }
             this.currentPlaying = numb;

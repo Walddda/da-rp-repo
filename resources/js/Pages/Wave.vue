@@ -1,5 +1,5 @@
 <template>
-    <tracks :attr="{loc: 'wave'}" sum="1"></tracks>
+    <tracks :attr="{loc: 'wave'}" sum="2"></tracks>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
         return {
             files: null,
         }
-    }
+    },
 
 }
 </script>
