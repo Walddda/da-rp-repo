@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <nav-bar-new profile/>
+        
         <!-- <BreezeValidationErrors class="mb-4" /> -->
         <div class="main-profile-content">
             <!-- <wallet></wallet> -->
@@ -23,10 +23,20 @@
                     <img src="/storage/covers/1638883713_1_2631819_15.png"/>
                 </div>
             </div>
-    
+            <div class="main-scroll-username" v-if="toggleScrollView">{{headUsername}}</div>
+            <!-- <svg viewBox="0 0 100 100" class="main-scroll-username">
+                <defs>
+                    <linearGradient id="linear-gradient" gradientUnits="userSpaceOnUse">
+                        <stop offset="0.1" stop-color="#8f35e8" />
+                        <stop offset="0.9" stop-color="#e20000" />
+                    </linearGradient>
+                </defs>
+                <text x="0" y="10" style="fill:url(#linear-gradient)">{{headUsername}}</text>
+            </svg> -->
+            
             <div class="profile-details flex flex-row justify-between">
                 <div class="profile-details-left">
-                    <label class="pd-username">{{form.username}} {{toggleScrollView}}
+                    <label class="pd-username" v-if="!toggleScrollView" >{{form.username}}
                         <a v-if="own" href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a>
                     </label>
                     <br>
@@ -64,6 +74,7 @@
             
             <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
         </div>
+        <nav-bar-new profile/>
     </div>
 </template>
 
@@ -129,6 +140,7 @@ export default {
             editTrack: null,
             toggleScrollView: false,
             scrollY: 0,
+            headUsername: this.userData.username.substring(0,15),
         }
     },
 
@@ -227,6 +239,7 @@ export default {
             this.editTrack = track;
             console.info('op')
         });
+
     },
     destroyed () {
         window.removeEventListener('scroll', this.onScroll);

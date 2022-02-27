@@ -595,7 +595,18 @@ label.main-file-label-box.error {
 }
 
 .toggleScrollView {
-  left: 5vw;
+  right: 5vw;
+  left: auto;
+}
+
+.main-scroll-username {
+  right: 16vw;
+  position: fixed;
+  top: 11vw;
+  background: -webkit-linear-gradient(0deg, #8f35e8 0%, #e20000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 150px;
 }
 
 .profile-avatar img {
@@ -645,8 +656,8 @@ label.main-file-label-box.error {
 .main-noti {
   border-radius: 15px;
   border: #8f35e8 solid 2px;
-  filter: drop-shadow(0 0 0.75rem crimson);
-  padding: 20px;
+  filter: drop-shadow(0 0 0.75rem black);
+  padding: 10px 20px;
   max-width: -webkit-max-content;
   max-width: -moz-max-content;
   max-width: max-content;
@@ -665,6 +676,46 @@ label.main-file-label-box.error {
 
 .main-noti button {
   padding: 5px 5px;
+}
+
+.main-noti-indic {
+  color: red;
+  font-size: 15px;
+  margin-left: -18px;
+  margin-top: 10px;
+  position: absolute;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.main-noti-icon {
+  cursor: pointer;
+}
+
+.main-noti-back {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: -10px;
+}
+
+.main-drop-list {
+  margin-left: 50px;
+  padding-left: 50px;
+  margin-top: -15px;
+  padding-top: 15px;
+}
+
+.main-drop-list .nav-link {
+  font-size: 25px;
+  padding-right: 30px;
+  border-bottom: white solid 2px;
+}
+
+.main-noti-span {
+  margin-top: 5px;
+  position: absolute;
 }
 
 * {
