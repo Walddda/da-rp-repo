@@ -131,7 +131,6 @@ export default {
             own: this.currentUser(this.userData.id),
             myTracks: true,
             purchased: false,
-            files: null,
             allFiles: null,
             transactions: [],
             purchasedTracks: [],
@@ -175,19 +174,6 @@ export default {
             // return Object.keys(list).map((key) => ({ value: key, label: list[key] }))[x]
             return countries.getName(x, "en", {select: "alias"})
         },
-        getSongs(){
-            axios.get('/api/beats', { params: { user: this.form.id } })
-            .then(response => {
-                if(!response.data.length){
-                    console.info('empty')
-                }else{
-                    this.files = response.data
-                    console.info('finish: ');
-                    //console.info(response.data);
-
-                }
-            })
-        },
         getTransactions() {
             axios.get('/api/beats')
             .then(response => {
@@ -223,7 +209,6 @@ export default {
         },
     },
     created(){
-        this.getSongs()
         this.getTransactions()
         window.addEventListener('scroll', this.onScroll);
     },

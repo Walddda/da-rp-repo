@@ -12,13 +12,9 @@
                 <div v-if="files">
                     <div class="container flex mx-auto w-full items-center justify-center">
                         <ul class="flex flex-col p-4 grid justify-items-center">
-                            <li v-for="(x, k) in files" v-if="attr.loc == 'wave'">
-                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)"/>
-                                <player v-else :track="x" :numb="k+1" :info="info" />
-                            </li>
-                            <li v-for="(x, k) in files" v-else>
-                                <player-wave v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)"/>
-                                <player-wave v-else :track="x" :numb="k+1" :info="info" />
+                            <li v-for="(x, k) in files" >
+                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="volume" current :curTime="audio.curLength.sum" @vol="volChange($event)"/>
+                                <player v-else :track="x" :numb="k+1" :info="info" :volume="volume" @vol="volChange($event)" />
                             </li>
                         </ul>
                     </div>
@@ -31,21 +27,34 @@
             </div>
 
 
-            <div v-if="currentPlaying" class="border-t-2 border-black pt-3 pb-3 fixed w-full bottom-0 flex flex-col items-center bg-white">
-                <div class="w-5/12 flex flex-row items-center"> 
-                    <img class="box-border h-28 w-28 border-2 border-black" loading="lazy" :src="files[currentPlaying-1].is_beat.get_cover.cover_path" alt="Album Pic">
-                    <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
-                    <div class="w-10/12 px-5 flex flex-col items-center">
-                        <div class="w-full" v-if="files">{{files[currentPlaying-1].is_beat.title}} - {{files[currentPlaying-1].is_beat.from_user.username}}</div>
-                        <slider2 v-if="files" class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick"/>
-                        <div v-if="files" class="flex justify-between items-center w-full">
-                            <span>{{audio.curLength.min}}:<span v-if="audio.curLength.sec <= 9">0</span>{{audio.curLength.sec}}</span>
-                            <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
+            <div v-if="currentPlaying" class="fixed bottom-0 flex flex-col w-full">
+                <div class="flex flex-col items-center"> 
+                    <div class="main-slider-container slider-global w-full" @click="mainSlider" @drag="mainSlider" ref="mainSliderRef" @dragend="mainSlider">
+                        <!-- <div class="main-slider-small"></div> -->
+                        <div class="main-slider-big">
+                            <div class="main-slider-play" 
+                            :style="[audio.curLength.sum ? 
+                                {width: ((audio.curLength.sum*100)/audio.length.sum)+'%'} : 
+                                this.$page.props.tracks[currentPlaying] ? {width: ((this.$page.props.tracks[currentPlaying]*100)/audio.length.sum)+'%'} :
+                                {width: ((audio.curLength.sum*100)/audio.length.sum)+'%'}]"></div>
+                            <div class="main-slider-hider"></div>
                         </div>
                     </div>
-                    <div class="text-white p-5 rounded-full bg-red-light shadow-lg" @click="play" >
-                        <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
-                        <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
+                    <div class="w-full flex flex-row main-global-bottom">
+                        <img class="box-border h-24 w-24" loading="lazy" :src="files[currentPlaying-1].is_beat.get_cover.cover_path" alt="Album Pic">
+                        <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
+                        <div class="w-10/12 px-5 flex flex-col items-center">
+                            <div class="w-full" v-if="files">{{files[currentPlaying-1].is_beat.title}} - {{files[currentPlaying-1].is_beat.from_user.username}}</div>
+                            <!-- <slider2 v-if="files" class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick"/> -->
+                            <div v-if="files" class="flex justify-between items-center w-full">
+                                <span>{{audio.curLength.min}}:<span v-if="audio.curLength.sec <= 9">0</span>{{audio.curLength.sec}}</span>
+                                <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
+                            </div>
+                        </div>
+                        <div class="text-white p-5 rounded-full bg-red-light shadow-lg" @click="play" >
+                            <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
+                            <svg v-else class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,9 +108,22 @@ export default {
             searchFocus: false,
             backgroundOp: 0,
             searchTerm : this.givenSearchTerm,
+            volume: 0.5,
         }
     },
     methods: {
+        
+		mainSlider(e){
+			let min = 0, cur = e.clientX - this.$refs.mainSliderRef.offsetLeft, max = this.$refs.mainSliderRef.clientWidth, perc = cur/max
+			// console.log('----------------------------------')
+			// console.log(e)
+			// console.log(this.$refs.mainSliderRef)
+			// console.log(min + ' - '+ cur +' - '+ max)
+			// console.log(cur/max)
+			if(perc > 1){perc = 1}
+			if(perc < 0){perc = 0}
+			this.emitter.emit('slide', {id: this.currentPlaying, timeP: perc})
+		},
         getTracks(term = this.searchTerm){
             //for profile site, to get only tracks from one profile 
             let profile = {}
@@ -132,6 +154,8 @@ export default {
                     }else{
                         this.files = response.data
                     }
+                    this.emitter.emit("openPopupPayment", this.files[1]);
+                    // this.currentPlaying = 1; //für global player testing
                     console.info('finish: ');
                     console.info(response.data);
                     this.loadedBeats = true;
@@ -142,18 +166,29 @@ export default {
             })
         },
         play(){
-            this.playing = !this.playing;
+            // this.playing = !this.playing;
+            // if(this.$refs.player)
             this.toggleAudio();
             this.getLength()
         },
 
-        toggleAudio(){         
+        toggleAudio(slide){         
             var player = this.$refs.player;
-            player.volume = 1.0;
-            console.warn(player.getAttribute("src"))
+            // console.warn(player.getAttribute("src"))
             try {
-                if (player.paused) {player.play()}
-            else {player.pause()}
+                if (player.paused) {
+                    player.play(); 
+                    this.playing=true
+                }
+                else {
+                    if(slide == 'slide'){
+                        player.play(); 
+                        this.playing=true
+                    }else{
+                        player.pause();
+                        this.playing=false
+                    }
+                }
             } catch (err) {
                 console.error(err);
                 console.error('r182 - sooooowy')
@@ -216,7 +251,9 @@ export default {
             // console.log('r239')
         },
         volChange(x){
-            console.log("new vol:"+x);
+            console.log("new vol:"+x + ' -> '+Math.pow(x,1.02));
+            this.volume = x;
+            this.$refs.player.volume = Math.pow(x,1.02);
         }
 
     },
@@ -258,10 +295,6 @@ export default {
             this.currentPlaying = numb;
             this.getLength()
             // console.log(text);
-        });
-        this.emitter.on("volume-change", newVol => {
-            console.log("vol: "+ newVol)
-            this.audio.volume = newVol/100;
         });
 
         this.emitter.on('upload-success',() =>{
@@ -313,7 +346,8 @@ export default {
         this.emitter.on('slide', data => {
             console.log(data)
             console.log(this.currentPlaying)
-            this.playing = true;
+            // this.playing = true;
+            this.toggleAudio('slide')
             if(this.currentPlaying == data.id){
                 console.log(this.audio.length.sum+'*'+data.timeP+'/'+100+' -> ' + (this.audio.length.sum*data.timeP))
                 this.$refs.player.currentTime = (this.audio.length.sum*data.timeP)

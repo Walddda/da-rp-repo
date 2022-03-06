@@ -287,7 +287,7 @@ label.main-file-label-box.error {
 
 .currency-icon {
     position: absolute;
-    margin-left: 163px;
+    margin-left: 150px;
     margin-top: 10px;
 }
 .currency-icon .doller-sign {
@@ -302,4 +302,32 @@ label.main-file-label-box.error {
 }
 .main-file-name.cover {
     text-align: right;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 320px;
+    border-radius: 15px;
+    border: #8f35e8 solid 2px;
+    filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+    background-color: #e6e1eb;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+
+    top: -5px;
+    left: 110%;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.main-form-text {
 }

@@ -13,6 +13,7 @@ use App\Notifications\PaymentNotification;
 use App\Notifications\DownloadCountNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Redirect;
 
 class AxiosController extends Controller
 {
@@ -30,35 +31,30 @@ class AxiosController extends Controller
                 ->get()
                 ->toArray();
             return response()->json($res);
-        } else if (!$request->keywords && !$request->user) {
+        } else if (!$request->keywords) {
             $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')
                 ->orderBy('created_at', 'desc')
                 ->get()->toArray();
             return response()->json($files);
         } else if ($request->keywords) {
             $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
-                ->has('isBeat.fromUser')
+
                 ->join('beats', function ($join) {
                     $join->on('beats.id', '=', 'files.beat_id');
                 })
+                // ->join('users', function ($join) {
+                //     $join->on('beats.user_id', '=', 'users.id');
+                // })
+                ->has('isBeat.fromUser')
                 ->where('beats.title', 'LIKE', '%' . $request->keywords . '%')
-                ->orderBy('beats.created_at', 'desc')
-                ->get()
-                ->toArray();
-            // $res = Beat::where('title', 'LIKE', '%' . $request->keywords . '%')
-            //     ->join('files', function ($join) use ($request) {
-            //         $join->on('beats.id', '=', 'files.beat_id');
-            //     })
-            //     ->get()
-            //     ->toArray();
-            return response()->json($res);
-        } else if ($request->user) {
-            $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
-                ->has('isBeat.fromUser')
-                ->join('beats', function ($join) {
-                    $join->on('beats.id', '=', 'files.beat_id');
-                })
-                ->where('beats.user_id', '=', $request->user)
+                ->orWhere('beats.description', 'LIKE', '%' . $request->keywords . '%')
+                ->orWhere('beats.tag1', 'LIKE', '%' . $request->keywords . '%')
+                ->orWhere('beats.tag2', 'LIKE', '%' . $request->keywords . '%')
+                ->orWhere('beats.tag3', 'LIKE', '%' . $request->keywords . '%')
+                ->orWhere('beats.tag4', 'LIKE', '%' . $request->keywords . '%')
+                ->orWhere('beats.tag5', 'LIKE', '%' . $request->keywords . '%')
+                // ->orWhere('isBeat.fromUser.username', 'LIKE', '%' . $request->keywords . '%')
+                // ->orWhere('users.username', 'LIKE', '%' . $request->keywords . '%')
                 ->orderBy('beats.created_at', 'desc')
                 ->get()
                 ->toArray();
@@ -101,7 +97,7 @@ class AxiosController extends Controller
             'beat' => 'required|max:10240',
             'cover' => 'mimes:png,jpg',
             'title' => 'required|max:255',
-            'ethPrice' => 'required',
+            'ethPrice' => array('required', 'digits_between:1,10'),
             'type' => array('required', 'regex:/(sample|beat)/'),
             'bpm' => array('required', 'regex:/\d+/'),
         ]);
@@ -219,7 +215,6 @@ class AxiosController extends Controller
                 ->update(['tag' . $key + 1 => $value]);
         }
         for ($i = 5; $i > sizeOf($tagsSplit); $i--) {
-            echo ($i);
             Beat::where('id', $id)
                 ->update(['tag' . $i => null]);
         }
@@ -236,6 +231,8 @@ class AxiosController extends Controller
 
         // 'type' => 'required|regex:(sample|beat)',
         // 'bpm' => 'required|regex:(\d*)',
+
+
 
         return response()->json([
             'success' => 'Track saved',

@@ -134,13 +134,13 @@ class UserController extends Controller
         $request->validate(['first_name' => 'required|string|max:255']);
         $request->validate(['last_name' => 'required|string|max:255']);
         $request->validate(['email' => 'required|string|email|max:255|unique:users,email, ' . $request->id]);
-        $request->validate(['password' => ['required', 'confirmed', Rules\Password::defaults()]]);
+        // $request->validate(['password' => ['required', 'confirmed', Rules\Password::defaults()]]);
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'username' => $request->username,
-            'password' => Hash::make($request->password),
+            // 'password' => Hash::make($request->password),
             'location' => $request->location,
             'description' => $request->desc,
         ]);

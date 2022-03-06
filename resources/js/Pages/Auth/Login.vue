@@ -57,11 +57,11 @@
                         </div>
                     </div>
                     <div class="main-form-row flex items-center justify-end">
-                        <div class="main-form-element max">
+                        <!--<div class="main-form-element max">
                             <Link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900">
                             Create an Account
                             </Link>
-                        </div>
+                        </div> -->
                         <div class="main-form-element min">
                             <button 
                                 class="main-page-form-cta submit" 

@@ -1,0 +1,54 @@
+.popup-main.payment {
+    font-size: 20px;
+    padding: 33px;
+    width: 650px;
+}
+.payment .popup-title {
+    margin-top: 0;
+}
+.payment .popup-footer {
+    margin-top: 20px;
+    padding: 0;
+    margin-bottom: 0;
+    // display: flex;
+    align-items: center;
+}
+.main-pay-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.main-pay-title {
+    font-weight: $semibold;
+    font-size: 40px;
+}
+.main-pay-img {
+    width: 150px;
+    border-radius: 20px;
+}
+.main-pay-info {
+    display: flex;
+    flex-direction: row;
+    font-size: 15px;
+    margin-top: 20px;
+}
+.main-pay-content {
+    margin-left: 10px;
+}
+.main-pay-eth {
+    font-weight: $semibold;
+}
+.popup-cta.download {
+    color: $rp-purple;
+    border: $rp-purple solid 1px;
+    height: 66px;
+    // margin-right: 10px;
+    padding: 0 5px 0 5px;
+    font-size: 34px;
+}
+
+.main-pay-down-text {
+    width: 150px;
+    text-align: right;
+    padding-right: 5px;
+}

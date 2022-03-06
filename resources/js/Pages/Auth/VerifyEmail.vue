@@ -1,24 +1,53 @@
 <template>
-    <div>
-        <Head title="Email Verification" />
-
-        <div class="mb-4 text-sm text-grey-600">
-            Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another. 
-        </div>
-
-        <div class="mb-4 font-medium text-sm text-green-600" v-if="verificationLinkSent" >
-            A new verification link has been sent to the email address you provided during registration.
-        </div>
-
-        <form @submit.prevent="submit">
-            <div class="mt-4 flex items-center justify-between">
-                <BreezeButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Resend Verification Email
-                </BreezeButton>
-
-                <Link :href="route('logout')" method="post" as="button" class="underline text-sm text-gray-600 hover:text-gray-900">Log Out</Link>
+<div class="main-page-form-div">
+        <div class="main-page-form-heading">
+            <div class="heading-title">
+                Forgot Password
             </div>
-        </form>
+            <div class="heading-logo"><a href="/">
+                <img src="/storage/assets/logo.png" class="h-44 w-auto"/></a>
+            </div>
+        </div>
+        <div class="main-page-form-content">
+            <div class="content-back">
+                <!--  bg-yellow-500 -->
+                <a :href="route('home')">
+                    <button class="main-page-form-cta back">Back</button>
+                </a>
+            </div>
+            <div class="content-form ">
+                <Head title="Email Verification" />
+
+                <div class="mb-4 main-form-text">
+                    Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another. 
+                </div>
+
+                <div class="mb-4 main-form-text" v-if="verificationLinkSent">
+                    A new verification link has been sent to the email address you provided during registration.
+                </div>
+
+                <BreezeValidationErrors class="mb-4" />
+
+                <form @submit.prevent="submit">
+                    <div class="main-form-row text-right flex justify-end">
+                        <div class="main-form-element half text-right">  
+                            <Link :href="route('logout')" method="post" as="button" class="underline text-sm text-gray-600 hover:text-gray-900">Log Out</Link>
+                        </div>
+                    </div>
+                    <div class="main-form-row flex items-center justify-end mt-4">
+                        <div class="main-form-element max">
+                            <button 
+                                class="main-page-form-cta submit" 
+                                :class="{ 'opacity-25': form.processing }" 
+                                :disabled="form.processing"
+                            >
+                                Resend Verification Email
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -28,7 +57,6 @@ import BreezeGuestLayout from '@/Layouts/Guest.vue'
 import { Head, Link } from '@inertiajs/inertia-vue3';
 
 export default {
-    layout: BreezeGuestLayout,
 
     components: {
         BreezeButton,

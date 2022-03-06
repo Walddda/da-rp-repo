@@ -43,7 +43,7 @@ Route::get('/admin', function () {
     return Inertia::render('Admin', [
         'token' => csrf_token(),
     ]);
-});
+})->middleware(['auth', 'verified']);
 
 Route::get('/feed', [FeedController::class, 'show']);
 Route::get('/feeed', function () {
@@ -57,6 +57,7 @@ Route::get('/', function () {
         'token' => csrf_token(),
     ]);
 });
+
 Route::post('/', function (Request $req) {
     return Inertia::render('Feed', [
         'token' => csrf_token(),
@@ -71,15 +72,15 @@ Route::post('/', function (Request $req) {
 
 Route::get('/settings', function () {
     return Inertia::render('Settings', []);
-});
+})->middleware(['auth', 'verified']);
 
 Route::get('/wave', function () {
     return Inertia::render('Wave', []);
 });
 Route::get('/myprofile/{username}', [UserController::class, 'show']);
-Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile')->middleware(['auth', 'verified']);
+Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile');
 
-Route::post('/wallet', [WalletController::class, 'save'])->name('wallet')->middleware(['auth', 'verified']);
+Route::post('/wallet', [WalletController::class, 'save'])->name('wallet');
 
 
 // Routes for Auth-Pages
@@ -112,6 +113,7 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
+
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
@@ -124,13 +126,20 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-Route::get('/profile', function () {
-    // Only verified users may access this route...
-})->middleware('verified');
+// Route::get('/profile', function () {
+//     // Only verified users may access this route...
+// })->middleware('verified');
 
 Route::get('/unreadNotifications', [NotificationController::class, 'unreadNotifications']);
 Route::get('/markNotificationsAsRead', [NotificationController::class, 'markAsRead']);
 
+Route::get('/privacy', function () {
+    return view('privacyPolicy');
+});
+
+Route::get('/terms', function () {
+    return view('terms');
+});
 
 
 

@@ -20,7 +20,7 @@
                 <form @submit.prevent="submit" class="box-border">
                     <div class="main-form-row">
                         <div class="main-form-element half">
-                            <label class="custom-text-label" for="first_name">First Name</label><br>
+                            <label class="custom-text-label" for="first_name">First Name*</label><br>
                             <BreezeInput 
                                 id="first_name" 
                                 type="text" 
@@ -32,7 +32,7 @@
                             />
                         </div>
                         <div class="main-form-element half">
-                            <label class="custom-text-label" for="last_name">Last Name</label><br>
+                            <label class="custom-text-label" for="last_name">Last Name*</label><br>
                             <BreezeInput 
                                 id="last_name" 
                                 type="text" 
@@ -46,7 +46,7 @@
                     </div>
                     <div class="main-form-row">
                         <div class="main-form-element">
-                            <label class="custom-text-label" for="email">Email</label><br>
+                            <label class="custom-text-label" for="email">Email*</label><br>
                             <BreezeInput 
                                 id="email" 
                                 type="email" 
@@ -59,7 +59,7 @@
                     </div>
                     <div class="main-form-row">
                         <div class="main-form-element half">
-                            <label class="custom-text-label" for="username">Username</label><br>
+                            <label class="custom-text-label" for="username">Username*</label><br>
                             <BreezeInput 
                                 id="username" 
                                 type="text" 
@@ -111,7 +111,9 @@
                     </div>
                     <div class="main-form-row">
                         <div class="main-form-element">
-                            <label class="custom-text-label" for="password_confirmation">Description</label><br>
+                            <label class="custom-text-label tooltip" for="password_confirmation">Bio
+                                <span class="tooltiptext">Tell us about yourself in a few sentences</span>
+                            </label><br>
                             <BreezeInput 
                                 id="password_confirmation" 
                                 type="text" 
@@ -123,7 +125,14 @@
                     </div>
                     <div class="main-form-row">
                         <div class="main-form-element half">
-                            <label class="custom-text-label" for="password">Password</label><br>
+                            <label class="custom-text-label tooltip" for="password">Password*
+                                <span class="tooltiptext">Your password must:<br>
+
+Be at least 8 characters<br>
+Have at least one number<br>
+Have at least one upper case letter<br>
+Have at least one lower case letter</span>
+                            </label><br>
                             <BreezeInput 
                                 id="password" 
                                 type="password" 
@@ -134,7 +143,7 @@
                             />
                         </div>
                         <div class="main-form-element half">
-                            <label class="custom-text-label" for="password_confirmation">Confirm Password</label><br>
+                            <label class="custom-text-label" for="password_confirmation">Confirm Password*</label><br>
                             <BreezeInput 
                                 id="password_confirmation" 
                                 type="password" 
@@ -144,12 +153,21 @@
                                 autocomplete="new-password"  
                             />
                         </div>
+
+
+                    </div>
+                    <div class="main-form-row">
+                        <div class="main-form-element">
+                            <label class="custom-text-label" for="password_confirmation">Terms & Conditions*</label><br>
+                            <input type="checkbox" class="form-control" name="terms" value="1" required/>I agree with the <a href="/privacy" target="_blank"><strong>Privacy Policy</strong></a> and <a href="/terms" target="_blank"><strong>Terms & Conditions</strong></a>   
+                            
+                        </div>
                     </div>
                     <div class="main-form-row flex items-center justify-end">
                         <div class="main-form-element max">
-                            <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                            <!-- <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
                             Login
-                            </Link>
+                            </Link> -->
                         </div>
                         <div class="main-form-element min">
                             <button 
@@ -161,6 +179,8 @@
                             </button>
                         </div>
                     </div>
+
+                    <label> All fields marked with an asterisk (*) are required. </label> 
                     
                     <BreezeValidationErrors class="mb-4" />
                     <!-- <div class="flex items-center justify-end mt-4">

@@ -44,7 +44,7 @@ class HandleInertiaRequests extends Middleware
             'text' => [
                 'nav' => [],
                 'feed' => [
-                    'main' => 'Start selling \nyour Beats now',
+                    'main' => 'Start selling \nyour Beats now.',
                     'button-cta' => 'get started',
                     'to-scroll' => 'explore',
                 ]
