@@ -11,11 +11,9 @@
         </div>
         <div class="main-page-form-content">
             <div class="content-back">
-                <!--  bg-yellow-500 -->
                 <button class="main-page-form-cta back" @click="back">Back</button>
             </div>
             <div class="content-form ">
-                <!-- bg-red-400 -->
                  <Head title="Register" />
                 <form @submit.prevent="submit" class="box-border">
                     <div class="main-form-row">
@@ -97,17 +95,7 @@
                                 </span>
                             </p>
                         </div>
-                        <!-- <select :class="[error.key ? 'error' : '','form-control main-select-input']" id="key" @change="changeKey($event)">
-                            <option value="" selected></option>
-                            <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
-                        </select> -->
-                        <!-- <v-select :options="[{country: 'Canada', code: 'CA'},]"></v-select> -->
                     </div>
-                        <!--<select id="location" class="form-select block w-full mt-1" v-model="form.location">
-                            <option v-for="country in countries" :value="country.value">
-                                {{ country.label }}
-                            </option>
-                        </select> -->
                     </div>
                     <div class="main-form-row">
                         <div class="main-form-element">
@@ -165,9 +153,6 @@ Have at least one lower case letter</span>
                     </div>
                     <div class="main-form-row flex items-center justify-end">
                         <div class="main-form-element max">
-                            <!-- <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                            Login
-                            </Link> -->
                         </div>
                         <div class="main-form-element min">
                             <button 
@@ -183,73 +168,9 @@ Have at least one lower case letter</span>
                     <label> All fields marked with an asterisk (*) are required. </label> 
                     
                     <BreezeValidationErrors class="mb-4" />
-                    <!-- <div class="flex items-center justify-end mt-4">
-                        <a :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                            Already registered?
-                        </a>
-
-                        <button 
-                            class="main-page-form-cta submit" 
-                            :class="{ 'opacity-25': form.processing }" 
-                            :disabled="form.processing"
-                        >
-                            Register
-                        </button>
-                    </div> -->
                 </form>
             </div>
         </div>
-
-        <!-- <Head title="Register" />
-
-        <BreezeValidationErrors class="mb-4" />
-
-        <form @submit.prevent="submit" class="box-border">
-            <div class="inline-flex w-full box-border">
-                <div class="mt-4 flex-1 w-2/5 box-border pr-4">
-                    <BreezeLabel for="first_name" value="First Name" />
-                    <BreezeInput id="first_name" type="text" class="mt-2 block w-full" v-model="form.first_name" required autofocus autocomplete="first_name" />
-                </div>
-                
-                <div class="mt-4 flex-1 w-2/5 box-border pl-4">
-                    <BreezeLabel for="last_name" value="Last Name" />
-                    <BreezeInput id="last_name" type="text" class="mt-2 block w-full" v-model="form.last_name" required autofocus autocomplete="last_name"/>
-                </div>
-            </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="email" value="Email" />
-                warum autocomplete email??
-                <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="username" />
-            </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="username" value="Username" />
-                <BreezeInput id="username" type="text" class="mt-1 block w-full" v-model="form.username" required autocomplete="username" />
-            </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="password" value="Password" />
-                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password"/>
-            </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="password_confirmation" value="Confirm Password" />
-                <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"  />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Already registered?
-                </Link>
-
-                <BreezeButton @click="loginWeb3" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </BreezeButton>
-            </div>
-
-            
-        </form> -->
     </div>
 </template>
 
@@ -313,7 +234,6 @@ export default {
         changeKey (event) {
             console.log(event.target.value);
             this.form.location = event.target.value
-            // this.selectedKey = event.target.options[event.target.options.selectedIndex].text
         }, 
         leave(x){
             console.log(this.mouseOpt + '-'+ this.mouseInp)
@@ -324,17 +244,13 @@ export default {
             console.log(x)
             var corrKey = false;
             this.countries.forEach(key => {
-                // console.log(key.label +'-'+ this.form.location)
                 if(this.form.location == key.label){
                     console.log(key.label)
                     corrKey = true;
                 }
             })
             if(!corrKey){
-                // this.error.key = ["Please use an existing key."]
             }else if(this.error.key){
-                // this.$delete(this.error, 'key')
-                // this.deleteError('key')
             }
         },
         mouseOptf(a){
@@ -344,7 +260,7 @@ export default {
             this.mouseInp = a;
         },
         back(){
-history.back()
+            history.back()
         },
     }
 }

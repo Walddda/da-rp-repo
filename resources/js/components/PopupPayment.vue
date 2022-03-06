@@ -1,83 +1,41 @@
 <template>
-    <div v-if="$page.props.auth.user && song.is_beat.from_user.id === $page.props.auth.user.id" class="relative bg-blurr fixed inset-0 flex items-center justify-center bg-semi-75" @click="close()">
-        <div class="popup text-center" @click.stop>
-        {{ song.is_beat.title }}<br>-<br>
-
-        {{song.is_beat.from_user.eth_address}}
-        
-        <span v-if="song.is_beat.feature"> feat. {{ song.is_beat.feature }} </span> <br>-<br>
-
-        price: {{ this.calculating ? 'Loading...' : this.dollarPrice }} $<br>-<br>
-        ether price: {{ song.is_beat.price }} ETH
-<!-- 
-        {{song.is_beat.id}}<br>
-        -<br>
-        {{$page.props.auth.user.id}} -->
-
-        
-        <div class="popup-footer">
-            <button class="popup-cta back" @click="close()">Cancel</button>
-            <a class="popup-cta download" :href="song.file_path" download>Download</a>
-            <button class="popup-cta submit" @click="pay()" disabled>Purchase</button>
+  <div class="popup-bg-blurr" @click="close()">
+    <div class="popup-main payment" @click.stop>
+      <div class="popup-title">Buy</div>
+        <p class="main-pay-title">{{ song.is_beat.title }}</p>
+        <div class="main-pay-row">
+          <p class="main-pay-artist">by {{ song.is_beat.title }}</p>
+          <p class="main-pay-eth">{{ song.is_beat.price }} ETH</p>
         </div>
-
-        <div v-if="download">You already bought this beat</div>
-
-        <div v-if="hash">{{hash}}</div>
-
-        <a :href="song.file_path" download>Download</a>
-        
+        <div class="main-pay-row">
+          <p class="main-pay-feat" v-if="song.is_beat.feature">feat. {{ song.is_beat.feature }}</p>
+          <p class="main-pay-dol">= {{ this.calculating ? 'Loading...' : this.dollarPrice }} $</p>
         </div>
+        <div class="main-pay-info">
+          <img class="main-pay-img" :src="song.is_beat.get_cover.cover_path" />
+          <div class="main-pay-content">
+            {{song.is_beat.bpm}} BPM<br>
+            {{song.is_beat.key}} <br>
+            <span v-for="(ax,ak) in song.is_beat">
+              <span v-if="ak.substring(0,3) == 'tag' && ax &&ak != 'tag1'">, </span>
+              <span  v-if="ak.substring(0,3) == 'tag' && ax">
+                {{ax}}</span>
+            </span><br>
+            {{song.is_beat.description}} <br>
+          </div>
+        </div>
+      <div class="popup-footer">
+        <button class="popup-cta back" @click="close()">Back</button>
+        <div class="flex flex-auto"></div>
+        <p v-if="download" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">You already bought this beat</p>
+        <p v-if="own" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">This is your beat</p>
+        <a v-if="download || own" :href="song.file_path" download>
+          <button class="popup-cta download">Download</button>
+        </a>
+        <button v-if="!download && !own" class="popup-cta submit" @click="pay()" :disabled="download">Buy</button>
+      </div>
     </div>
-
-    <div v-else class="popup-bg-blurr" @click="close()">
-        <div class="popup-main payment" @click.stop>
-            <div class="popup-title">Buy</div>
-              <p class="main-pay-title">{{ song.is_beat.title }}</p>
-              <div class="main-pay-row">
-                <p class="main-pay-artist">by {{ song.is_beat.title }}</p>
-                <p class="main-pay-eth">{{ song.is_beat.price }} ETH</p>
-              </div>
-              <div class="main-pay-row">
-                <p class="main-pay-feat" v-if="song.is_beat.feature">feat. {{ song.is_beat.feature }}</p>
-                <p class="main-pay-dol">= {{ this.calculating ? 'Loading...' : this.dollarPrice }} $</p>
-              </div>
-              <div class="main-pay-info">
-                <img class="main-pay-img" :src="song.is_beat.get_cover.cover_path" />
-                <div class="main-pay-content">
-                  {{song.is_beat.bpm}} BPM<br>
-                  {{song.is_beat.key}} <br>
-                  <span v-for="(ax,ak) in song.is_beat">
-                    <span v-if="ak.substring(0,3) == 'tag' && ax &&ak != 'tag1'">, </span>
-                    <span  v-if="ak.substring(0,3) == 'tag' && ax">
-                      {{ax}}</span>
-                  </span><br>
-                  {{song.is_beat.description}} <br>
-                </div>
-              </div>
-
-        
-        <div class="popup-footer">
-            <button class="popup-cta back" @click="close()">Back</button>
-            <div class="flex flex-auto"></div>
-            <p v-if="download" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">You already bought this beat</p>
-            <a v-if="download" :href="song.file_path" download>
-              <button class="popup-cta download">Download</button>
-            </a>
-            <button v-if="!download" class="popup-cta submit" @click="pay()" :disabled="download">Buy</button>
-        </div>
-<!-- 
-        <div v-if="download">You already bought this beat</div>
-
-        <div v-if="hash">{{hash}}</div>
-
-        <div v-if="download"><a :href="song.file_path" download>Download</a></div> -->
-        
-        </div>
-
-    </div>
-
-    
+  </div>
 </template>
 <script>
 import web3 from 'web3/dist/web3.min.js'
@@ -100,6 +58,7 @@ export default {
             hash: '',
             download: false,
             transactions: [],
+            own: this.$page.props.auth.user && this.song.is_beat.from_user.id === this.$page.props.auth.user.id,
         }
     },
 

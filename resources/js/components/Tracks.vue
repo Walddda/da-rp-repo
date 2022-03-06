@@ -154,7 +154,7 @@ export default {
                     }else{
                         this.files = response.data
                     }
-                    this.emitter.emit("openPopupPayment", this.files[1]);
+                    // this.emitter.emit("openPopupPayment", this.files[1]);
                     // this.currentPlaying = 1; //für global player testing
                     console.info('finish: ');
                     console.info(response.data);
