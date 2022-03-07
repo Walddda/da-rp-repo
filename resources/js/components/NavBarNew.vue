@@ -183,8 +183,15 @@ export default {
         async connect() {
             if (typeof window.ethereum !== 'undefined') {
 
-                const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-                const address = accounts[0]
+
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const address = accounts[0];
+
+
+                this.emitter.emit('success', 'Your Wallet was successfully connected.')
+                
+
+                
 
                 return useForm({ address }).post(this.route('wallet'))
             } else {

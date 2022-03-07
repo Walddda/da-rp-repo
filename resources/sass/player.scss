@@ -142,3 +142,30 @@
 .player-main-inf {
     height: 90px;
 }
+
+.main-global-p {
+    // background-color: #e08d96;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    height: 20px;
+    width: 30px;
+}
+.main-global-p svg {
+    padding-left: 1px;
+    padding-bottom: 1px;
+    fill: white;
+}
+
+.main-global-ind-cl {
+    bottom: 0px;
+}
+.main-global-ind-cl .main-global-p {
+    border-top-left-radius: 0.25rem;
+}
+.main-global-ind-op {
+    bottom: 76px;
+}
+.main-global-ind-op .main-global-p {
+    border-bottom-left-radius: 0.25rem;
+}

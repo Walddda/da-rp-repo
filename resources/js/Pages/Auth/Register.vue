@@ -98,9 +98,8 @@
                     </div>
                     </div>
                     <div class="main-form-row">
-                        <div class="main-form-element">
-                            <label class="custom-text-label tooltip" for="password_confirmation">Bio
-                                <span class="tooltiptext">Tell us about yourself in a few sentences</span>
+                        <div class="main-form-element tooltip">
+                            <label class="custom-text-label" for="password_confirmation">Bio
                             </label><br>
                             <BreezeInput 
                                 id="password_confirmation" 
@@ -108,27 +107,27 @@
                                 :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
                                 v-model="form.description"  
                                 autocomplete="new-password"  
-                            />
+                            /><span class="tooltiptext">Tell us about yourself in a few sentences</span>
                         </div>
                     </div>
                     <div class="main-form-row">
-                        <div class="main-form-element half">
-                            <label class="custom-text-label tooltip" for="password">Password*
-                                <span class="tooltiptext">Your password must:<br>
-
-Be at least 8 characters<br>
-Have at least one number<br>
-Have at least one upper case letter<br>
-Have at least one lower case letter</span>
+                        <div class="main-form-element half tooltip">
+                            <label class="custom-text-label" for="password">Password*
                             </label><br>
                             <BreezeInput 
                                 id="password" 
                                 type="password" 
                                 :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                
                                 v-model="form.password" 
                                 required 
                                 autocomplete="new-password"
-                            />
+                            /><span class="tooltiptext">Your password must:<br>
+
+Be at least 8 characters<br>
+Have at least one number<br>
+Have at least one upper case letter<br>
+Have at least one lower case letter</span>
                         </div>
                         <div class="main-form-element half">
                             <label class="custom-text-label" for="password_confirmation">Confirm Password*</label><br>
@@ -151,8 +150,14 @@ Have at least one lower case letter</span>
                             
                         </div>
                     </div>
-                    <div class="main-form-row flex items-center justify-end">
+                    <div class="main-form-row flex items-center">
+                        <div class="main-form-element half flex-auto flex-row">
+                            <label> All fields marked with an asterisk (*) are required. </label>
+                        </div>
                         <div class="main-form-element max">
+                            <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                                Login
+                            </Link>
                         </div>
                         <div class="main-form-element min">
                             <button 
@@ -164,8 +169,6 @@ Have at least one lower case letter</span>
                             </button>
                         </div>
                     </div>
-
-                    <label> All fields marked with an asterisk (*) are required. </label> 
                     
                     <BreezeValidationErrors class="mb-4" />
                 </form>
