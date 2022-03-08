@@ -38,7 +38,7 @@
                     <textarea id="desc" class="no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none" v-model="form.desc"></textarea>
             </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <BreezeLabel for="password" value="Password" />
                 <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password"/>
             </div>
@@ -46,7 +46,7 @@
             <div class="mt-4">
                 <BreezeLabel for="password_confirmation" value="Confirm Password" />
                 <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"/>
-            </div>
+            </div> -->
 
             <div class="text-center pt-4 pb-8 border-b border-gray-200">
                 <Button class="ml-4 cta-main but-main" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
@@ -93,8 +93,8 @@ export default {
                 first_name: this.$page.props.auth.user.first_name,
                 last_name: this.$page.props.auth.user.last_name,
                 email: this.$page.props.auth.user.email,
-                password: this.$page.props.auth.user.password,
-                password_confirmation: this.$page.props.auth.user.password_confirmation,
+                // password: this.$page.props.auth.user.password,
+                // password_confirmation: this.$page.props.auth.user.password_confirmation,
                 id: this.$page.props.auth.user.id,
                 location: this.$page.props.auth.user.location,
                 desc: this.$page.props.auth.user.description,
@@ -113,7 +113,6 @@ export default {
 
     methods: {
         submit(e) {
-            console.log('lezzgo')
             e.preventDefault();
             let currentObj = this;
             const config = {
@@ -128,8 +127,8 @@ export default {
             formData.append('first_name', this.form.first_name);
             formData.append('last_name', this.form.last_name);
             formData.append('email', this.form.email);
-            formData.append('password', this.form.password);
-            formData.append('password_confirmation', this.form.password_confirmation);
+            // formData.append('password', this.form.password);
+            // formData.append('password_confirmation', this.form.password_confirmation);
             formData.append('id', this.form.id);
             formData.append('location', this.form.location);
             formData.append('desc', this.form.desc);
@@ -154,7 +153,6 @@ export default {
         },
         
         upload(e){
-            console.log('lezzgo')
             e.preventDefault();
             let currentObj = this;
             const config = {

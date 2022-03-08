@@ -35,7 +35,7 @@
 									<p>no volume rn</p>
 								</div>
 								<div v-else @click="toggleVol">
-									<p>voLUME</p>
+									<p>Volume</p>
 								</div>
 								<div v-if="volumeOn">
 									<input type="range" min="0" max="100" v-model="volume" @click="volumeEmit" @drag="volumeEmit" @dragend="volumeEmit">

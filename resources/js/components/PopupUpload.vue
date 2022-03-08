@@ -1,9 +1,10 @@
 <template>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <div class="popup-bg-blurr" @click="close">
         <div class="popup-main" @click.stop @click="currencySelect = false">
             <!-- {{$page.props.auth.user}} -->
             <div class="popup-title">Upload</div>
+            <div class="asterisk"> All fields marked with an asterisk (*) are required. </div>
     <!-- <form v-if="logedin" :action="route" method="post" enctype="multipart/form-data">upload -->
             <form class="popup-content main-form" v-if="$page.props.auth.user" @submit="upload()" enctype="multipart/form-data">
                 <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
@@ -35,9 +36,12 @@
                     </div>
                 </transition> -->
 
+                
+                
                 <div class="main-form-row">
+                
                     <div class="main-form-element vier-fünftel">
-                        <label class="custom-text-label" for="title">Title</label><br>
+                        <label class="custom-text-label" for="title">Title*</label><br>
                         <input
                             type="text"
                             name="beatTitle"
@@ -60,6 +64,7 @@
                             value="beat"
                             v-model="type"
                             required
+                            checked
                             />
                         </label>
                         <label class="inline-flex items-center">
@@ -77,7 +82,7 @@
                 </div>
                 <div class="main-form-row">
                     <div class="main-form-element half">  
-                        <label class="custom-text-label" for="bpm">BPM</label><br>
+                        <label class="custom-text-label" for="bpm">BPM*</label><br>
                         <input
                             type="text"
                             name="beatBPM"
@@ -93,7 +98,7 @@
                         @mouseleave="mouseInpf(false)"
                         @mouseover="mouseInpf(true)"
                     >
-                        <label class="custom-text-label" for="key">Key</label><br>
+                        <label class="custom-text-label" for="key">Key*</label><br>
                         <input
                             type="text"
                             name="key"
@@ -139,7 +144,7 @@
                 </div>
                 <div class="main-form-row">
                     <div class="main-form-element half">  
-                        <label class="custom-text-label" for="price">Price</label><br>
+                        <label class="custom-text-label" for="price">Price*</label><br>
                         <div v-if="currency == 'ETH' || currencySelect"
                             @click.stop 
                             @click="currencySelect = !currencySelect; currency= 'ETH'" 
@@ -176,6 +181,7 @@
                             @focus="currencySelect = false"
                             v-model="price"
                             v-on:keypress="NumbersOnly"
+                            maxlength = "8"
                         />
                     </div><div class="main-form-element half">
                         <label class="custom-text-label" for="feature">Featured Artists</label><br>
@@ -208,7 +214,7 @@
                 </div>
                 <div class="main-form-row flex justify-between">
                     <div class="main-form-element zwei-fünftel flex flex-col justify-end">
-                        <label class="custom-text-label" for="chooseFile">Track</label>
+                        <label class="custom-text-label" for="chooseFile">Track*</label>
                         <label 
                             v-if="beat" 
                             class="main-file-label-box checked mt-2" 
@@ -228,6 +234,7 @@
                             class="custom-file-input"
                             id="chooseFile"
                             accept="audio/mp3"
+                            required
                             v-on:change="onBeatChange"
                             style="display:none"
                         />
@@ -263,6 +270,9 @@
                         />
                     </div>
                 </div>
+
+                
+
                 <div class="main-form-row flex flex-col" v-if="error">
                     <span class="main-form-error-msg" v-for="e in error">{{e[0]}}<br></span>
                 </div>
@@ -275,15 +285,12 @@
                 @click="upload();">Upload</button>
             </div>
         </div>
-        <popup-crop v-if="showPopupCrop" :img="cover"></popup-crop>
     </div>
 </template>
 
 
 <script>
 import VueTagsInput from "@sipec/vue3-tags-input";
-import PopupCrop from "./PopupCrop.vue";
-// import vSelect from 'vue-select';
 
 export default {
 
@@ -291,8 +298,6 @@ export default {
 
     components: {
         VueTagsInput,
-        // vSelect,
-        PopupCrop,
     },
 
     data() {
@@ -304,11 +309,11 @@ export default {
             coverType: '',
             title: '',
             tag: '',
-            tags: ['test1', 'test23', 'abcde'],
+            tags: [],
             bpm: '',
             keys: ["C", "Cm", "Db", "C#m", "D", "Dm", "Eb", "D#m", "E", "Em", "F", "Fm", "Gb", "F#m", "G", "Gm", "Ab", "G#m", "A", "Am", "Bb", "A#m", "B", "Bm"],
             selectedKey: '',
-            type: '',
+            type: 'beat',
             description: '',
             feature: '',
             price: '',
@@ -327,7 +332,6 @@ export default {
             currencySelect: false,
             beatFileName: '',
             coverFileName: '',
-            showPopupCrop: '',
             length: null,
         }
     },
@@ -457,20 +461,6 @@ export default {
         },
         onBeatChange(e) {
             this.beat = e.target.files[0];
-            // var audio = document.createElement('audio');
-            // console.log(e)
-            // audio.src = e.target.result
-            // audio.addEventListener('loadedmetadata', function(){
-                // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
-                // this.length = audio.duration;
-            
-                // example 12.3234 seconds
-                // console.log("The duration of the song is of: " + this.length + " seconds");
-                // Alternatively, just display the integer value with
-                // parseInt(duration)
-                // 12 seconds
-            // },false);
-            // console.log(this.length)
             if(e.target.files[0]){
                 this.beatFileName = e.target.files[0].name;
             }else{
@@ -479,8 +469,6 @@ export default {
             },
 		loadImage(event) {
             console.log(event.target.files[0]);
-            // this.showPopupCrop = true;
-            // console.error('hiiilfe');
             this.cover = event.target.files[0];
             if(event.target.files[0]){
                 this.coverFileName = event.target.files[0].name;
@@ -551,10 +539,6 @@ export default {
         deleteError(field){
             var temp = this.error;
             if(typeof temp === 'object' && temp !== null){
-                // temp.forEach((k, element) => {
-                //     console.info(k)
-                //     console.warn(element)
-                // });
                 for (const [key, value] of Object.entries(temp)) {
                     console.log(`${key}: ${value}`);
                 }
@@ -564,14 +548,6 @@ export default {
         },
     }, 
     mounted(){
-        this.emitter.on("closePopupCrop", state => {
-            if(!state){
-                this.cover = ''
-                this.coverFileName = ''
-            }
-            this.showPopupCrop = false;
-            console.info('cl')
-        });
         var audio = document.createElement('audio');
         let diese = this;
         document.getElementById("chooseFile").addEventListener('change', function(event){
@@ -600,15 +576,6 @@ export default {
                 reader.readAsDataURL(file);
             }
         }, false); 
-        
-        // var aud = document.getElementById("chooseFile")
-        // if(aud) {
-        //     aud.addEventListener('change', function(event){
-        //         console.log('yes')
-        //         console.log(event)
-        //         console.log(event.target.result)
-        //     })
-        // }
     }
 };
 </script>

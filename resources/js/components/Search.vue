@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center justify-center" :class="[loc == 'nav' ? 'nav-search-div' : '']">
     <div class="flex">
-        <form action="/" method="post" name="searchForm" ref="form" class="flex flex-row" :class="[loc == 'feed' ? 'main-search-form' : loc == 'nav' ? 'nav-search-form' : '']">
+        <form action="/" method="post" name="searchForm" ref="form" style="margin-top:20px" class="flex flex-row" :class="[loc == 'feed' ? 'main-search-form' : loc == 'nav' ? 'nav-search-form' : '']">
             <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
             <i v-if=" loc == 'feed'" class="main-search-icon">
                 <svg class="w-14 h-14 text-gray-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
@@ -10,6 +10,7 @@
                         d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
                 </svg>
             </i>
+
             <input type="text" 
                 v-if=" loc == 'nav'"
                 class="px-4 py-2 w-80 search-text-input-nav" 

@@ -30,6 +30,9 @@ import BreezeButton from '@/Components/Button.vue'
                     const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
                     const address = accounts[0]
 
+
+                    console.log('hi')
+
                     return useForm({ address }).post(this.route('wallet'))
                 } else {
                     alert('MetaMask not detected. Please try again from a MetaMask enabled browser.')

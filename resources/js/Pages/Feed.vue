@@ -9,14 +9,14 @@
             <div v-if="!$page.props.auth.user" class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
                 <div :style="{opacity: (1-backgroundOp)}">
                 <p class="heading-feed">Start selling<br>
-                your beats now</p>
-                <a href="/register"><button class="cta-main but-main mt-4">get started</button></a>
+                your beats now.</p>
+                <a href="/register"><button class="cta-main but-main mt-4">Get started</button></a>
                 </div>
             </div>
             <div v-else class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
                 <div :style="{opacity: (1-backgroundOp)}">
                 <p class="heading-feed">Find exactly<br>
-                what you need</p>
+                what you need.</p>
                 <search :keywords="searchTerm" loc="feed" feed></search>
                 <!-- <button class="cta-main but-main mt-4">get started</button> -->
                 </div>

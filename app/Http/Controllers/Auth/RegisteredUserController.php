@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
 class RegisteredUserController extends Controller
@@ -39,7 +40,14 @@ class RegisteredUserController extends Controller
             'last_name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required', 'confirmed', Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                //->symbols()
+                //->uncompromised()
+            ],
         ]);
 
         $user = User::create([
@@ -54,6 +62,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+
+        return redirect()->route('verification.notice');
+        #return redirect(RouteServiceProvider::HOME)';
     }
 }

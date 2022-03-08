@@ -1,30 +1,83 @@
+<!------------------------------------------------------------------------------------- ><!-->
 <template>
-    <Head title="Reset Password" />
-
-    <BreezeValidationErrors class="mb-4" />
-
-    <form @submit.prevent="submit">
-        <div>
-            <BreezeLabel for="login" value="Email / Username" />
-            <BreezeInput id="login" type="text" class="mt-1 block w-full" v-model="form.login" required autofocus autocomplete="username" />
-        </div>
-
-        <div class="mt-4">
-            <BreezeLabel for="password" value="Password" />
-            <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
-        </div>
-
-        <div class="mt-4">
-            <BreezeLabel for="password_confirmation" value="Confirm Password" />
-            <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <BreezeButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+<div class="main-page-form-div">
+        <div class="main-page-form-heading">
+            <div class="heading-title">
                 Reset Password
-            </BreezeButton>
+            </div>
+            <div class="heading-logo"><a href="/">
+                <img src="/storage/assets/logo.png" class="h-44 w-auto"/></a>
+            </div>
         </div>
-    </form>
+        <div class="main-page-form-content">
+            <div class="content-back">
+                <!--  bg-yellow-500 -->
+                <a :href="route('home')">
+                    <button class="main-page-form-cta back">Back</button>
+                </a>
+            </div>
+            <div class="content-form ">
+                <Head title="Reset Password" />
+
+                <BreezeValidationErrors class="mb-4" />
+
+                <form @submit.prevent="submit">
+                    <div class="main-form-row">
+                        <div class="main-form-element">
+                            <label class="custom-text-label" for="login">Email</label><br>
+                            <BreezeInput 
+                                id="login" 
+                                type="text" 
+                                class="custom-text-input main-text-input" 
+                                v-model="form.login" 
+                                required 
+                                autofocus
+                            />
+                        </div>
+                    </div>
+                    <div class="main-form-row">
+                        <div class="main-form-element">
+                            <label class="custom-text-label" for="password">Password</label><br>
+                            <BreezeInput 
+                                id="password" 
+                                type="password" 
+                                class="custom-text-input main-text-input" 
+                                v-model="form.password" 
+                                required 
+                                autocomplete="new-password" 
+                                autofocus
+                            />
+                        </div>
+                    </div>
+                    <div class="main-form-row">
+                        <div class="main-form-element">
+                            <label class="custom-text-label" for="password_confirmation">Confirm Password</label><br>
+                            <BreezeInput 
+                                id="password_confirmation" 
+                                type="password" 
+                                class="custom-text-input main-text-input" 
+                                v-model="form.password_confirmation" 
+                                required 
+                                autocomplete="new-password" 
+                                autofocus
+                            />
+                        </div>
+                    </div>
+                    <div class="main-form-row flex items-center justify-end mt-4">
+                        <div class="main-form-element max">
+                            <button 
+                                class="main-page-form-cta submit" 
+                                :class="{ 'opacity-25': form.processing }" 
+                                :disabled="form.processing"
+                            >
+                                Reset Password
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -36,7 +89,6 @@ import BreezeValidationErrors from '@/Components/ValidationErrors.vue'
 import { Head } from '@inertiajs/inertia-vue3';
 
 export default {
-    layout: BreezeGuestLayout,
 
     components: {
         BreezeButton,

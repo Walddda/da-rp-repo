@@ -1,6 +1,7 @@
 // Fonts
 // @import url("https://fonts.googleapis.com/css?family=Nunito");
 // @import "vue-select/src/scss/vue-select.scss";
+@import "https://use.fontawesome.com/releases/v5.15.4/css/all.css";
 
 // Variables
 @import "variables";
@@ -13,7 +14,7 @@
 @import "profile";
 @import "nav";
 @import "wave";
-
+@import "payment";
 // Bootstrap
 // @import "~bootstrap/scss/bootstrap";
 
@@ -78,6 +79,7 @@
     font-size: 133px;
     font-weight: $semibold;
     color: white;
+    line-height: 105%;
 }
 
 .nav-link {
@@ -103,6 +105,7 @@ input.search-text-input-feed {
     width: 730px;
     height: 110px;
     padding-left: 100px;
+    border: none;
 }
 input.search-text-input-feed:focus {
     --tw-ring-color: 0;
@@ -113,6 +116,7 @@ input.search-text-input-nav {
     font-size: 20px;
     height: 60px;
     width: 300px;
+    border: none;
 }
 input.search-text-input-nav:focus {
     --tw-ring-color: 0;

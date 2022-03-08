@@ -3,11 +3,17 @@
 body,
 body *:not(html):not(style):not(br):not(tr):not(code) {
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol"; */
     position: relative;
+    /* font-family: basic-sans;
+    font-weight: 400; */
 }
-
+@import url("https://use.typekit.net/rjj3aqh.css");
+.im {
+    color: #718096 !important;
+}
 body {
     -webkit-text-size-adjust: none;
     background-color: #ffffff;
@@ -17,6 +23,8 @@ body {
     margin: 0;
     padding: 0;
     width: 100% !important;
+    font-family: basic-sans !important;
+    font-weight: 400 !important;
 }
 
 p,
@@ -202,6 +210,7 @@ img {
     line-height: 18px;
     margin: 0;
     padding: 10px 0;
+    font-family: basic-sans !important;
 }
 
 .content-cell {
@@ -232,11 +241,11 @@ img {
 
 .button-blue,
 .button-primary {
-    background-color: #2d3748;
-    border-bottom: 8px solid #2d3748;
-    border-left: 18px solid #2d3748;
-    border-right: 18px solid #2d3748;
-    border-top: 8px solid #2d3748;
+    background-color: #8f35e8;
+    border-bottom: 8px solid #8f35e8;
+    border-left: 18px solid #8f35e8;
+    border-right: 18px solid #8f35e8;
+    border-top: 8px solid #8f35e8;
 }
 
 .button-green,
@@ -287,4 +296,10 @@ img {
 
 .break-all {
     word-break: break-all;
+}
+
+/* ----- */
+a.main-button-purp {
+    background-color: #8f35e8;
+    font-size: 34px;
 }

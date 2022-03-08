@@ -153,15 +153,12 @@
                 @click="upload();">Edit</button>
             </div>
         </div>
-        <popup-crop v-if="showPopupCrop" :img="cover"></popup-crop>
     </div>
 </template>
 
 
 <script>
 import VueTagsInput from "@sipec/vue3-tags-input";
-import PopupCrop from "./PopupCrop.vue";
-// import vSelect from 'vue-select';
 
 export default {
 
@@ -169,8 +166,6 @@ export default {
 
     components: {
         VueTagsInput,
-        // vSelect,
-        PopupCrop,
     },
 
     data() {
@@ -277,11 +272,12 @@ export default {
                             currentObj.processing = false;
                             console.log(currentObj.error)
                         }else if (response.data.success) {
-                            currentObj.emitter.emit('upload-success');
+                            currentObj.emitter.emit('success', 'Your Track was successfully edited.')
                             currentObj.success = response.data.success
                             currentObj.error = null
-                            currentObj.close();
                             console.log(currentObj.success)
+                            currentObj.emitter.emit('upload-success');
+                            currentObj.close();
                         }
                     })
                     .catch(error => {
@@ -299,11 +295,10 @@ export default {
                         }
                         // Do something with error data
                     });
+                    
         },
 		loadImage(event) {
             console.log(event.target.files[0]);
-            // this.showPopupCrop = true;
-            // console.error('hiiilfe');
             this.cover = event.target.files[0];
             if(event.target.files[0]){
                 this.coverFileName = event.target.files[0].name;
@@ -390,14 +385,6 @@ export default {
         }
     }, 
     mounted(){
-        this.emitter.on("closePopupCrop", state => {
-            if(!state){
-                this.cover = ''
-                this.coverFileName = ''
-            }
-            this.showPopupCrop = false;
-            console.info('cl')
-        });
         var audio = document.createElement('audio');
         let diese = this;
 

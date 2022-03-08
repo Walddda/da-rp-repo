@@ -66,3 +66,10 @@
         }
     };
 </script>
+
+<style>
+button{
+    color: #9034ec;
+    font-weight: bold;
+}
+</style>

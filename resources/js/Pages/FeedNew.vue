@@ -4,19 +4,19 @@
 <template>
     <div>
         <Head title="Home" />
-
+        <!-- <button @click="showSuccess = !showSuccess" class="fixed bottom-0 left-0 p-2 bg-red-400">SUCCESSSS</button> -->
         <div class="background-image "><!-- Foto von Dmitry Demidov von Pexels -->
             <div v-if="!$page.props.auth.user" class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
                 <div :style="{opacity: (1-backgroundOp)}">
                 <p class="heading-feed">Start selling<br>
-                your beats now</p>
-                <a href="/register"><button class="cta-main but-main mt-4">get started</button></a>
+                your beats now.</p>
+                <a href="/register"><button class="cta-main but-main mt-4" style="margin-top:30px">Get started</button></a>
                 </div>
             </div>
             <div v-else class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
                 <div :style="{opacity: (1-backgroundOp)}">
                 <p class="heading-feed">Find exactly<br>
-                what you need</p>
+                what you need.</p>
                 <search :keywords="searchTerm" loc="feed" feed></search>
                 <!-- <button class="cta-main but-main mt-4">get started</button> -->
                 </div>
@@ -26,18 +26,19 @@
         
         <nav-bar-new :backgroundOp="backgroundOp" :searchTerm="searchTerm" feed></nav-bar-new>
 
-            <!-- <nav-bar :searchTerm="searchTerm"></nav-bar> -->
+        <!-- <nav-bar :searchTerm="searchTerm"></nav-bar> -->
 
+        <!-- // {{$page.props.auth.user}} -->
         <tracks :attr="{loc: 'feed'}"></tracks>
 
-        <upload v-if="showPopupUpload"></upload>
+        <upload v-if="showPopupUpload && $page.props.auth.user.eth_address"></upload>
         <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
-        <popup-wallet v-if="showPopupWallet"></popup-wallet>
         <popup-payment v-if="showPopupPayment" :song="paymentTrack"></popup-payment>
         <!-- <PopupWallet :showing="walletPopup" @close="WalletPopup = false">
             <p>Would You like to connect your wallet?</p>
             <wallet/>
         </PopupWallet> -->
+        <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
     </div>
 </template>
 
@@ -52,6 +53,7 @@ import PopupPayment from '@/Components/PopupPayment.vue'
 import Search from '@/Components/Search.vue';
 import Tracks from '@/Components/Tracks.vue';
 import PopupEdit from '@/Components/PopupEdit.vue'
+import Success from '@/Components/Success.vue';
 
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
@@ -68,6 +70,7 @@ export default {
         Search,
         Tracks,
         PopupEdit,
+        Success,
     },
 
     props: { 
@@ -81,18 +84,23 @@ export default {
             playing: false,
             currentPlaying: null,
             showPopupUpload: false,
-            showPopupWallet: false,
             showPopupPayment: false,
             paymentTrack: null,
             backgroundOp: 0,
-            walletPopup: true,
             searchTerm : this.givenSearchTerm,
             showPopupEdit: false,
             editTrack: null,
+            showSuccess: false,
+            messageSuccess: 'Gongrats',
         }
     },
     created () {
         window.addEventListener('scroll', this.onScroll);
+        window.addEventListener('keydown', function(e) {
+            if(e.keyCode == 32 && e.target == document.body) {
+                e.preventDefault();
+            }
+            });
     },
     destroyed () {
         window.removeEventListener('scroll', this.onScroll);
@@ -124,14 +132,6 @@ export default {
             this.showPopupUpload = true;
             console.info('op')
         });
-        this.emitter.on("closePopupWallet", () => {
-            this.showPopupWallet = false;
-            console.info('cl')
-        });
-        this.emitter.on("openPopupWallet", () => {
-            this.showPopupWallet = true;
-            console.info('op')
-        });
         this.emitter.on("closePopupPayment", () => {
             this.showPopupPayment = false;
             console.info('cl')
@@ -161,6 +161,12 @@ export default {
             this.editTrack = track;
             console.info('op')
         });
+
+        this.emitter.on("success", message => {
+            console.log(message)
+            this.messageSuccess = message;
+            this.showSuccess = true;
+        })
     }
 };
 </script>
@@ -183,5 +189,6 @@ export default {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 
 </style>
