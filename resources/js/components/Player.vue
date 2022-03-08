@@ -1,10 +1,10 @@
 <template>
 <div class="fullPlayer">
 	<div class="playerImgBox">
-		<img class="block h-52 w-52 max-w-none playerImg" loading="lazy" @error="defaultCover = true" v-if="!defaultCover" :src="track.is_beat.get_cover.cover_path" ref="cover"/>
+		<img id="coverimg" class="block h-52 w-52 max-w-none playerImg" loading="lazy" @error="defaultCover = true" v-if="!defaultCover" :src="track.is_beat.get_cover.cover_path" ref="cover" @load="averageColor($refs.cover)"/>
 		<img class="block h-52 w-52 max-w-none playerImg" loading="lazy" v-if="defaultCover" src="http://localhost:8000/storage/covers/Default-cover.png" ref="cover"/>
 	</div>
-	<div class="playerControl h-52 flex flex-col transition-width">
+	<div class="playerControl h-52 flex flex-col transition-width"  :style="[rgb ? {'backgroundColor': 'rgb('+(255-rgb.r)+','+(255-rgb.g)+','+(255-rgb.b)+')'}:'']">
 		<div class="flex items-center justify-center h-full">
 			<div class="w-full h-full">
 				<div class="flex w-full">
@@ -149,6 +149,7 @@ export default {
 			volumeOn: false,
 			volumeOff: false,
 			own: this.currentUser(this.track.is_beat.from_user.id),
+			rgb: null,
 		}
 	},
 	created() {
@@ -163,8 +164,86 @@ export default {
             this.convert();
             console.log('reload');
         });
+		// console.log('avgcolor')
+		// console.log(this.averageColor(this.$refs.cover))
+		// console.log(this.averageColor(document.getElementById("coverimg")))
+		// this.$refs.cover.onLoad
 	},
 	methods: {
+		averageColor(imageElement) {
+ 
+            // Create the canvas element
+            var canvas
+                = document.createElement('canvas'),
+ 
+                // Get the 2D context of the canvas
+                context
+                    = canvas.getContext &&
+                    canvas.getContext('2d'),
+                imgData, width, height,
+                length,
+ 
+                // Define variables for storing
+                // the individual red, blue and
+                // green colors
+                rgb = { r: 0, g: 0, b: 0 },
+ 
+                // Define variable for the
+                // total number of colors
+                count = 0;
+ 
+            // Set the height and width equal
+            // to that of the canvas and the image
+            height = canvas.height =
+                imageElement.naturalHeight ||
+                imageElement.offsetHeight ||
+                imageElement.height;
+            width = canvas.width =
+                imageElement.naturalWidth ||
+                imageElement.offsetWidth ||
+                imageElement.width;
+ 
+            // Draw the image to the canvas
+            context.drawImage(imageElement, 0, 0);
+ 
+            // Get the data of the image
+            imgData = context.getImageData(
+                        0, 0, width, height);
+ 
+            // Get the length of image data object
+            length = imgData.data.length;
+ 
+            for (var i = 0; i < length; i += 4) {
+ 
+                // Sum all values of red colour
+                rgb.r += imgData.data[i];
+ 
+                // Sum all values of green colour
+                rgb.g += imgData.data[i + 1];
+ 
+                // Sum all values of blue colour
+                rgb.b += imgData.data[i + 2];
+ 
+                // Increment the total number of
+                // values of rgb colours
+                count++;
+            }
+ 
+            // Find the average of red
+            rgb.r
+                = 255-Math.floor(rgb.r / count);
+ 
+            // Find the average of green
+            rgb.g
+                = 255-Math.floor(rgb.g / count);
+ 
+            // Find the average of blue
+            rgb.b
+                = 255-Math.floor(rgb.b / count);
+			this.rgb = rgb
+            console.log(rgb);
+			this.$emit('color', rgb)
+        },
 		mainSlider(e){
 			let min = 0, cur = e.clientX - this.$refs.mainSliderRef.offsetLeft, max = this.$refs.mainSliderRef.clientWidth, perc = cur/max
 			// console.log('----------------------------------')

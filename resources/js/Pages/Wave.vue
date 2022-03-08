@@ -1,5 +1,5 @@
 <template>
-    <tracks :attr="{loc: 'wave'}" sum="2"></tracks>
+    <tracks :attr="{loc: 'wave'}" :sum="3"></tracks>
 </template>
 
 <script>

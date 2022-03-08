@@ -13,7 +13,7 @@
                     <div class="container flex mx-auto w-full items-center justify-center">
                         <ul class="flex flex-col p-4 grid justify-items-center">
                             <li v-for="(x, k) in files" v-if="attr.loc == 'wave'">
-                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)"/>
+                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="audio.volume" current :curTime="audio.curLength.sum" v-on:volume-change="volChange($event)" @color="wavecolor"/>
                                 <canvas id="canvas" ref="canvas" v-if="k == currentPlaying-1" class="main-wave block h-52 w-52 max-w-none"></canvas>
                                 <player v-else :track="x" :numb="k+1" :info="info" />
                             </li>
@@ -100,9 +100,13 @@ export default {
             searchFocus: false,
             backgroundOp: 0,
             searchTerm : this.givenSearchTerm,
+            rgb: {r: 0, g:0, b:0}
         }
     },
     methods: {
+        wavecolor(rgb){
+            this.rgb = rgb
+        },
         wave(first){
             var audio = this.$refs.player;
             // var files = this.files;
@@ -157,11 +161,11 @@ export default {
                 //console.log(i)
                 //console.log(barHeight)
                 
-                var r = barHeight + (25 * (i/bufferLength));
-                var g = 250 * (i/bufferLength);
-                var b = 50;
+                // var r = barHeight + (25 * (i/bufferLength));
+                // var g = 250 * (i/bufferLength);
+                // var b = 50;
 
-                ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+                ctx.fillStyle = "rgb(" + this.rgb.r + "," + this.rgb.g + "," + this.rgb.b + ")";
                 ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
 
                 x += barWidth + 1;
