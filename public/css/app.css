@@ -184,6 +184,13 @@
   border-bottom-left-radius: 0.25rem;
 }
 
+.popup-cta.pay {
+  background-color: #8f35e8;
+  padding: 0 18px;
+  font-size: 18px;
+  height: 40px;
+}
+
 .main-form {
   height: 100%;
 }

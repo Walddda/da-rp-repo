@@ -297,6 +297,7 @@ export default {
                     });
                     
         },
+
 		loadImage(event) {
             console.log(event.target.files[0]);
             this.cover = event.target.files[0];

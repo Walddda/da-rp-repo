@@ -38,13 +38,13 @@
   </div>
 </template>
 <script>
-import web3 from 'web3/dist/web3.min.js'
+import Web3 from 'web3/dist/web3.min.js'
 
 export default {
     name: 'Payment',
     
     components: {
-        web3,
+        Web3,
     },
 
     props:{
@@ -77,6 +77,10 @@ export default {
         },
 
         pay() {
+          const web3 = new Web3(provider);
+
+          if (this.$page.props.auth.user.eth_address) {
+            .then(console.log)
             ethereum.request({
               method: 'eth_sendTransaction',
               params: [
@@ -120,6 +124,9 @@ export default {
                   })
               })
               .catch((error) => console.error)
+          } else {
+            this.emitter.emit('error', 'No Wallet connected')
+          }
         },
 
         getTransactions() {

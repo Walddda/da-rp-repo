@@ -39,6 +39,7 @@
             <wallet/>
         </PopupWallet> -->
         <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+        <error v-if="showError" :text="messageError" @close="showError = false" />
     </div>
 </template>
 
@@ -54,6 +55,7 @@ import Search from '@/Components/Search.vue';
 import Tracks from '@/Components/Tracks.vue';
 import PopupEdit from '@/Components/PopupEdit.vue'
 import Success from '@/Components/Success.vue';
+import Error from '@/Components/Error.vue';
 
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
@@ -71,6 +73,7 @@ export default {
         Tracks,
         PopupEdit,
         Success,
+        Error,
     },
 
     props: { 
@@ -92,6 +95,8 @@ export default {
             editTrack: null,
             showSuccess: false,
             messageSuccess: 'Gongrats',
+            showError: false,
+            messageError: 'Error',
         }
     },
     created () {
@@ -166,6 +171,12 @@ export default {
             console.log(message)
             this.messageSuccess = message;
             this.showSuccess = true;
+        })
+
+        this.emitter.on("error", message => {
+            console.log(message)
+            this.messageError = message;
+            this.showError = true;
         })
     }
 };

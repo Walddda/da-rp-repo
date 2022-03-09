@@ -195,7 +195,7 @@ export default {
 
                 return useForm({ address }).post(this.route('wallet'))
             } else {
-                alert('MetaMask not detected. Please try again from a MetaMask enabled browser.')
+                this.emitter.emit('error', 'MetaMask not detected')
             }
         },
         mouseEnter() {

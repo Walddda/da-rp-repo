@@ -21,9 +21,9 @@
 								<svg class="w-6 h-6" @click="likeUnlike" :fill="likedColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z"/></svg>
 								{{likeCount}}
 							</div> -->
-							<div @click="paymentEmit">
+							<button class="popup-cta pay" @click="paymentEmit">
 								{{ this.dollarPrice }} $
-							</div>
+							</button>
 						</div>	
 						<div class="flex flex-auto h-12 flex justify-end items-end" style="padding-right: 10px">
 								<span v-if="own" @click="this.emitter.emit('openPopupEdit', this.track)" class="underline">
@@ -219,7 +219,11 @@ export default {
 			this.emitter.emit("show-info", this.numb);
 		},
 		paymentEmit() {
-			this.emitter.emit("openPopupPayment", this.track);
+			if(this.$page.props.auth.user) {
+				this.emitter.emit("openPopupPayment", this.track)
+			} else {
+				this.emitter.emit('error', 'Login to Purchase a track')
+			}
 		},
 		volumeEmit(){
 			// this.emitter.emit("volume-change", this.volume);

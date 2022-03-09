@@ -2,7 +2,7 @@
 <div class="main-page-form-div">
         <div class="main-page-form-heading">
             <div class="heading-title">
-                Forgot Password
+                Verify your E-Mail
             </div>
             <div class="heading-logo"><a href="/">
                 <img src="/storage/assets/logo.png" class="h-44 w-auto"/></a>

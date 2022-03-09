@@ -56,8 +56,8 @@
                 <div class="flex justify-center">
                     <!-- <a href="/settings">Settings</a><br>
                     <a href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a> -->
-                    <button @click="purchased = !purchased; myTracks = !myTracks" class="toggle-option left" :class="[purchased ? 'active' : '']">purchased tracks</button>
-                    <button @click="myTracks = !myTracks; purchased = !purchased" class="toggle-option right" :class="[myTracks ? 'active' : '']">my tracks</button>
+                    <button @click="myTracks = !myTracks; purchased = !purchased" class="toggle-option left" :class="[myTracks ? 'active' : '']">my tracks</button>
+                    <button @click="purchased = !purchased; myTracks = !myTracks" class="toggle-option right" :class="[purchased ? 'active' : '']">purchased tracks</button>
                 </div>
             </div>
             

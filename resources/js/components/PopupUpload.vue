@@ -441,6 +441,7 @@ export default {
                             currentObj.error = null
                             currentObj.close();
                             console.log(currentObj.success)
+                            this.emitter.emit('success', 'Your Track was successfully uploaded.')
                         }
                     })
                     .catch(error => {

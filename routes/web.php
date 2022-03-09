@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileUpload;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Application;
@@ -141,6 +142,7 @@ Route::get('/terms', function () {
     return view('terms');
 });
 
+// Passwort aendern by Gab
 
 
 // Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);
