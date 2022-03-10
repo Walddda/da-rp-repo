@@ -71,8 +71,14 @@
                     <player v-else :track="x" :numb="k+1"/>
                 </li>
             </div>
+
+            <upload v-if="showPopupUpload && $page.props.auth.user.eth_address"></upload>
             
             <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
+
+            <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+
+            <error v-if="showError" :text="messageError" @close="showError = false" />
         </div>
         <nav-bar-new profile/>
     </div>
@@ -86,6 +92,9 @@ import NavBarNew from '@/Components/NavBarNew.vue'
 import Tracks from '@/Components/Tracks.vue';
 import Player from '@/Components/Player.vue';
 import PopupEdit from '@/Components/PopupEdit.vue'
+import Upload from '@/Components/PopupUpload.vue'
+import Success from '@/Components/Success.vue';
+import Error from '@/Components/Error.vue';
 
 
 const countries = require('i18n-iso-countries')
@@ -102,6 +111,9 @@ export default {
         Tracks,
         Player,
         PopupEdit,
+        Upload,
+        Success,
+        Error,
     },
 
     props: {
@@ -136,7 +148,12 @@ export default {
             purchasedTracks: [],
             purchasedFiles: [],
             showPopupEdit: false,
+            showPopupUpload: false,
             editTrack: null,
+            showSuccess: false,
+            messageSuccess: 'Gongrats',
+            showError: false,
+            messageError: 'Error',
             toggleScrollView: false,
             scrollY: 0,
             headUsername: this.userData.username.substring(0,15),
@@ -155,7 +172,7 @@ export default {
             // console.log(this.backgroundOp)
         },
         submit() {
-            this.form.post(this.route('myprofile'), {
+            this.form.post(this.route('profile'), {
                 onFinish: () => this.form.reset('password', 'password_confirmation'),
             })
         }, 
@@ -224,6 +241,28 @@ export default {
             this.editTrack = track;
             console.info('op')
         });
+
+        this.emitter.on("closePopupUpload", () => {
+            this.showPopupUpload = false;
+            console.info('cl')
+        });
+
+        this.emitter.on("openPopupUpload", () => {
+            this.showPopupUpload = true;
+            console.info('op')
+        });
+
+        this.emitter.on("success", message => {
+            console.log(message)
+            this.messageSuccess = message;
+            this.showSuccess = true;
+        })
+
+        this.emitter.on("error", message => {
+            console.log(message)
+            this.messageError = message;
+            this.showError = true;
+        })
 
     },
     destroyed () {

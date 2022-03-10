@@ -17,6 +17,7 @@ class WalletController extends Controller
     public function save(Request $request)
     {
         $user = User::where('id', Auth::id());
+        // dd($request);
 
         $user->update([
             'eth_address' => $request->address

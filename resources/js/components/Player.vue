@@ -14,7 +14,7 @@
 						<div class="flex justify-between player-main-inf">
 							<div>
 								<h1 class="trackName">{{track.is_beat.title}}</h1>
-								<a :href="'/myprofile/' + track.is_beat.from_user.username"><p class="artistName">{{track.is_beat.from_user.username}}</p></a>
+								<a :href="'/profile/' + track.is_beat.from_user.username"><p class="artistName">{{track.is_beat.from_user.username}}</p></a>
 								<p v-if="track.is_beat.feature" class="featName">Feat. {{track.is_beat.feature}}</p>
 							</div>
 							<!-- <div class="text-red-lighter">
@@ -254,52 +254,56 @@ export default {
         },
 
 		likeUnlike(e){
-			console.log(e)
-			if(this.likedColor == 'black'){
-					this.likedColor = 'red'
-					this.likeCount++;
-				}else{
-					this.likedColor = 'black'
-					this.likeCount--;
+			if (this.$page.props.auth.user) {
+				console.log(e)
+				if(this.likedColor == 'black'){
+						this.likedColor = 'red'
+						this.likeCount++;
+					}else{
+						this.likedColor = 'black'
+						this.likeCount--;
+						}
+				axios.get('/api/beat/like/'+this.track.beat_id+'/'+this.$page.props.auth.user.id)
+				.then(response => {
+					console.info('liked: ');
+					console.info(response.data);
+					this.likeCount= response.data.count
+					if(response.data.cov != 'old'){
+						// this.emitter.emit("cover-update", response.data.cov);
+						// console.warn(this.$refs)
+						// console.error("storage/covers/placeholder_"+response.data.cov+".jpg");
+						var val;
+						switch (response.data.cov) {
+							case 1:
+								val = ''
+								break;
+							case 2:
+								val = '_silver'
+								break;
+							case 3:
+								val = '_gold'
+								break;
+							case 4:
+								val = '_diamond'
+								break;
+						
+							default:
+								val = ''
+								break;
+						}
+						this.$refs.cover.src = "/storage/covers/Default-cover"+val+".png"
+						// console.info(this.$refs.cover)
 					}
-            axios.get('/api/beat/like/'+this.track.beat_id+'/'+this.$page.props.auth.user.id)
-            .then(response => {
-                console.info('liked: ');
-                console.info(response.data);
-				this.likeCount= response.data.count
-				if(response.data.cov != 'old'){
-					// this.emitter.emit("cover-update", response.data.cov);
-					// console.warn(this.$refs)
-					// console.error("storage/covers/placeholder_"+response.data.cov+".jpg");
-					var val;
-					switch (response.data.cov) {
-						case 1:
-							val = ''
-							break;
-						case 2:
-							val = '_silver'
-							break;
-						case 3:
-							val = '_gold'
-							break;
-						case 4:
-							val = '_diamond'
-							break;
-					
-						default:
-							val = ''
-							break;
-					}
-					this.$refs.cover.src = "/storage/covers/Default-cover"+val+".png"
-					// console.info(this.$refs.cover)
-				}
-				// this.refreshLikeCount()
-				if(!response.data.del){
-					this.likedColor = 'red'
-				}else{
-					this.likedColor = 'black'
-					}
-            })
+					// this.refreshLikeCount()
+					if(!response.data.del){
+						this.likedColor = 'red'
+					}else{
+						this.likedColor = 'black'
+						}
+				})
+			} else {
+				this.emitter.emit('error', 'Login to like a track')
+			}
 		},
 		refreshLikeCount(){
 			axios.get('/api/likeCount/'+this.track.beat_id)

@@ -13,7 +13,7 @@
 						<div class="flex justify-between">
 							<div>
 								<h1 class="trackName">{{track.is_beat.title}}</h1>
-								<a :href="'/myprofile/' + track.is_beat.from_user.username"><p class="artistName">{{track.is_beat.from_user.username}}</p></a>
+								<a :href="'/profile/' + track.is_beat.from_user.username"><p class="artistName">{{track.is_beat.from_user.username}}</p></a>
 								<p v-if="track.is_beat.feature" class="featName">Feat. {{track.is_beat.feature}}</p>
 							</div>
 							<!-- <div class="text-red-lighter">

@@ -16,7 +16,7 @@
                     <span class="nav-link pl-10 inline" @click="toggleSearch" >Search</span>
                     <notification @unreadCount="(n) => unreadNoti = n" v-show="showNoti"></notification>
                     <div v-if="showDrop" class="absolute flex main-drop-list" @mouseleave="mouseLeavesMeth" @mouseenter="mouseEnter">
-                        <a :href="'/myprofile/' + this.$page.props.auth.user.username" class="nav-link">
+                        <a :href="'/profile/' + this.$page.props.auth.user.username" class="nav-link">
                             Profile
                         </a>
                         <a href="/" class="nav-link">Home</a>
@@ -45,7 +45,7 @@
                     <span class="nav-link ml-10 inline cursor-pointer" @click="toggleSearch" :style="[this.backgroundOp <= 0.9 ? {display: 'none'} : this.backgroundOp <= 1 ?  {opacity: (-4+(this.backgroundOp/0.2)), display: 'inline'} : {display:'inline'}]">Search</span>
                     <notification @unreadCount="(n) => unreadNoti = n" v-show="showNoti"></notification>
                     <div v-if="showDrop" class="absolute flex main-drop-list" @mouseleave="mouseLeavesMeth" @mouseenter="mouseEnter">
-                        <a :href="'/myprofile/' + this.$page.props.auth.user.username" class="nav-link">
+                        <a :href="'/profile/' + this.$page.props.auth.user.username" class="nav-link">
                             Profile
                         </a>
                         <a href="/settings" class="nav-link">
@@ -116,7 +116,6 @@
 import Search from '@/Components/Search.vue';
 import { UploadIcon, MenuIcon, XIcon } from '@heroicons/vue/outline';
 import Notification from "@/Components/Notification.vue";
-import Web3 from 'web3/dist/web3.min.js'
 import { useForm } from '@inertiajs/inertia-vue3'
 
 // const navigation = [
@@ -133,7 +132,6 @@ export default {
         UploadIcon,
         Notification,
         useForm,
-        Web3,
     },
     props:{
         searchTerm: {type: String, required: false},
@@ -152,6 +150,8 @@ export default {
         unreadNoti: 0,
         username: '',
         userhref: '',
+        accounts: '',
+        address: '',
         navigation: [
                     { name: 'Login', href: '/login', current: false, click: '' },
                     { name: 'Register', href: '/register', current: false, click: '' },
@@ -181,19 +181,24 @@ export default {
             }
         },
         async connect() {
+            console.log('hi')
             if (typeof window.ethereum !== 'undefined') {
+                console.log(ethereum._metamask.isUnlocked())
+                this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                this.address = this.accounts[0];
 
-
-                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                const address = accounts[0];
+                
 
 
                 this.emitter.emit('success', 'Your Wallet was successfully connected.')
                 
 
-                
+                console.log(this.address)
 
-                return useForm({ address }).post(this.route('wallet'))
+                // return useForm(this.address).post(this.route('wallet'))
+
+                return axios.post('/wallet', {address: this.address})
+
             } else {
                 this.emitter.emit('error', 'MetaMask not detected')
             }
@@ -221,10 +226,14 @@ export default {
         if(this.$page.props.auth.user){
             // this.navigationLoged[0].name = this.$page.props.auth.user.username
             this.username = this.$page.props.auth.user.username
-            // this.navigationLoged[0].href = '/myprofile/'+this.$page.props.auth.user.username
-            this.userhref = '/myprofile/'+this.$page.props.auth.user.username
+            // this.navigationLoged[0].href = '/popfile/'+this.$page.props.auth.user.username
+            this.userhref = '/profile/'+this.$page.props.auth.user.username
         }
         
+    },
+
+    created() {
+        ethereum.on('accountsChanged', this.connect);
     }
 
 }

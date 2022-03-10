@@ -60,7 +60,7 @@
                 <MenuItem v-slot="{ active }">
                   <a :href="route('logout')" method="post" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Logout</a>
                 </MenuItem>-->
-                <BreezeDropdownLink :href="route('myprofile')" >
+                <BreezeDropdownLink :href="route('profile')" >
                   My Profile 
                 </BreezeDropdownLink>
                 <BreezeDropdownLink>

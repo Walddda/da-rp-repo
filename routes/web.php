@@ -78,8 +78,8 @@ Route::get('/settings', function () {
 Route::get('/wave', function () {
     return Inertia::render('Wave', []);
 });
-Route::get('/myprofile/{username}', [UserController::class, 'show']);
-Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile');
+Route::get('/profile/{username}', [UserController::class, 'show']);
+Route::post('/profile', [UserController::class, 'update'])->name('profile');
 
 Route::post('/wallet', [WalletController::class, 'save'])->name('wallet');
 
@@ -143,6 +143,8 @@ Route::get('/terms', function () {
 });
 
 // Passwort aendern by Gab
+Route::post('/change-password', [ChangePasswordController::class, 'updatePassword']);
+
 
 
 // Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);

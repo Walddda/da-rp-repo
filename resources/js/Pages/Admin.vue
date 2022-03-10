@@ -433,7 +433,7 @@ export default {
             formData.append('desc', this.selectedUser.description);
 
 
-            axios.post('/myprofile', formData, config)
+            axios.post('/profile', formData, config)
                 .then(function (response) {
                     currentObj.processing = false;
                     console.log(response);

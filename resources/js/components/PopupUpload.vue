@@ -431,17 +431,21 @@ export default {
                         currentObj.isHidden = false;
                         console.log(response);
                         if (response.data.error) {
+                            currentObj.emitter.emit('error', 'Your Track failed to upload.')
                             currentObj.error = response.data.error
                             currentObj.success = null
                             currentObj.processing = false;
                             console.log(currentObj.error)
                         }else if (response.data.success) {
+                            currentObj.emitter.emit('success', 'Your Track was successfully uploaded.')
                             currentObj.emitter.emit('upload-success');
                             currentObj.success = response.data.success
                             currentObj.error = null
-                            currentObj.close();
+                            
                             console.log(currentObj.success)
-                            this.emitter.emit('success', 'Your Track was successfully uploaded.')
+                            
+                            
+                            currentObj.close();
                         }
                     })
                     .catch(error => {

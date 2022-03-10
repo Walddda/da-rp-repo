@@ -38,7 +38,7 @@ import BreezeButton from '@/Components/Button.vue'
                 const address = (await web3.eth.requestAccounts())[0]
                 const signature = await web3.eth.personal.sign(message, address)
 
-                return useForm({ message, address, signature }).post(this.route('myprofile'))
+                return useForm({ message, address, signature }).post(this.route('wallet'))
             }
         }    
     }

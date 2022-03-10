@@ -145,7 +145,7 @@ class UserController extends Controller
             'description' => $request->desc,
         ]);
 
-        return "/myprofile/{$request->username}";
+        return "/profile/{$request->username}";
     }
 
     /**

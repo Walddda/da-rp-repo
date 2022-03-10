@@ -50,10 +50,12 @@
 
             <div class="text-center pt-4 pb-8 border-b border-gray-200">
                 <Button class="ml-4 cta-main but-main" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Update Profile
+                    Update Profile!
                 </Button>
             </div>
         </form>
+
+        <change-password></change-password>
 
     </div>
 </template>
@@ -68,6 +70,7 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 import Wallet from '@/Components/Wallet.vue'
 import { CogIcon } from '@heroicons/vue/outline';
 import NavBarNew from '@/Components/NavBarNew.vue'
+import ChangePassword from '@/Components/ChangePassword.vue'
 
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
@@ -84,6 +87,7 @@ export default {
         Link,
         CogIcon,
         NavBarNew,
+        ChangePassword
     },
 
      data(){
@@ -134,7 +138,7 @@ export default {
             formData.append('desc', this.form.desc);
 
 
-            axios.post('/myprofile', formData, config)
+            axios.post('/profile', formData, config)
                 .then(function (response) {
                     console.log(response);
                     window.location.href= response.data;
@@ -166,7 +170,7 @@ export default {
             formData.append('form', this.form);
 
 
-            axios.post('/myprofile', formData, config)
+            axios.post('/profile', formData, config)
                 .then(function (response) {
                     console.log(response);
                     if (response.data.error) {

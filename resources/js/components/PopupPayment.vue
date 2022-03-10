@@ -38,13 +38,13 @@
   </div>
 </template>
 <script>
-import Web3 from 'web3/dist/web3.min.js'
+import web3 from 'web3/dist/web3.min.js'
 
 export default {
     name: 'Payment',
     
     components: {
-        Web3,
+        web3,
     },
 
     props:{
@@ -77,15 +77,12 @@ export default {
         },
 
         pay() {
-          const web3 = new Web3(provider);
-
-          if (this.$page.props.auth.user.eth_address) {
-            .then(console.log)
+          if (ethereum.selectedAddress) {
             ethereum.request({
               method: 'eth_sendTransaction',
               params: [
                   {
-                  from: this.$page.props.auth.user.eth_address,
+                  from: ethereum.selectedAddress,
                   to: this.song.is_beat.from_user.eth_address,
                   value: parseInt(web3.utils.toWei(String(this.song.is_beat.price), 'ether')).toString(16),
                   },
@@ -119,11 +116,16 @@ export default {
                     formCount.append('beat_id', this.song.is_beat.id)
                     formCount.append('seller_id', this.song.is_beat.from_user.id)
                     formCount.append('download_count', this.counter)
-
+                    this.emitter.emit('success', 'Track was successfully purchased')
                     return axios.post('/api/counter', formCount)
                   })
               })
-              .catch((error) => console.error)
+              .catch((error) => {
+                console.error
+                if (error.message.includes("User denied transaction signature")) {
+                  this.emitter.emit('error', 'Transaction cancelled')
+                }
+              })
           } else {
             this.emitter.emit('error', 'No Wallet connected')
           }

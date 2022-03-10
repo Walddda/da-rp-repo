@@ -20,7 +20,7 @@
                     </div>
                     
                 </div>
-                <div v-else-if="!files & !loading & !searchEmpty">Be the first one to upload your work at Beatchain.</div>
+                <div v-if="loadEmpty">Be the first one to upload your work at Beatchain.</div>
                 <div v-if="searchEmpty">Your search "{{searchTerm}}" had no result.</div>
 
                 <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
@@ -51,8 +51,22 @@
                                 <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
                             </div>
                         </div>
-                        |{{cache}}|
-                        Volume
+                        <div class="volumeControls flex flex-row items-center">
+                            <div style="width: 24px" class="m-2" @click="mute">
+                            <svg id="Ebene_1" class="main_icon_volume" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.121 66.698"><defs></defs>
+                                <path class="cls-1" d="M50.174,21.514V78.486a4.855,4.855,0,0,1-8.044,3.66L21.374,64.07H8.958a7.4,7.4,0,0,1-7.4-7.4V43.33a7.4,7.4,0,0,1,7.4-7.4H21.374L42.13,17.854A4.855,4.855,0,0,1,50.174,21.514Z" transform="translate(-1.558 -16.651)"/>    
+                                <path v-if="volume == 0" class="cls-1" d="M86.126,57.322a3.4,3.4,0,1,1-4.808,4.812L73.994,54.81,66.67,62.134a3.4,3.4,0,0,1-4.808-4.812L69.186,50l-7.324-7.324a3.4,3.4,0,0,1,4.808-4.808l7.324,7.324,7.324-7.324a3.4,3.4,0,1,1,4.808,4.808L78.8,50Z" transform="translate(-1.558 -16.651)"/>
+                                <path v-if="volume > 0" class="cls-1" d="M72.615,50a12.687,12.687,0,0,1-7.136,11.46,3.2,3.2,0,0,1-4.4-1.732,3.246,3.246,0,0,1,1.6-4.028,6.369,6.369,0,0,0,0-11.4,3.246,3.246,0,0,1-1.6-4.028,3.2,3.2,0,0,1,4.4-1.728A12.676,12.676,0,0,1,72.615,50Z" transform="translate(-1.558 -16.651)" />
+                                <path v-if="volume > 0.3" class="cls-1" d="M86.3,50a29.29,29.29,0,0,1-2.908,13.02,22.28,22.28,0,0,1-8.064,9.092,3.2,3.2,0,0,1-4.536-1.228,3.3,3.3,0,0,1,1.24-4.26C76.887,63.521,79.9,57.161,79.9,50s-3.008-13.52-7.868-16.628a3.293,3.293,0,0,1-1.24-4.256,3.2,3.2,0,0,1,4.536-1.232,22.291,22.291,0,0,1,8.064,9.1A29.277,29.277,0,0,1,86.3,50Z" transform="translate(-1.558 -16.651)" />
+                                <path v-if="volume > 0.7" class="cls-1" d="M98.679,50c0,14.008-6.552,26.592-17.1,32.844a3.2,3.2,0,0,1-4.708-1.856,3.241,3.241,0,0,1,1.52-3.692C86.959,72.173,92.279,61.725,92.279,50s-5.32-22.176-13.888-27.3a3.243,3.243,0,0,1-1.52-3.692,3.2,3.2,0,0,1,4.708-1.86C92.127,23.405,98.679,35.993,98.679,50Z" transform="translate(-1.558 -16.651)" />
+                            </svg>
+                            <!-- <p>Volume {{volume}}</p> -->
+                            </div>
+                            <!-- <input v-if="showVol" type="range" step="0.01" min="0" max="1" v-model="volume" @change="volumeEmit"> -->
+                            <div class="main-volume-bar-player" @click="volSlider" @drag="volSlider" ref="volSliderRef" @dragend="volSlider">
+                                <div class="main-volume-bar-in" :style="{'width': (myvol*100)+'%'}"></div>
+                            </div>
+                        </div>
                         <div class="p-5" @click="play" >
                             <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
                             <svg v-else class="w-10 h-10" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
@@ -121,11 +135,14 @@ export default {
             loading: true,
             searchEmpty: false,
             searchFocus: false,
+            loadEmpty: false,
             backgroundOp: 0,
             searchTerm : this.givenSearchTerm,
             volume: 0.5,
             showGlobal: true,
             cache: null,
+			myvol: this.volume,
+			volold: null,
         }
     },
     methods: {
@@ -203,6 +220,7 @@ export default {
                 }
             }
             this.searchEmpty = false;
+            this.loadEmpty = false;
             console.info('start');
             if(term){
                 window.scrollTo({
@@ -214,9 +232,14 @@ export default {
             .then(response => {
                 if(!response.data.length){
                     console.info('empty')
-                    this.searchEmpty = true;
-                    this.loading = false;
-                    this.searchTerm = term
+                    if(term){
+                        this.searchEmpty = true;
+                        this.loading = false;
+                        this.searchTerm = term
+                    }else{
+                        this.loadEmpty = true;
+                        this.loading = false;
+                    }
                 }else{
                     if(this.sum){
                         this.files = response.data.slice(0,this.sum)
