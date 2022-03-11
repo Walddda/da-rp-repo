@@ -72,8 +72,12 @@ export default {
     },
     methods: {
         send(e){
+            console.log('Search:   ---')
+            console.log(this.loc)
+            console.log(this.feed)
+            console.log(this.keywords)
             if(this.feed){
-                e.preventDefault();
+            e.preventDefault();
                 this.emitter.emit("search", this.keywords);
                 // if(window.scrolLY >= 840){
                 //     window.scrollY = 840;

@@ -364,7 +364,15 @@ export default {
         }
 
     },
-    mounted() {    
+    mounted() {
+        console.log(this.givenSearchTerm)  
+        if(this.givenSearchTerm != ''){
+            console.log('yeah')
+            window.scrollTo({
+                top: 840,
+                behaviour: "smooth",
+            })
+        }
         // this.$nextTick(function () {
         //     this.rendered = true;
         // })

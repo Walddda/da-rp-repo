@@ -2,7 +2,8 @@
     // @import './app.scss';
 </style>
 <template>
-    <div>
+    <div id="details">Geh auf den Pc bruh... </div>
+    <div class="responsive">
         <Head title="Home" />
         <!-- <button @click="showSuccess = !showSuccess" class="fixed bottom-0 left-0 p-2 bg-red-400">SUCCESSSS</button> -->
         <div class="background-image "><!-- Foto von Dmitry Demidov von Pexels -->

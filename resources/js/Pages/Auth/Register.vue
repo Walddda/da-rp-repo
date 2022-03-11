@@ -1,5 +1,6 @@
 <template>
-    <div class="main-page-form-div">
+    <div id="details">Geh auf den Pc bruh... </div>
+    <div class="main-page-form-div responsive">
         <div class="main-page-form-heading">
             <div class="heading-title">
                 Register

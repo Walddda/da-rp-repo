@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav-bar-new/>
+        <nav-bar-new profile/>
         <form @submit.prevent="submit" class="w-full max-w-sm m-40">
             <div class="mt-4">
                 <BreezeLabel for="username" value="Username" />
@@ -56,6 +56,10 @@
         </form>
 
         <change-password></change-password>
+
+        <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+
+        <error v-if="showError" :text="messageError" @close="showError = false" />
 
     </div>
 </template>
@@ -185,7 +189,21 @@ export default {
                     // Do something with error data
                 });
         },
-    }, 
+    },
+
+    mounted() {
+        this.emitter.on("success", message => {
+            console.log(message)
+            this.messageSuccess = message;
+            this.showSuccess = true;
+        })
+
+        this.emitter.on("error", message => {
+            console.log(message)
+            this.messageError = message;
+            this.showError = true;
+        })
+    },
     
 }
 </script>

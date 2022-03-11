@@ -148,3 +148,20 @@ button.search-button {
 .nav-search-div {
     height: min-content;
 }
+
+#details {
+    color: black;
+    font-size: 50px;
+    display: none;
+}
+
+@media all and (max-width: 1000px) {
+    #details {
+        display: block;
+        color: blue;
+    }
+
+    .responsive * {
+        display: none;
+    }
+}

@@ -181,26 +181,28 @@ export default {
             }
         },
         async connect() {
-            console.log('hi')
-            if (typeof window.ethereum !== 'undefined') {
-                console.log(ethereum._metamask.isUnlocked())
-                this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                this.address = this.accounts[0];
+            if (this.$page.props.auth.user) {
+                if (typeof window.ethereum !== 'undefined') {
+                    this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    this.address = this.accounts[0];
 
-                
+                    
 
 
-                this.emitter.emit('success', 'Your Wallet was successfully connected.')
-                
+                    this.emitter.emit('success', 'Your Wallet was successfully connected.')
+                    
 
-                console.log(this.address)
+                    console.log(this.address)
 
-                // return useForm(this.address).post(this.route('wallet'))
+                    // return useForm(this.address).post(this.route('wallet'))
 
-                return axios.post('/wallet', {address: this.address})
+                    return axios.post('/wallet', {address: this.address})
 
+                } else {
+                    this.emitter.emit('error', 'MetaMask not detected')
+                }
             } else {
-                this.emitter.emit('error', 'MetaMask not detected')
+                this.emitter.emit('error', 'Login to connect a wallet')
             }
         },
         mouseEnter() {
@@ -233,7 +235,7 @@ export default {
     },
 
     created() {
-        ethereum.on('accountsChanged', this.connect);
+        ethereum.on('accountsChanged', this.connect)
     }
 
 }

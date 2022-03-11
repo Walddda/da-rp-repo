@@ -63,6 +63,7 @@ Route::post('/', function (Request $req) {
     return Inertia::render('Feed', [
         'token' => csrf_token(),
         'searchTerm' => $req->input('searchTerm'),
+        'givenSearchTerm' => $req->input('searchTerm'),
     ]);
 })->name('home');
 // ->middleware('guest')

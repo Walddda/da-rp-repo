@@ -20,7 +20,7 @@
                     : {'width': '10vw', 'padding':'0.5vw',
                     'margin-top': '2.5%'} ]"
                 >
-                    <img src="/storage/covers/1638883713_1_2631819_15.png"/>
+                    <img src="/storage/assets/1646747270_1_9977342_3.jpg"/>
                 </div>
             </div>
             <div class="main-scroll-username" v-if="toggleScrollView">{{headUsername}}</div>
@@ -162,7 +162,7 @@ export default {
 
     methods: {
         onScroll (event) {
-            console.log(window.scrollY);
+            // console.log(window.scrollY);
             this.scrollY = window.scrollY;
             if(window.scrollY <= 200){
                 this.toggleScrollView = false;
