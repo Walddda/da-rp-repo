@@ -2,45 +2,47 @@
     // @import './app.scss';
 </style>
 <template>
-    <div id="details">Geh auf den Pc bruh... </div>
-    <div class="responsive">
-        <Head title="Home" />
-        <!-- <button @click="showSuccess = !showSuccess" class="fixed bottom-0 left-0 p-2 bg-red-400">SUCCESSSS</button> -->
-        <div class="background-image "><!-- Foto von Dmitry Demidov von Pexels -->
-            <div v-if="!$page.props.auth.user" class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
-                <div :style="{opacity: (1-backgroundOp)}">
-                <p class="heading-feed">Start selling<br>
-                your beats now.</p>
-                <a href="/register"><button class="cta-main but-main mt-4" style="margin-top:30px">Get started</button></a>
+    <div>
+        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="responsive">
+            <Head title="Home" />
+            <!-- <button @click="showSuccess = !showSuccess" class="fixed bottom-0 left-0 p-2 bg-red-400">SUCCESSSS</button> -->
+            <div class="background-image "><!-- Foto von Dmitry Demidov von Pexels -->
+                <div v-if="!$page.props.auth.user" class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
+                    <div :style="{opacity: (1-backgroundOp)}">
+                    <p class="heading-feed">Start selling<br>
+                    your beats now.</p>
+                    <a href="/register"><button class="cta-main but-main mt-4" style="margin-top:30px">Get started</button></a>
+                    </div>
+                </div>
+                <div v-else class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
+                    <div :style="{opacity: (1-backgroundOp)}">
+                    <p class="heading-feed">Find exactly<br>
+                    what you need.</p>
+                    <search :keywords="searchTerm" loc="feed" feed></search>
+                    <!-- <button class="cta-main but-main mt-4">get started</button> -->
+                    </div>
                 </div>
             </div>
-            <div v-else class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
-                <div :style="{opacity: (1-backgroundOp)}">
-                <p class="heading-feed">Find exactly<br>
-                what you need.</p>
-                <search :keywords="searchTerm" loc="feed" feed></search>
-                <!-- <button class="cta-main but-main mt-4">get started</button> -->
-                </div>
-            </div>
+            <!-- <home-page v-if="!$page.props.auth.user"></home-page> -->
+            
+            <nav-bar-new :backgroundOp="backgroundOp" :searchTerm="searchTerm" feed></nav-bar-new>
+
+            <!-- <nav-bar :searchTerm="searchTerm"></nav-bar> -->
+
+            <!-- // {{$page.props.auth.user}} -->
+            <tracks :attr="{loc: 'feed'}"></tracks>
+
+            <upload v-if="showPopupUpload && $page.props.auth.user.eth_address"></upload>
+            <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
+            <popup-payment v-if="showPopupPayment" :song="paymentTrack"></popup-payment>
+            <!-- <PopupWallet :showing="walletPopup" @close="WalletPopup = false">
+                <p>Would You like to connect your wallet?</p>
+                <wallet/>
+            </PopupWallet> -->
+            <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+            <error v-if="showError" :text="messageError" @close="showError = false" />
         </div>
-        <!-- <home-page v-if="!$page.props.auth.user"></home-page> -->
-        
-        <nav-bar-new :backgroundOp="backgroundOp" :searchTerm="searchTerm" feed></nav-bar-new>
-
-        <!-- <nav-bar :searchTerm="searchTerm"></nav-bar> -->
-
-        <!-- // {{$page.props.auth.user}} -->
-        <tracks :attr="{loc: 'feed'}"></tracks>
-
-        <upload v-if="showPopupUpload && $page.props.auth.user.eth_address"></upload>
-        <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
-        <popup-payment v-if="showPopupPayment" :song="paymentTrack"></popup-payment>
-        <!-- <PopupWallet :showing="walletPopup" @close="WalletPopup = false">
-            <p>Would You like to connect your wallet?</p>
-            <wallet/>
-        </PopupWallet> -->
-        <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
-        <error v-if="showError" :text="messageError" @close="showError = false" />
     </div>
 </template>
 

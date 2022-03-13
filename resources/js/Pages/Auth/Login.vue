@@ -1,115 +1,117 @@
-<template>        
-<div id="details">Geh auf den Pc bruh... </div>
-    <div class="main-page-form-div responsive">
-        <div class="main-page-form-heading">
-            <div class="heading-title">Login</div>
-            <div class="heading-logo">
-                <a href="/">
-                    <img src="/storage/assets/logo.png" class="h-44 w-auto"
-                /></a>
+<template> 
+    <div>
+        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="main-page-form-div responsive">
+            <div class="main-page-form-heading">
+                <div class="heading-title">Login</div>
+                <div class="heading-logo">
+                    <a href="/">
+                        <img src="/storage/assets/logo.png" class="h-44 w-auto"
+                    /></a>
+                </div>
             </div>
-        </div>
-        <div class="main-page-form-content">
-            <div class="content-back">
-                <a :href="route('home')">
-                    <button class="main-page-form-cta back">Back</button>
-                </a>
-            </div>
-            <div class="content-form">
-                <Head title="Log in" />
-                <form @submit.prevent="submit" class="box-border">
-                    <div class="main-form-row">
-                        <div class="main-form-element">
-                            <label class="custom-text-label" for="login"
-                                >Email / Username</label
-                            ><br />
-                            <BreezeInput
-                                id="login"
-                                type="text"
-                                :class="[
-                                    error &&
-                                    error.login &&
-                                    error.login[0].includes('required') &&
-                                    !form.login
-                                        ? 'error'
-                                        : '',
-                                    'custom-text-input main-text-input',
-                                ]"
-                                v-model="form.login"
-                                required
-                                autocomplete="username"
-                                autofocus
-                            />
+            <div class="main-page-form-content">
+                <div class="content-back">
+                    <a :href="route('home')">
+                        <button class="main-page-form-cta back">Back</button>
+                    </a>
+                </div>
+                <div class="content-form">
+                    <Head title="Log in" />
+                    <form @submit.prevent="submit" class="box-border">
+                        <div class="main-form-row">
+                            <div class="main-form-element">
+                                <label class="custom-text-label" for="login"
+                                    >Email / Username</label
+                                ><br />
+                                <BreezeInput
+                                    id="login"
+                                    type="text"
+                                    :class="[
+                                        error &&
+                                        error.login &&
+                                        error.login[0].includes('required') &&
+                                        !form.login
+                                            ? 'error'
+                                            : '',
+                                        'custom-text-input main-text-input',
+                                    ]"
+                                    v-model="form.login"
+                                    required
+                                    autocomplete="username"
+                                    autofocus
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div class="main-form-row">
-                        <div class="main-form-element">
-                            <label class="custom-text-label" for="password"
-                                >Password</label
-                            ><br />
-                            <BreezeInput
-                                id="password"
-                                type="password"
-                                :class="[
-                                    error &&
-                                    error.password &&
-                                    error.password[0].includes('required') &&
-                                    !form.password
-                                        ? 'error'
-                                        : '',
-                                    'custom-text-input main-text-input',
-                                ]"
-                                v-model="form.password"
-                                required
-                                autocomplete="current-password"
-                            />
+                        <div class="main-form-row">
+                            <div class="main-form-element">
+                                <label class="custom-text-label" for="password"
+                                    >Password</label
+                                ><br />
+                                <BreezeInput
+                                    id="password"
+                                    type="password"
+                                    :class="[
+                                        error &&
+                                        error.password &&
+                                        error.password[0].includes('required') &&
+                                        !form.password
+                                            ? 'error'
+                                            : '',
+                                        'custom-text-input main-text-input',
+                                    ]"
+                                    v-model="form.password"
+                                    required
+                                    autocomplete="current-password"
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div class="main-form-row">
-                        <div class="main-form-element half flex items-center">
-                            <input
-                                type="checkbox"
-                                id="checkRemember"
-                                class="form-checkbox main-form-checkbox left"
-                                v-model="form.remember"
-                                name="coverType"
-                            />
-                            <label class="custom-text-label" for="checkRemember"
-                                >Remember me</label
-                            >
+                        <div class="main-form-row">
+                            <div class="main-form-element half flex items-center">
+                                <input
+                                    type="checkbox"
+                                    id="checkRemember"
+                                    class="form-checkbox main-form-checkbox left"
+                                    v-model="form.remember"
+                                    name="coverType"
+                                />
+                                <label class="custom-text-label" for="checkRemember"
+                                    >Remember me</label
+                                >
+                            </div>
+                            <div class="main-form-element half text-right">
+                                <a
+                                    v-if="canResetPassword"
+                                    :href="route('password.request')"
+                                    class="underline text-sm text-gray-600 hover:text-gray-900"
+                                >
+                                    Forgot your password?
+                                </a>
+                            </div>
                         </div>
-                        <div class="main-form-element half text-right">
-                            <a
-                                v-if="canResetPassword"
-                                :href="route('password.request')"
-                                class="underline text-sm text-gray-600 hover:text-gray-900"
-                            >
-                                Forgot your password?
-                            </a>
+                        <div class="main-form-row flex items-center justify-end">
+                            <div class="main-form-element max">
+                                <Link
+                                    :href="route('register')"
+                                    class="underline text-sm text-gray-600 hover:text-gray-900"
+                                >
+                                    Register
+                                </Link>
+                            </div>
+                            <div class="main-form-element min">
+                                <button
+                                    class="main-page-form-cta submit"
+                                    :class="{ 'opacity-25': form.processing }"
+                                    :disabled="form.processing"
+                                >
+                                    Login
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="main-form-row flex items-center justify-end">
-                        <div class="main-form-element max">
-                            <Link
-                                :href="route('register')"
-                                class="underline text-sm text-gray-600 hover:text-gray-900"
-                            >
-                                Register
-                            </Link>
-                        </div>
-                        <div class="main-form-element min">
-                            <button
-                                class="main-page-form-cta submit"
-                                :class="{ 'opacity-25': form.processing }"
-                                :disabled="form.processing"
-                            >
-                                Login
-                            </button>
-                        </div>
-                    </div>
 
-                    <BreezeValidationErrors class="mb-4" />
-                </form>
+                        <BreezeValidationErrors class="mb-4" />
+                    </form>
+                </div>
             </div>
         </div>
     </div>

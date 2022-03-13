@@ -1,86 +1,89 @@
 <template>
     <div>
-
-        
-        <!-- <BreezeValidationErrors class="mb-4" /> -->
-        <div class="main-profile-content">
-            <!-- <wallet></wallet> -->
-            <div>
-                <img src="/storage/assets/PROFILE_BG_cut1.jpg" class="profile-bg"/>
-                <div 
-                    class="profile-avatar" 
-                    :class="[toggleScrollView ? 'toggleScrollView' : '']"
-                    :style="[!toggleScrollView 
-                    ? {
-                        'width': ((400 - scrollY)/20)+'vw',
-                        'left': 'calc( 50vw - '+ ((400 - scrollY)/40)+'vw',
-                        'padding': (-0.0025 * scrollY +1)+'vw',
-                        'margin-top': (-0.0125 * scrollY +5)+'%',
-                        }
-                    : {'width': '10vw', 'padding':'0.5vw',
-                    'margin-top': '2.5%'} ]"
-                >
-                    <img src="/storage/assets/1646747270_1_9977342_3.jpg"/>
+        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="responsive">
+            <!-- <BreezeValidationErrors class="mb-4" /> -->
+            <div class="main-profile-content">
+                <!-- <wallet></wallet> -->
+                <div>
+                    <img src="/storage/assets/PROFILE_BG_cut1.jpg" class="profile-bg"/>
+                    <div 
+                        class="profile-avatar" 
+                        :class="[toggleScrollView ? 'toggleScrollView' : '']"
+                        :style="[!toggleScrollView 
+                        ? {
+                            'width': ((400 - scrollY)/20)+'vw',
+                            'left': 'calc( 50vw - '+ ((400 - scrollY)/40)+'vw',
+                            'padding': (-0.0025 * scrollY +1)+'vw',
+                            'margin-top': (-0.0125 * scrollY +5)+'%',
+                            }
+                        : {'width': '10vw', 'padding':'0.5vw',
+                        'margin-top': '2.5%'} ]"
+                    >
+                        <img src="/storage/assets/1646747270_1_9977342_3.jpg"/>
+                    </div>
                 </div>
-            </div>
-            <div class="main-scroll-username" v-if="toggleScrollView">{{headUsername}}</div>
-            <!-- <svg viewBox="0 0 100 100" class="main-scroll-username">
-                <defs>
-                    <linearGradient id="linear-gradient" gradientUnits="userSpaceOnUse">
-                        <stop offset="0.1" stop-color="#8f35e8" />
-                        <stop offset="0.9" stop-color="#e20000" />
-                    </linearGradient>
-                </defs>
-                <text x="0" y="10" style="fill:url(#linear-gradient)">{{headUsername}}</text>
-            </svg> -->
-            
-            <div class="profile-details flex flex-row justify-between">
-                <div class="profile-details-left">
-                    <label class="pd-username" v-if="!toggleScrollView" >{{form.username}}
-                        <a v-if="own" href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a>
-                    </label>
-                    <br>
-                    <label class="pd-email">{{form.email}} </label> <br><br>
-                    <label class="pd-location">{{form.location}} </label> <br>
-                    <label class="pd-joined">joined {{form.joined}} </label>
+                <div class="main-scroll-username" v-if="toggleScrollView">{{headUsername}}</div>
+                <!-- <svg viewBox="0 0 100 100" class="main-scroll-username">
+                    <defs>
+                        <linearGradient id="linear-gradient" gradientUnits="userSpaceOnUse">
+                            <stop offset="0.1" stop-color="#8f35e8" />
+                            <stop offset="0.9" stop-color="#e20000" />
+                        </linearGradient>
+                    </defs>
+                    <text x="0" y="10" style="fill:url(#linear-gradient)">{{headUsername}}</text>
+                </svg> -->
+                
+                <div class="profile-details flex flex-row justify-between">
+                    <div class="profile-details-left">
+                        <label class="pd-username" v-if="!toggleScrollView" >{{form.username}}
+                            <a v-if="own" href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a>
+                        </label>
+                        <br>
+                        <label class="pd-email">{{form.email}} </label> <br><br>
+                        <label class="pd-location">{{form.location}} </label> <br>
+                        <label class="pd-joined">joined {{form.joined}} </label>
+                    </div>
+                    <div class="profile-details-right">
+                        <label class="pd-desc">{{form.description}} </label>
+                    </div>
                 </div>
-                <div class="profile-details-right">
-                    <label class="pd-desc">{{form.description}} </label>
+
+                <!-- {{userData.username}} -->
+
+                <!-- MyProfile, sehen andere nicht -->
+                <div v-if="own" class="main-toggle-own-tracks flex justify-center">
+                    <div class="flex justify-center">
+                        <!-- <a href="/settings">Settings</a><br>
+                        <a href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a> -->
+                        <button @click="myTracks = !myTracks; purchased = !purchased" class="toggle-option left" :class="[myTracks ? 'active' : '']">my tracks</button>
+                        <button @click="purchased = !purchased; myTracks = !myTracks" class="toggle-option right" :class="[purchased ? 'active' : '']">purchased tracks</button>
+                    </div>
                 </div>
-            </div>
-
-            <!-- {{userData.username}} -->
-
-            <!-- MyProfile, sehen andere nicht -->
-            <div v-if="own" class="main-toggle-own-tracks flex justify-center">
-                <div class="flex justify-center">
-                    <!-- <a href="/settings">Settings</a><br>
-                    <a href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a> -->
-                    <button @click="myTracks = !myTracks; purchased = !purchased" class="toggle-option left" :class="[myTracks ? 'active' : '']">my tracks</button>
-                    <button @click="purchased = !purchased; myTracks = !myTracks" class="toggle-option right" :class="[purchased ? 'active' : '']">purchased tracks</button>
+                
+                <div v-if="myTracks">
+                    <tracks :attr="{loc: 'prof', id: form.id}"></tracks>
                 </div>
+
+                <div v-if="purchased">
+                    <li v-for="(x, k) in purchasedFiles">
+                        <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" current/>
+                        <player v-else :track="x" :numb="k+1"/>
+                    </li>
+                </div>
+
+                <upload v-if="showPopupUpload && $page.props.auth.user.eth_address"></upload>
+                
+                <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
+
+                <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+
+                <error v-if="showError" :text="messageError" @close="showError = false" />
+
+                <popup-payment v-if="showPopupPayment" :song="paymentTrack"></popup-payment>
             </div>
-            
-            <div v-if="myTracks">
-                <tracks :attr="{loc: 'prof', id: form.id}"></tracks>
-            </div>
-
-            <div v-if="purchased">
-                <li v-for="(x, k) in purchasedFiles">
-                    <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" current/>
-                    <player v-else :track="x" :numb="k+1"/>
-                </li>
-            </div>
-
-            <upload v-if="showPopupUpload && $page.props.auth.user.eth_address"></upload>
-            
-            <popup-edit v-if="showPopupEdit" :track="editTrack"></popup-edit>
-
-            <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
-
-            <error v-if="showError" :text="messageError" @close="showError = false" />
+            <nav-bar-new profile/>
         </div>
-        <nav-bar-new profile/>
     </div>
 </template>
 
@@ -93,6 +96,7 @@ import Tracks from '@/Components/Tracks.vue';
 import Player from '@/Components/Player.vue';
 import PopupEdit from '@/Components/PopupEdit.vue'
 import Upload from '@/Components/PopupUpload.vue'
+import PopupPayment from '@/Components/PopupPayment.vue'
 import Success from '@/Components/Success.vue';
 import Error from '@/Components/Error.vue';
 
@@ -111,9 +115,11 @@ export default {
         Tracks,
         Player,
         PopupEdit,
+        PopupPayment,
         Upload,
         Success,
         Error,
+        
     },
 
     props: {
@@ -149,6 +155,8 @@ export default {
             purchasedFiles: [],
             showPopupEdit: false,
             showPopupUpload: false,
+            showPopupPayment: false,
+            paymentTrack: null,
             editTrack: null,
             showSuccess: false,
             messageSuccess: 'Gongrats',
@@ -249,6 +257,17 @@ export default {
 
         this.emitter.on("openPopupUpload", () => {
             this.showPopupUpload = true;
+            console.info('op')
+        });
+
+        this.emitter.on("closePopupPayment", () => {
+            this.showPopupPayment = false;
+            console.info('cl')
+        });
+
+        this.emitter.on("openPopupPayment", track => {
+            this.paymentTrack = track;
+            this.showPopupPayment = true;
             console.info('op')
         });
 

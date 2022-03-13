@@ -1047,14 +1047,14 @@ button.search-button {
   height: min-content;
 }
 
-#details {
+.details {
   color: black;
   font-size: 50px;
   display: none;
 }
 
 @media all and (max-width: 1000px) {
-  #details {
+  .details {
     display: block;
     color: blue;
   }

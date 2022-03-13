@@ -1,66 +1,68 @@
 <template>
     <div>
-        <nav-bar-new profile/>
-        <form @submit.prevent="submit" class="w-full max-w-sm m-40">
-            <div class="mt-4">
-                <BreezeLabel for="username" value="Username" />
-                <BreezeInput id="username" type="text" class="mt-1 block w-full" v-model="form.username" required autocomplete="username"/>
-            </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="firstname" value="First Name" />
-                <BreezeInput id="firstname" type="text" class="mt-1 block w-full" v-model="form.first_name" required autocomplete="first name"/>
-            </div>
-
-            <div class="mt-4">
-                <BreezeLabel for="lastname" value="Last Name" />
-                <BreezeInput id="lastname" type="text" class="mt-1 block w-full" v-model="form.last_name" required autocomplete="last name"/>
-            </div>
-
-            <div class="mt-4">
-                    <BreezeLabel for="email" value="Email" />
-                    <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email"/>
+        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="responsive">
+            <nav-bar-new profile/>
+            <form @submit.prevent="submit" class="w-full max-w-sm m-40">
+                <div class="mt-4">
+                    <BreezeLabel for="username" value="Username" />
+                    <BreezeInput id="username" type="text" class="mt-1 block w-full" v-model="form.username" required autocomplete="username"/>
                 </div>
 
-            
+                <div class="mt-4">
+                    <BreezeLabel for="firstname" value="First Name" />
+                    <BreezeInput id="firstname" type="text" class="mt-1 block w-full" v-model="form.first_name" required autocomplete="first name"/>
+                </div>
 
-            <div class="mt-4">
-                <BreezeLabel for="location" value="Location" />
-                <select id="location" class="form-select block w-full mt-1" v-model="form.location">
-                    <option v-for="country in countries" :value="country.value">
-                        {{ country.label }}
-                    </option>
-                </select>
-            </div>
+                <div class="mt-4">
+                    <BreezeLabel for="lastname" value="Last Name" />
+                    <BreezeInput id="lastname" type="text" class="mt-1 block w-full" v-model="form.last_name" required autocomplete="last name"/>
+                </div>
 
-            <div class="w-full px-3">
-                    <BreezeLabel for="desc" value="Description" />
-                    <textarea id="desc" class="no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none" v-model="form.desc"></textarea>
-            </div>
+                <div class="mt-4">
+                        <BreezeLabel for="email" value="Email" />
+                        <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email"/>
+                    </div>
 
-            <!-- <div class="mt-4">
-                <BreezeLabel for="password" value="Password" />
-                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password"/>
-            </div>
+                
 
-            <div class="mt-4">
-                <BreezeLabel for="password_confirmation" value="Confirm Password" />
-                <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"/>
-            </div> -->
+                <div class="mt-4">
+                    <BreezeLabel for="location" value="Location" />
+                    <select id="location" class="form-select block w-full mt-1" v-model="form.location">
+                        <option v-for="country in countries" :value="country.value">
+                            {{ country.label }}
+                        </option>
+                    </select>
+                </div>
 
-            <div class="text-center pt-4 pb-8 border-b border-gray-200">
-                <Button class="ml-4 cta-main but-main" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Update Profile!
-                </Button>
-            </div>
-        </form>
+                <div class="w-full px-3">
+                        <BreezeLabel for="desc" value="Description" />
+                        <textarea id="desc" class="no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none" v-model="form.desc"></textarea>
+                </div>
 
-        <change-password></change-password>
+                <!-- <div class="mt-4">
+                    <BreezeLabel for="password" value="Password" />
+                    <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password"/>
+                </div>
 
-        <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+                <div class="mt-4">
+                    <BreezeLabel for="password_confirmation" value="Confirm Password" />
+                    <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"/>
+                </div> -->
 
-        <error v-if="showError" :text="messageError" @close="showError = false" />
+                <div class="text-center pt-4 pb-8 border-b border-gray-200">
+                    <Button class="ml-4 cta-main but-main" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                        Update Profile!
+                    </Button>
+                </div>
+            </form>
 
+            <change-password></change-password>
+
+            <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+
+            <error v-if="showError" :text="messageError" @close="showError = false" />
+        </div>
     </div>
 </template>
 

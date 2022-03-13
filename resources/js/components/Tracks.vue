@@ -67,6 +67,12 @@
                                 <div class="main-volume-bar-in" :style="{'width': (myvol*100)+'%'}"></div>
                             </div>
                         </div>
+                        <div class="p-5">
+                            <button class="popup-cta pay" @click="paymentEmit">
+								{{files[currentPlaying-1].is_beat.price}} $
+							</button>
+                            
+                        </div>
                         <div class="p-5" @click="play" >
                             <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
                             <svg v-else class="w-10 h-10" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
@@ -143,6 +149,7 @@ export default {
             cache: null,
 			myvol: this.volume,
 			volold: null,
+            dollarPrice: 0,
         }
     },
     methods: {
@@ -240,6 +247,8 @@ export default {
                         this.loadEmpty = true;
                         this.loading = false;
                     }
+
+                    
                 }else{
                     if(this.sum){
                         this.files = response.data.slice(0,this.sum)
@@ -255,6 +264,7 @@ export default {
                     console.info(this.$refs.player)
                     this.loading = false;
                     console.log(term)
+                    this.convert()
                 }
             })
         },
@@ -361,7 +371,32 @@ export default {
             console.log("new vol:"+x + ' -> '+Math.pow(x,1.02));
             this.volume = x;
             this.$refs.player.volume = Math.pow(x,1.02);
-        }
+        },
+
+        convert() {
+			// console.log('test')
+            axios.get('https://api.coinbase.com/v2/exchange-rates')
+            .then(res => {
+				// console.log(res)
+				// console.log(this.track.is_beat.price)
+				// console.log(currentObj.track.is_beat.price)
+                console.log('hi')
+
+                this.files.forEach(element => {
+                
+                element.is_beat.price = (Math.round(((element.is_beat.price / res.data.data.rates.ETH) + Number.EPSILON) * 100) / 100).toFixed(2)
+                console.log(element.is_beat.price)
+            });
+            })
+        },
+
+        paymentEmit() {
+			if(this.$page.props.auth.user) {
+				this.emitter.emit("openPopupPayment", this.files[this.currentPlaying-1])
+			} else {
+				this.emitter.emit('error', 'Login to Purchase a track')
+			}
+		},
 
     },
     mounted() {
@@ -373,14 +408,20 @@ export default {
                 behaviour: "smooth",
             })
         }
+
+        
         // this.$nextTick(function () {
         //     this.rendered = true;
         // })
         this.getTracks(this.searchTerm);
 
+        
+
         this.getCurrentTime();
         setInterval(this.getCurrentTime, 10);
         // setInterval(()=>{this.emitter.emit("reload")}, 20000);
+
+        
 
 
         this.getLength();
@@ -457,6 +498,7 @@ export default {
                     this.toggleAudio();
                     this.currentPlayingOld = this.currentPlaying;
                     // console.log('r308')
+                    
                 }
 
             });
@@ -491,6 +533,8 @@ export default {
                 }
             }
         });
+
+        
     }
 };
 </script>

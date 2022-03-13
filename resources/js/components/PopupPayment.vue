@@ -132,7 +132,7 @@ export default {
         },
 
         getTransactions() {
-          axios.get('api/transactions')
+          axios.get('/api/transactions')
             .then(response => {
               this.transactions = response.data
               this.transactions.forEach((transaction) => {

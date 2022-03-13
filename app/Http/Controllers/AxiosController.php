@@ -14,6 +14,7 @@ use App\Notifications\DownloadCountNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class AxiosController extends Controller
 {
@@ -26,7 +27,7 @@ class AxiosController extends Controller
                 ->join('beats', function ($join) {
                     $join->on('beats.id', '=', 'files.beat_id');
                 })
-                ->where('beats.user_id', '=', json_decode($request->profile)->id)
+                ->where('beats.user_id', '          ', json_decode($request->profile)->id)
                 ->orderBy('beats.created_at', 'desc')
                 ->get()
                 ->toArray();
@@ -92,8 +93,16 @@ class AxiosController extends Controller
             "other" => 'Something other went wrong',
         ];
         $errorKey = 'other';
-        // dd($req);
-        $req->validate([
+        dd($req);
+        // $req->validate([
+        //     'beat' => 'required|max:10240',
+        //     'cover' => 'mimes:png,jpg',
+        //     'title' => 'required|max:255',
+        //     'ethPrice' => array('required', 'digits_between:1,10'),
+        //     'type' => array('required', 'regex:/(sample|beat)/'),
+        //     'bpm' => array('required', 'regex:/\d+/'),
+        // ]);
+        $validator = Validator::make($req->all(), [
             'beat' => 'required|max:10240',
             'cover' => 'mimes:png,jpg',
             'title' => 'required|max:255',
@@ -101,6 +110,9 @@ class AxiosController extends Controller
             'type' => array('required', 'regex:/(sample|beat)/'),
             'bpm' => array('required', 'regex:/\d+/'),
         ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors(), 'lool' => 'saad']);
+        }
 
         // 'type' => 'required|regex:(sample|beat)',
         // 'bpm' => 'required|regex:(\d*)',

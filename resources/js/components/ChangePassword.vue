@@ -58,12 +58,6 @@ export default {
                     alert("Passwords dont match")
                 } 
             }).catch((err) => {
-                
-                // if(err.errors.password[0] && err.errors.password[0] == "The password confirmation does not match."){
-                //     alert("hurensohn")
-                // }else if(err.errors){
-                //     console.warn(err.errors)
-                // }
                 console.log(err)
             })
 
