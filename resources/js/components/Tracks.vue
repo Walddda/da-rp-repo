@@ -69,7 +69,7 @@
                         </div>
                         <div class="p-5">
                             <button class="popup-cta pay" @click="paymentEmit">
-								{{files[currentPlaying-1].is_beat.price}} $
+								{{files[currentPlaying-1].is_beat.dollarPrice}} $
 							</button>
                             
                         </div>
@@ -384,8 +384,8 @@ export default {
 
                 this.files.forEach(element => {
                 
-                element.is_beat.price = (Math.round(((element.is_beat.price / res.data.data.rates.ETH) + Number.EPSILON) * 100) / 100).toFixed(2)
-                console.log(element.is_beat.price)
+                element.is_beat.dollarPrice = (Math.round(((element.is_beat.price / res.data.data.rates.ETH) + Number.EPSILON) * 100) / 100).toFixed(2)
+                console.log(element.is_beat.dollarPrice)
             });
             })
         },

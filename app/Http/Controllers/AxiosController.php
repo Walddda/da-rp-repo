@@ -93,7 +93,7 @@ class AxiosController extends Controller
             "other" => 'Something other went wrong',
         ];
         $errorKey = 'other';
-        dd($req);
+        // dd($req);
         // $req->validate([
         //     'beat' => 'required|max:10240',
         //     'cover' => 'mimes:png,jpg',

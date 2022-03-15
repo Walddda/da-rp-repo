@@ -7,7 +7,7 @@
         <div class="responsive">
             <Head title="Home" />
             <!-- <button @click="showSuccess = !showSuccess" class="fixed bottom-0 left-0 p-2 bg-red-400">SUCCESSSS</button> -->
-            <div class="background-image "><!-- Foto von Dmitry Demidov von Pexels -->
+            <div class="background-image" ref="feedLanding"><!-- Foto von Dmitry Demidov von Pexels -->
                 <div v-if="!$page.props.auth.user" class="w-full h-full flex items-center" :style="{backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'}">
                     <div :style="{opacity: (1-backgroundOp)}">
                     <p class="heading-feed">Start selling<br>
@@ -115,13 +115,17 @@ export default {
     },
     methods: {
         onScroll (event) {
-            if(window.scrollY <= 840){
+            // console.log(document.getElementById('feedNav'))
+            // console.log(this.$refs.feedLanding)
+            // console.log(window.scrollY)
+            // console.log('---')
+            if(window.scrollY <= this.$refs.feedLanding.scrollHeight - document.getElementById('feedNav').scrollHeight){
                 // if(window.scrollY > this.lastScroll){
                 //     this.backgroundOp += 0.01
                 // }else{
                 //     this.backgroundOp -= 0.01
                 // }
-                this.backgroundOp = scrollY/840;
+                this.backgroundOp = scrollY/(this.$refs.feedLanding.scrollHeight - document.getElementById('feedNav').scrollHeight);
             }else{
                 this.backgroundOp = 1;
             }

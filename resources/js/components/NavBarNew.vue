@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 h-32 w-full" :style="[backgroundOp >= 1 ? {backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'} : [backgroundOp || backgroundOp == 0 ? '' : {backgroundColor: 'rgb(0,0,0)'} ]]">
+  <nav class="fixed top-0 h-32 w-full" id="feedNav" :style="[backgroundOp >= 1 ? {backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'} : [backgroundOp || backgroundOp == 0 ? '' : {backgroundColor: 'rgb(0,0,0)'} ]]"  ref="feedNav">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
     <div class="mx-auto px-2">
         <div class="relative flex justify-between h-32 pt-8">

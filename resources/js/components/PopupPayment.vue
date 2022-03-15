@@ -4,11 +4,11 @@
       <div class="popup-title">Buy</div>
         <p class="main-pay-title">{{ song.is_beat.title }}</p>
         <div class="main-pay-row">
-          <p class="main-pay-artist">by {{ song.is_beat.title }}</p>
+          <p class="main-pay-artist">by {{ song.is_beat.from_user.username }}</p>
           <p class="main-pay-eth">{{ song.is_beat.price }} ETH</p>
         </div>
         <div class="main-pay-row">
-          <p class="main-pay-feat" v-if="song.is_beat.feature">feat. {{ song.is_beat.feature }}</p>
+          <p class="main-pay-feat">{{ song.is_beat.feature ? 'feat. ' + song.is_beat.feature : '' }}</p>
           <p class="main-pay-dol">= {{ this.calculating ? 'Loading...' : this.dollarPrice }} $</p>
         </div>
         <div class="main-pay-info">
