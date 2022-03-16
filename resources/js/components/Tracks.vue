@@ -13,7 +13,7 @@
                     <div class="container flex mx-auto w-full items-center justify-center">
                         <ul class="flex flex-col p-4 grid justify-items-center">
                             <li v-for="(x, k) in files">
-                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="volume" current :curTime="[cache ? cache : audio.curLength.sum]" @vol="volChange($event)" @color="wavecolor"/>
+                                <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="volume" current :curTime="[cache ? cache : audio.curLength.sum]" @vol="volChange($event)" @color="wavecolor" ref="curTrack"/>
                                 <canvas id="canvas" ref="canvas" v-if="k == currentPlaying-1" class="main-wave block h-52 w-52 max-w-none"></canvas>
                                 <player v-else :track="x" :numb="k+1" :info="info" :volume="volume" @vol="volChange($event)" />
                             </li>
@@ -84,6 +84,7 @@ import PlayerWave from '@/Components/PlayerWave.vue';
 import Slider from '@vueform/slider'
 import Slider2 from "vue3-slider"
 import axios from 'axios';
+import FastAverageColor from 'fast-average-color';
 
 
 export default {
@@ -145,7 +146,9 @@ export default {
             var src = context.createMediaElementSource(audio);
             console.log(src)
             var analyser = context.createAnalyser();
-
+        
+            // this.$refs.curTrack.averageColor();
+            console.log(this.$refs.canvas)
             var canvas = this.$refs.canvas;
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -502,6 +505,7 @@ export default {
                     this.toggleAudio();
                     this.currentPlayingOld = this.currentPlaying;
                     // console.log('r308')
+                    // this.$refs.curTrack.averageColor();
                 }
 
             });

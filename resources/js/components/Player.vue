@@ -3,7 +3,7 @@
 	    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
 
 	<div class="playerImgBox">
-		<img id="coverimg" class="block h-52 w-52 max-w-none playerImg" loading="lazy" @error="defaultCover = true" v-if="!defaultCover" :src="track.is_beat.get_cover.cover_path" ref="cover" @load="averageColor($refs.cover)"/>
+		<img id="coverimg" class="block h-52 w-52 max-w-none playerImg" loading="lazy" @error="defaultCover = true" v-if="!defaultCover" :src="track.is_beat.get_cover.cover_path" ref="cover"/>
 		<img class="block h-52 w-52 max-w-none playerImg" loading="lazy" v-if="defaultCover" src="http://localhost:8000/storage/covers/Default-cover.png" ref="cover"/>
 	</div>
 	<div class="playerControl h-52 flex flex-col transition-width"  :style="[rgb ? {'backgroundColor': 'rgb('+(255-rgb.r)+','+(255-rgb.g)+','+(255-rgb.b)+')'}:'']">
@@ -127,6 +127,8 @@
 
 <script>    
 import axios from 'axios';
+import FastAverageColor from 'fast-average-color';
+
 export default {
     name: 'Player',
     
@@ -175,8 +177,46 @@ export default {
 		// this.$refs.cover.onLoad
 	},
 	methods: {
-		averageColor(imageElement) {
- 
+		averageColor(imageElement = this.$refs.cover) {
+			// @load="averageColor($refs.cover)
+			const fac = new FastAverageColor();
+            const cont = imageElement;
+			fac.getColorAsync(cont, { algorithm: 'dominant', mode: 'precision' })
+			.then(color => {
+				console.log(color);
+				console.log(color.rgb.replace(/[^\d,]/g, '').split(','));
+				const rgb = color.rgb.replace(/[^\d,]/g, '').split(',')
+				this.rgb = {r: rgb[0],g: rgb[1],b: rgb[2]}
+				this.$emit('color', this.rgb)
+				// {
+				//     rgb: 'rgb(255, 0, 0)',
+				//     rgba: 'rgba(255, 0, 0, 1)',
+				//     hex: '#ff0000',
+				//     hexa: '#ff0000ff',
+				//     value: [255, 0, 0, 255],
+				//     isDark: true,
+				//     isLight: false
+				// }
+			})
+			.catch(e => {
+				console.error(e);
+			});
+            // const color = fac.getColor(cont, { algorithm: 'dominant', mode: 'precision' });
+
+            // cont.style.backgroundColor = color.rgba;
+            // cont.style.color = color.isDark ? '#fff' : '#000';
+
+            // console.log(color.rgb.replace(/[^\d,]/g, '').split(','));
+			// const rgb = color.rgb.replace(/[^\d,]/g, '').split(',')
+			// this.rgb = {r: rgb[0],g: rgb[1],b: rgb[2]}
+			// this.rgb.r = rgb[0]
+			// this.rgb.g = rgb[1]
+			// this.rgb.b = rgb[2]
+			// this.rgb.r = 
+			
+			//this.$emit('color', rgb)
+			// this.rgb = color.rgb;
+			/*
             // Create the canvas element
             var canvas
                 = document.createElement('canvas'),
@@ -247,7 +287,7 @@ export default {
                 = 255-Math.floor(rgb.b / count);
 			this.rgb = rgb
             console.log(rgb);
-			this.$emit('color', rgb)
+			this.$emit('color', rgb)*/
         },
 		mute(){
 			if(!this.volold && this.volold != 0){

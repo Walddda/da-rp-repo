@@ -122,6 +122,7 @@
 <script>    
 import axios from 'axios';
 import slider from 'vue3-slider';
+
 export default {
     name: 'Player',
     
