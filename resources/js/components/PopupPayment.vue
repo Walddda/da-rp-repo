@@ -31,21 +31,22 @@
         <p v-if="own" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">This is your beat</p>
         <a v-if="download || own" :href="song.file_path" download>
           <button class="popup-cta download">Download</button>
+
+          
         </a>
         <button v-if="!download && !own" class="popup-cta submit" @click="pay()" :disabled="download">Buy</button>
+        
       </div>
     </div>
   </div>
 </template>
 <script>
-import web3 from 'web3/dist/web3.min.js'
+import Web3 from "web3"
+import Beats from "../../dapp/build/contracts/Beats.json"
+import { purchaseBeat, getBeat } from '../services/blockchain.js'
 
 export default {
     name: 'Payment',
-    
-    components: {
-        web3,
-    },
 
     props:{
       song: Object,
@@ -77,40 +78,27 @@ export default {
         },
 
         pay() {
-          if (ethereum.selectedAddress) {
-            ethereum.request({
-              method: 'eth_sendTransaction',
-              params: [
-                  {
-                  from: ethereum.selectedAddress,
-                  to: this.song.is_beat.from_user.eth_address,
-                  value: parseInt(web3.utils.toWei(String(this.song.is_beat.price), 'ether')).toString(16),
-                  },
-              ],
-              })
-              .then(
-                (txHash) => {
-                  console.log(txHash)
-                  this.hash = txHash
-                  this.download = true
+          //console.log(this.song.is_beat.id, this.song.is_beat.from_user.eth_address)
+          purchaseBeat(this.$store.state.contract, this.song.is_beat.id, this.song.is_beat.price, ethereum.selectedAddress)
+            .then(response => {
+              this.download = true
 
-                  let formData = new FormData()
-                  console.log('transaction')
-                  console.log(this.song.is_beat.from_user.id)
-                  console.log(this.$page.props.auth.user.id)
-                  formData.append('seller_id', this.song.is_beat.from_user.id)
-                  formData.append('buyer_id', this.$page.props.auth.user.id)
-                  formData.append('hash', this.hash)
-                  formData.append('beat_id', this.song.is_beat.id)
+              console.log('hi')
 
-                  const config = {
+              let formData = new FormData()
+              formData.append('seller_id', this.song.is_beat.from_user.id)
+              formData.append('buyer_id', this.$page.props.auth.user.id)
+              formData.append('hash', response.transactionHash)
+              formData.append('beat_id', this.song.is_beat.id)
+
+              const config = {
                       headers: {
                           'content-type': 'multipart/form-data',
                           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                       },
                   }
-                
-                return axios.post('/api/transaction', formData, config)
+
+              return axios.post('/api/transaction', formData, config)
                   .then(response => {
                     let formCount = new FormData();
                     formCount.append('beat_id', this.song.is_beat.id)
@@ -119,16 +107,10 @@ export default {
                     this.emitter.emit('success', 'Track was successfully purchased')
                     return axios.post('/api/counter', formCount)
                   })
+            })
+            .catch((error) => {
+                this.emitter.emit('error', 'Transaction cancelled')
               })
-              .catch((error) => {
-                console.error
-                if (error.message.includes("User denied transaction signature")) {
-                  this.emitter.emit('error', 'Transaction cancelled')
-                }
-              })
-          } else {
-            this.emitter.emit('error', 'No Wallet connected')
-          }
         },
 
         getTransactions() {

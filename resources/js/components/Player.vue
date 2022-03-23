@@ -22,7 +22,7 @@
 								{{likeCount}}
 							</div> -->
 							<button class="popup-cta pay" @click="paymentEmit">
-								{{ this.track.is_beat.dollarPrice }} $
+								{{ this.track.is_beat.dollarPrice 	}} $
 							</button>
 						</div>	
 						<div class="flex flex-auto h-12 flex justify-end items-end" style="padding-right: 10px">

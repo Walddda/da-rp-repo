@@ -63,6 +63,7 @@ import Success from '@/Components/Success.vue';
 import Error from '@/Components/Error.vue';
 import Mobile from '@/Components/Mobile.vue';
 
+
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
 // import 'vue-slider-component/dist-css/vue-slider-component.css'
