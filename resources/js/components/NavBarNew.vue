@@ -174,10 +174,10 @@ export default {
         },
         
         toggleUpload(){
-            if (this.$page.props.auth.user.eth_address) {
+            if (ethereum.selectedAddress) {
                 this.emitter.emit('openPopupUpload')
             } else {
-                alert('Connect your wallet before uploading')
+                this.emitter.emit('error', 'Connect Wallet to upload')
             }
         },
         async connect() {
