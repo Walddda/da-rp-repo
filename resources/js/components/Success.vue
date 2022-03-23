@@ -37,7 +37,7 @@ export default {
         //     this.dec()
         // });
         this.dec()
-        this.int = setInterval(this.dec, 1000)
+        this.int = setInterval(this.dec, 500)
     },
     methods:{
         dec(){

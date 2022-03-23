@@ -128,6 +128,7 @@ import PopupPayment from '@/Components/PopupPayment.vue'
 import PopupEdit from '@/Components/PopupEdit.vue'
 import Search from '@/Components/Search.vue';
 
+
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
 // import 'vue-slider-component/dist-css/vue-slider-component.css'
@@ -331,6 +332,8 @@ export default {
         this.getCurrentTime();
         setInterval(this.getCurrentTime, 100);
         // setInterval(()=>{this.emitter.emit("reload")}, 20000);
+
+        
 
 
         this.getLength();

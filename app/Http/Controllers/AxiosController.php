@@ -210,6 +210,7 @@ class AxiosController extends Controller
             // dd('test');
             $beatModel->save();
             return response()->json([
+                'id' => $beat_id,
                 'path' => $filePath,
                 'success' => 'File has been uploaded.',
             ]);

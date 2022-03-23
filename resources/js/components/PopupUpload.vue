@@ -291,6 +291,7 @@
 
 <script>
 import VueTagsInput from "@sipec/vue3-tags-input";
+import { createBeat, loadBlockchainData, created } from '../services/blockchain.js'
 
 export default {
 
@@ -418,7 +419,7 @@ export default {
             axios.get('https://api.coinbase.com/v2/exchange-rates')
                 .then(res => {
                     if(currentObj.currency == 'USD'){
-                        currentObj.ethPrice = res.data.data.rates.ETH * currentObj.price;
+                        currentObj.ethPrice = (res.data.data.rates.ETH * currentObj.price).toFixed(4);
                     }else{
                         currentObj.ethPrice = currentObj.price;
                     }
@@ -437,14 +438,13 @@ export default {
                             currentObj.processing = false;
                             console.log(currentObj.error)
                         }else if (response.data.success) {
+                            //response.data.id,
+                            createBeat(currentObj.$store.state.contract, response.data.id, currentObj.title, currentObj.ethPrice, ethereum.selectedAddress)
                             currentObj.emitter.emit('success', 'Your Track was successfully uploaded.')
                             currentObj.emitter.emit('upload-success');
                             currentObj.success = response.data.success
                             currentObj.error = null
-                            
                             console.log(currentObj.success)
-                            
-                            
                             currentObj.close();
                         }
                     })

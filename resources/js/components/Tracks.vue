@@ -105,6 +105,7 @@ import PlayerWave from '@/Components/PlayerWave.vue';
 import Slider from '@vueform/slider'
 import Slider2 from "vue3-slider"
 import axios from 'axios';
+import { loadBlockchainData, getBeatCount, getBeat } from '../services/blockchain.js'
 
 
 export default {
@@ -448,8 +449,29 @@ export default {
 			}
 		},
 
+        blockchainTracks() {
+            loadBlockchainData()
+                .then(response => {
+                    this.$store.state.contract = response
+                    console.log(this.$store.state.contract)
+                    getBeatCount(this.$store.state.contract)
+                        .then(response => {
+                            for (var i = 1; i <= response; i++) {
+                                getBeat(this.$store.state.contract, i)
+                                    .then(response => {
+                                        this.$store.state.beats.push(response)
+                                        
+                                    })
+                            }
+                            console.log(this.$store.state.beats)
+                        })
+                })
+        },
+
     },
     mounted() {
+        
+        
         console.log(this.givenSearchTerm)  
         if(this.givenSearchTerm != ''){
             console.log('yeah')
@@ -494,6 +516,7 @@ export default {
 
         this.emitter.on('upload-success',() =>{
             this.getTracks();
+            this.blockchainTracks()
             console.log('yeeeah')
         });
 
@@ -572,8 +595,15 @@ export default {
                 }
             }
         });
+        
 
         
+    },
+
+    created() {
+        if(this.$page.props.auth.user) {
+            this.blockchainTracks()
+        }
     }
 };
 </script>
