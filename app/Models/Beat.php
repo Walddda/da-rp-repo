@@ -38,7 +38,10 @@ class Beat extends Model
     // {
     //     return $this->hasOne(User::class, 'id', 'feature');
     // }
-
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
     public function getCover()
     {
         return $this->belongsTo(Cover::class, 'cover_id');

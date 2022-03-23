@@ -1,6 +1,8 @@
 .main-form {
     height: 100%;
     // padding: 20px;
+    // font-size: 14px;
+    font-size: clamp(14px, 16px, 1vw);
 }
 
 .main-form-row {
@@ -12,7 +14,7 @@
 input.main-text-input {
     width: 100%;
     border-radius: 15px;
-    height: 45px;
+    height: clamp(35px, 45px, 3vw);
     background-color: #e6e1eb;
     border: none;
 }
@@ -32,7 +34,7 @@ input.main-text-input.price-input {
 select.main-select-input {
     width: 100%;
     border-radius: 15px;
-    height: 45px;
+    height: clamp(35px, 45px, 3vw);
     background-color: #e6e6e6;
 }
 select.main-select-input:focus {
@@ -81,7 +83,7 @@ select.main-select-input:focus {
 .main-form-row div.main-tag-input .ti-input {
     width: 100%;
     border-radius: 15px;
-    height: 45px;
+    height: clamp(35px, 45px, 3vw);
     background-color: #e6e1eb;
     border: none;
 }

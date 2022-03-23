@@ -11,7 +11,7 @@
                         <span style="color:white" id="notifiy_num" class="main-noti-indic" v-show="unreadNoti > 0"> {{unreadNoti}}</span>
                     </span>
                     <div class="main-noti-back" @click="hideNotis" v-show="showNoti"></div>
-                    <a :href="userhref" @mouseenter="mouseEnter" @mouseleave="mouseLeavesMeth" class="nav-link ml-12">{{username}}</a>
+                    <a href="/" @mouseenter="mouseEnter" @mouseleave="mouseLeavesMeth" class="nav-link ml-12">Home</a>
                     <a v-for="item in navigationProfile" :key="item.name" :href="item.href" @click="item.click" @mouseover="item.mouseEnter" class="nav-link pl-10" :style="item.style" >{{ item.name }}</a>
                     <span class="nav-link pl-10 inline" @click="toggleSearch" >Search</span>
                     <notification @unreadCount="(n) => unreadNoti = n" v-show="showNoti"></notification>
@@ -161,7 +161,6 @@ export default {
                     { name: 'Wallet', href: '#', current: false, click: this.connect },
                     ],
         navigationProfile: [
-                    { name: 'Home', href: '/', current: false, click: '' },
                     { name: 'Upload', href: '#', current: false, click: this.toggleUpload },
                     { name: 'Wallet', href: '#', current: false, click: this.connect },
                     ],
@@ -183,18 +182,12 @@ export default {
         async connect() {
             if (this.$page.props.auth.user) {
                 if (typeof window.ethereum !== 'undefined') {
-                    this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                    this.address = this.accounts[0];
-
-                    
-
+                    this.accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+                    this.address = this.accounts[0]
 
                     this.emitter.emit('success', 'Your Wallet was successfully connected.')
-                    
 
                     console.log(this.address)
-
-                    // return useForm(this.address).post(this.route('wallet'))
 
                     return axios.post('/wallet', {address: this.address})
 

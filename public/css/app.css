@@ -48,6 +48,7 @@
   height: 7px;
   width: 100%;
   transition: height 0.5s;
+  transition: width 0.1s;
   background-color: #e6e6e6;
 }
 
@@ -68,6 +69,7 @@
   border-radius: 0px 0px 20px 0px;
   overflow: hidden;
   margin-top: -5px;
+  transition: width 0.1s;
 }
 
 .slider-global.main-slider-container {
@@ -92,6 +94,10 @@
 
 .slider-global .main-slider-play {
   background: linear-gradient(90deg, #c39fe7 0%, #e08d96 100%);
+}
+
+.main-slider-play {
+  transition: width 0.1s;
 }
 
 .main-slider-hider {
@@ -193,6 +199,7 @@
 
 .main-form {
   height: 100%;
+  font-size: clamp(14px, 16px, 1vw);
 }
 
 .main-form-row {
@@ -204,7 +211,7 @@
 input.main-text-input {
   width: 100%;
   border-radius: 15px;
-  height: 45px;
+  height: clamp(35px, 45px, 3vw);
   background-color: #e6e1eb;
   border: none;
 }
@@ -224,7 +231,7 @@ input.main-text-input.price-input {
 select.main-select-input {
   width: 100%;
   border-radius: 15px;
-  height: 45px;
+  height: clamp(35px, 45px, 3vw);
   background-color: #e6e6e6;
 }
 
@@ -282,7 +289,7 @@ select.main-select-input:focus {
 .main-form-row div.main-tag-input .ti-input {
   width: 100%;
   border-radius: 15px;
-  height: 45px;
+  height: clamp(35px, 45px, 3vw);
   background-color: #e6e1eb;
   border: none;
 }
@@ -553,6 +560,8 @@ label.main-file-label-box.error {
   border-radius: 25px;
   box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.16);
   width: 600px;
+  max-height: 90vh;
+  overflow-y: scroll;
 }
 
 .popup-bg-blurr {
@@ -568,7 +577,7 @@ label.main-file-label-box.error {
 
 .popup-title {
   text-align: center;
-  font-size: 104px;
+  font-size: clamp(50px, 106px, 5vw);
   margin-top: 35px;
 }
 
@@ -589,7 +598,7 @@ label.main-file-label-box.error {
 .popup-content {
   margin-left: 100px;
   margin-right: 100px;
-  margin-top: 70px;
+  margin-top: clamp(40px, 70px, 4vw);
 }
 
 .popup-cta {
@@ -1039,6 +1048,7 @@ button.search-button {
 
 .main-feed-div {
   min-height: calc(100vh - 125px);
+  margin-bottom: 100px;
 }
 
 .nav-search-div {
@@ -1048,19 +1058,24 @@ button.search-button {
 }
 
 .details {
-  color: black;
-  font-size: 50px;
   display: none;
 }
 
 @media all and (max-width: 1000px) {
   .details {
     display: block;
-    color: blue;
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    font-weight: 600;
   }
 
   .responsive * {
     display: none;
+  }
+
+  .mobileHeader {
+    padding: 15%;
   }
 }
 /*! tailwindcss v2.2.17 | MIT License | https://tailwindcss.com */

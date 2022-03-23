@@ -7,6 +7,8 @@
     border-radius: 25px;
     box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.16);
     width: 600px;
+    max-height: 90vh;
+    overflow-y: scroll;
 }
 
 .popup-bg-blurr {
@@ -22,7 +24,8 @@
 
 .popup-title {
     text-align: center;
-    font-size: 104px;
+    // font-size: 104px;
+    font-size: clamp(50px, 106px, 5vw);
     margin-top: 35px;
 }
 
@@ -42,7 +45,7 @@
 .popup-content {
     margin-left: 100px;
     margin-right: 100px;
-    margin-top: 70px;
+    margin-top: clamp(40px, 70px, 4vw);
 }
 
 .popup-cta {

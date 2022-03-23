@@ -144,24 +144,30 @@ button.search-button {
 }
 .main-feed-div {
     min-height: calc(100vh - 125px);
+    margin-bottom: 100px;
 }
 .nav-search-div {
     height: min-content;
 }
 
 .details {
-    color: black;
-    font-size: 50px;
     display: none;
 }
 
 @media all and (max-width: 1000px) {
     .details {
         display: block;
-        color: blue;
+        color: white;
+        font-size: 25px;
+        text-align: center;
+        font-weight: $semibold;
     }
 
     .responsive * {
         display: none;
+    }
+
+    .mobileHeader {
+        padding: 15%;
     }
 }

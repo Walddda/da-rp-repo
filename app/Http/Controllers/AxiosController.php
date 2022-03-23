@@ -20,17 +20,37 @@ class AxiosController extends Controller
 {
     public function getTracks(Request $request)
     {
+        // dd(json_decode($request->profile)->id);
         // var_dump(sizeOf(json_decode($request->profile)));
         if (strlen($request->profile) > 2) {
-            $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
-                ->has('isBeat.fromUser')
-                ->join('beats', function ($join) {
-                    $join->on('beats.id', '=', 'files.beat_id');
-                })
-                ->where('beats.user_id', '          ', json_decode($request->profile)->id)
-                ->orderBy('beats.created_at', 'desc')
-                ->get()
-                ->toArray();
+            // dd('yes');
+            // dd(json_decode($request->profile));
+            if (json_decode($request->profile)->transact) {
+
+                $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.transactions', 'isBeat.getCover', 'isBeat.likes2')
+                    ->has('isBeat.fromUser')
+                    ->join('beats', function ($join) {
+                        $join->on('beats.id', '=', 'files.beat_id');
+                    })
+                    ->join('transactions', function ($join) {
+                        $join->on('beats.id', '=', 'transactions.beat_id');
+                    })
+                    ->where('transactions.buyer_id', '=', json_decode($request->profile)->id)
+                    ->orderBy('beats.created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            } else {
+                $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
+                    ->has('isBeat.fromUser')
+                    ->join('beats', function ($join) {
+                        $join->on('beats.id', '=', 'files.beat_id');
+                    })
+                    ->where('beats.user_id', '=', json_decode($request->profile)->id)
+                    ->orderBy('beats.created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+            // dd($res);
             return response()->json($res);
         } else if (!$request->keywords) {
             $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')

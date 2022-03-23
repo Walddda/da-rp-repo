@@ -48,7 +48,7 @@
 								</div>
 								<!-- <input v-if="showVol" type="range" step="0.01" min="0" max="1" v-model="volume" @change="volumeEmit"> -->
 								<div class="main-volume-bar-player" @click="volSlider" @drag="volSlider" ref="volSliderRef" @dragend="volSlider">
-									<div class="main-volume-bar-in" :style="{'width': (myvol*100)+'%'}"></div>
+									<div class="main-volume-bar-in" :style="{'width': (volume*100)+'%'}"></div>
 								</div>
 							</div>
 							<div class="flex flex-auto"></div>
@@ -173,7 +173,7 @@ export default {
 		mute(){
 			if(!this.volold && this.volold != 0){
 				console.log('mute')
-				this.volold = this.myvol;
+				this.volold = this.volume;
 				this.myvol = 0;
 			}else{
 				if(this.volold == 0){

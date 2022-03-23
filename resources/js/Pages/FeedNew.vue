@@ -3,7 +3,9 @@
 </style>
 <template>
     <div>
-        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="details">
+            <mobile></mobile>
+        </div>
         <div class="responsive">
             <Head title="Home" />
             <!-- <button @click="showSuccess = !showSuccess" class="fixed bottom-0 left-0 p-2 bg-red-400">SUCCESSSS</button> -->
@@ -59,6 +61,7 @@ import Tracks from '@/Components/Tracks.vue';
 import PopupEdit from '@/Components/PopupEdit.vue'
 import Success from '@/Components/Success.vue';
 import Error from '@/Components/Error.vue';
+import Mobile from '@/Components/Mobile.vue';
 
 //   import VueSlider from 'vue-slider-component'
 // import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
@@ -77,6 +80,7 @@ export default {
         PopupEdit,
         Success,
         Error,
+        Mobile,
     },
 
     props: { 

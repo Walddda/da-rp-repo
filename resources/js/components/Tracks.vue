@@ -8,9 +8,9 @@
             <source type="audio/mp3"/>
         </audio>
         <div ref="feedDiv">
-            <div class="main-feed-div flex items-center justify-center">
+            <div class="main-feed-div flex justify-center" :class="[attr.loc == 'feed' || loadEmpty || loading ? 'items-center' : '']">
                 <div v-if="files">
-                    <div class="container flex mx-auto w-full items-center justify-center">
+                    <div class="container flex mx-auto w-full justify-center" :class="[attr.loc == 'feed' || loadEmpty || loading ? 'items-center' : '']">
                         <ul class="flex flex-col p-4 grid justify-items-center">
                             <li v-for="(x, k) in files" >
                                 <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="volume" current :curTime="[cache ? cache : audio.curLength.sum]" @vol="volChange($event)"/>
@@ -20,7 +20,9 @@
                     </div>
                     
                 </div>
-                <div v-if="loadEmpty">Be the first one to upload your work at Beatchain.</div>
+                <div v-if="loadEmpty && attr && attr.loc == 'feed'">Be the first one to upload your work at Beatchain.</div>
+                <div v-if="loadEmpty && attr && attr.loc == 'prof'">There is nothing to see.</div>
+                <div v-if="loadEmpty && attr && attr.loc == 'prof-bought'">Buy your first beat.</div>
                 <div v-if="searchEmpty">Your search "{{searchTerm}}" had no result.</div>
 
                 <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
@@ -64,17 +66,17 @@
                             </div>
                             <!-- <input v-if="showVol" type="range" step="0.01" min="0" max="1" v-model="volume" @change="volumeEmit"> -->
                             <div class="main-volume-bar-player" @click="volSlider" @drag="volSlider" ref="volSliderRef" @dragend="volSlider">
-                                <div class="main-volume-bar-in" :style="{'width': (myvol*100)+'%'}"></div>
+                                <div class="main-volume-bar-in" :style="{'width': (volume*100)+'%'}"></div>
                             </div>
                         </div>
                         <div class="p-5">
                             <button class="popup-cta pay" @click="paymentEmit">
-								{{files[currentPlaying-1].is_beat.dollarPrice}} $
+								{{files[currentPlaying-1].is_beat.dollarPrice}}$
 							</button>
                             
                         </div>
-                        <div class="p-5" @click="play" >
-                            <svg v-if="playing" class="w-8 h-8" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
+                        <div class="p-5" @click="play()" >
+                            <svg v-if="playing" class="w-10 h-10" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"/></svg>
                             <svg v-else class="w-10 h-10" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M 5 4 l 10 6 l -10 6 z z"/></svg>
                         </div>
                     </div>
@@ -217,6 +219,31 @@ export default {
 			if(perc < 0){perc = 0}
 			this.emitter.emit('slide', {id: this.currentPlaying, timeP: perc})
 		},
+		volSlider(e){
+			let min = 0, cur = e.clientX - this.$refs.volSliderRef.offsetLeft, max = this.$refs.volSliderRef.clientWidth, perc = cur/max
+			console.log(cur)
+			console.log(max)
+			console.log(perc)
+            this.volChange(perc)
+			// this.volume = perc;
+			// this.volumeEmit()
+		},
+        
+		mute(){
+			if(!this.volold && this.volold != 0){
+				console.log('mute')
+				this.volold = this.volume;
+                this.volChange(0)
+			}else{
+				if(this.volold == 0){
+                this.volChange(0.5)
+				}else{
+                this.volChange(this.volold)
+				}
+				console.log('mute aus')
+				this.volold = null;
+			}
+		},
         getTracks(term = this.searchTerm){
             //for profile site, to get only tracks from one profile 
             let profile = {}
@@ -224,6 +251,14 @@ export default {
                 profile = {
                     act: true,
                     id: this.attr.id,
+                    transact: false
+                }
+            }
+            if(this.attr.loc == 'prof-bought'){
+                profile = {
+                    act: true,
+                    id: this.attr.id,
+                    transact: true
                 }
             }
             this.searchEmpty = false;
@@ -268,11 +303,26 @@ export default {
                 }
             })
         },
-        play(){
-            // this.playing = !this.playing;
-            // if(this.$refs.player)
-            this.toggleAudio();
-            this.getLength()
+        play(numb){
+            if(numb){
+                if(this.currentPlaying === null){
+                    // console.log('r266')
+                    this.currentPlaying = numb;
+                }
+                else if(this.currentPlaying == numb || !this.playing){
+                    this.currentPlaying = numb;
+                    this.playing = !this.playing;
+                    this.toggleAudio();
+                    // console.log('r273')
+                }
+                this.currentPlaying = numb;
+                this.getLength()
+            }else{
+                this.playing = !this.playing;
+                this.toggleAudio();
+                this.getLength()
+            }
+                    
         },
 
         toggleAudio(slide){         
@@ -438,18 +488,7 @@ export default {
         });
         this.emitter.on("play-pause", numb => {
             console.log("test")
-            if(this.currentPlaying === null){
-                // console.log('r266')
-                this.currentPlaying = numb;
-            }
-            else if(this.currentPlaying == numb || !this.playing){
-                this.currentPlaying = numb;
-                this.playing = !this.playing;
-                this.toggleAudio();
-                // console.log('r273')
-            }
-            this.currentPlaying = numb;
-            this.getLength()
+            this.play(numb);
             // console.log(text);
         });
 
