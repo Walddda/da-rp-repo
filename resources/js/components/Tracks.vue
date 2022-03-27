@@ -1,16 +1,16 @@
-<style lang="scss">
-    // @import './app.scss';
-</style>
 <template>
     <div>
-        
         <audio v-if="files" style="display:none" ref="player"  preload="metadata" >
             <source type="audio/mp3"/>
         </audio>
         <div ref="feedDiv">
-            <div class="main-feed-div flex justify-center" :class="[attr.loc == 'feed' || loadEmpty || loading ? 'items-center' : '']">
+            <div class="main-feed-div flex justify-center" :class="[attr.loc == 'feed' || loadEmpty || loading || attr.loc == 'single' ? 'items-center' : '']">
                 <div v-if="files">
-                    <div class="container flex mx-auto w-full justify-center" :class="[attr.loc == 'feed' || loadEmpty || loading ? 'items-center' : '']">
+                <div v-if="searchTerm" class="flex flex-row">
+                <div class="mr-4 cursor-pointer" @click="searchBack">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"/></svg>
+                </div><div>Search results for "{{searchTerm}}":</div></div>
+                    <div class="container flex mx-auto w-full justify-center" :class="[attr.loc == 'feed' || loadEmpty || loading || attr.loc == 'single' ? 'items-center' : '']">
                         <ul class="flex flex-col p-4 grid justify-items-center">
                             <li v-for="(x, k) in files" >
                                 <player v-if="k == currentPlaying-1" :track="x" :numb="k+1" :rn="playing" :info="info" :volume="volume" current :curTime="[cache ? cache : audio.curLength.sum]" @vol="volChange($event)"/>
@@ -22,8 +22,11 @@
                 </div>
                 <div v-if="loadEmpty && attr && attr.loc == 'feed'">Be the first one to upload your work at Beatchain.</div>
                 <div v-if="loadEmpty && attr && attr.loc == 'prof'">There is nothing to see.</div>
+                <div v-if="loadEmpty && attr && attr.loc == 'single'">This track doesn't exist.</div>
                 <div v-if="loadEmpty && attr && attr.loc == 'prof-bought'">Buy your first beat.</div>
-                <div v-if="searchEmpty">Your search "{{searchTerm}}" had no result.</div>
+                <div v-if="searchEmpty"><div class="mr-4 cursor-pointer" @click="searchBack">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"/></svg>
+                </div>Your search "{{searchTerm}}" had no result.</div>
 
                 <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
             </div>
@@ -32,7 +35,6 @@
             <div v-if="currentPlaying" :style="[showGlobal ? {} : {'bottom': '-100px'}]" class="transition-all fixed bottom-0 flex flex-col w-full">
                 <div class="flex flex-col items-center"> 
                     <div class="main-slider-container slider-global w-full" @click="mainSlider" @drag="mainSlider" ref="mainSliderRef" @dragend="mainSlider">
-                        <!-- <div class="main-slider-small"></div> -->
                         <div class="main-slider-big">
                             <div class="main-slider-play" 
                             :style="[audio.curLength.sum ? 
@@ -44,10 +46,8 @@
                     </div>
                     <div class="w-full flex flex-row main-global-bottom">
                         <img class="box-border h-24 w-24" loading="lazy" :src="files[currentPlaying-1].is_beat.get_cover.cover_path" alt="Album Pic">
-                        <!-- <img class="transform scale-75" :src="'/storage/covers/'+files[currentPlaying].is_beat.get_cover.name" alt="Album Pic"> -->
                         <div class="w-full px-5 pt-2 flex flex-col items-center">
                             <div class="w-full text-2xl" v-if="files">{{files[currentPlaying-1].is_beat.title}} - {{files[currentPlaying-1].is_beat.from_user.username}}</div>
-                            <!-- <slider2 v-if="files" class="text-center" trackColor="#020203" v-model="audio.curLength.sum" :max="audio.length.sum" @dragging="updateCurTime" @click="testClick"/> -->
                             <div v-if="files" class="flex items-center w-full text-base">
                                 <span>{{audio.curLength.min}}:<span v-if="audio.curLength.sec <= 9">0</span>{{audio.curLength.sec}}</span>&nbsp;/&nbsp;
                                 <span>{{audio.length.min}}:<span v-if="audio.length.sec <= 9">0</span>{{audio.length.sec}}</span>
@@ -62,9 +62,7 @@
                                 <path v-if="volume > 0.3" class="cls-1" d="M86.3,50a29.29,29.29,0,0,1-2.908,13.02,22.28,22.28,0,0,1-8.064,9.092,3.2,3.2,0,0,1-4.536-1.228,3.3,3.3,0,0,1,1.24-4.26C76.887,63.521,79.9,57.161,79.9,50s-3.008-13.52-7.868-16.628a3.293,3.293,0,0,1-1.24-4.256,3.2,3.2,0,0,1,4.536-1.232,22.291,22.291,0,0,1,8.064,9.1A29.277,29.277,0,0,1,86.3,50Z" transform="translate(-1.558 -16.651)" />
                                 <path v-if="volume > 0.7" class="cls-1" d="M98.679,50c0,14.008-6.552,26.592-17.1,32.844a3.2,3.2,0,0,1-4.708-1.856,3.241,3.241,0,0,1,1.52-3.692C86.959,72.173,92.279,61.725,92.279,50s-5.32-22.176-13.888-27.3a3.243,3.243,0,0,1-1.52-3.692,3.2,3.2,0,0,1,4.708-1.86C92.127,23.405,98.679,35.993,98.679,50Z" transform="translate(-1.558 -16.651)" />
                             </svg>
-                            <!-- <p>Volume {{volume}}</p> -->
                             </div>
-                            <!-- <input v-if="showVol" type="range" step="0.01" min="0" max="1" v-model="volume" @change="volumeEmit"> -->
                             <div class="main-volume-bar-player" @click="volSlider" @drag="volSlider" ref="volSliderRef" @dragend="volSlider">
                                 <div class="main-volume-bar-in" :style="{'width': (volume*100)+'%'}"></div>
                             </div>
@@ -82,10 +80,6 @@
                     </div>
                 </div>
             </div>
-            <!-- volume
-            player pixel weiter runter
-            pfeil rutscht zwischen end und mitte
-             -->
             <div v-if="currentPlaying" class="fixed right-0 flex items-center transition-all" 
             :class="[!showGlobal ? 'main-global-ind-cl' : 'main-global-ind-op']">
                 <div class="main-global-p pointer" @click="showGlobal = !showGlobal">
@@ -101,7 +95,6 @@
 
 <script>
 import Player from '@/Components/Player.vue';
-import PlayerWave from '@/Components/PlayerWave.vue';
 import Slider from '@vueform/slider'
 import Slider2 from "vue3-slider"
 import axios from 'axios';
@@ -113,7 +106,6 @@ export default {
         Player,
         Slider,
         Slider2,
-        PlayerWave,
     },
 
     props: { 
@@ -140,7 +132,7 @@ export default {
             },
             value: 20,
             paymentTrack: null,
-            info: null,
+            info: 3,
             loading: true,
             searchEmpty: false,
             searchFocus: false,
@@ -162,21 +154,12 @@ export default {
             fetch(url)
             .then(response => response.blob())
             .then(blob => {
-                console.log('--->')
-                console.log(blob)
-                console.log(URL.createObjectURL(blob))
-                // video.srcObject = blob;
-                // curr.$refs.player.srcObject = blob;
                 curr.$refs.player.src = URL.createObjectURL(blob);
                 if(curr.wantTime){
                     curr.cache = this.wantTime*this.audio.length.sum;
-                    // this.$refs.player.currentTime = this.wantTime*this.audio.length.sum;
-                    // curr.$refs.player.currentTime = (curr.wantTime*curr.audio.length.sum)
                     curr.wantTime = null;
                 } else if(curr.$page.props.tracks[curr.currentPlaying]){
                     curr.cache = this.$page.props.tracks[this.currentPlaying];
-                    // this.$refs.player.currentTime = this.$page.props.tracks[this.currentPlaying];
-                    // curr.$refs.player.currentTime = (curr.$page.props.tracks[curr.currentPlaying])
                 }
                 return curr.$refs.player.load();
             })
@@ -248,6 +231,7 @@ export default {
         getTracks(term = this.searchTerm){
             //for profile site, to get only tracks from one profile 
             let profile = {}
+            let id = '';
             if(this.attr.loc == 'prof'){
                 profile = {
                     act: true,
@@ -262,6 +246,9 @@ export default {
                     transact: true
                 }
             }
+            if(this.attr.id){
+                id = this.attr.id;
+            }
             this.searchEmpty = false;
             this.loadEmpty = false;
             console.info('start');
@@ -271,7 +258,7 @@ export default {
                     behaviour: "smooth",
                 })
             }
-            axios.get('/api/beats', { params: { keywords: term, profile} })
+            axios.get('/api/beats', { params: { keywords: term, profile, id} })
             .then(response => {
                 if(!response.data.length){
                     console.info('empty')
@@ -431,12 +418,12 @@ export default {
 				// console.log(res)
 				// console.log(this.track.is_beat.price)
 				// console.log(currentObj.track.is_beat.price)
-                console.log('hi')
+                // console.log('hi')
 
                 this.files.forEach(element => {
                 
                 element.is_beat.dollarPrice = (Math.round(((element.is_beat.price / res.data.data.rates.ETH) + Number.EPSILON) * 100) / 100).toFixed(2)
-                console.log(element.is_beat.dollarPrice)
+                // console.log(element.is_beat.dollarPrice)
             });
             })
         },
@@ -467,6 +454,14 @@ export default {
                         })
                 })
         },
+
+        searchBack(){
+            this.searchTerm = ''
+            this.loading = true
+            this.files = null
+            this.getTracks()
+            this.emitter.emit('nav-change', '')
+        }
 
     },
     mounted() {
@@ -601,7 +596,7 @@ export default {
     },
 
     created() {
-        if(this.$page.props.auth.user) {
+        if(this.$page.props.auth.user && ethereum.selectedAddress) {
             this.blockchainTracks()
         }
     }
@@ -611,20 +606,4 @@ export default {
 <style src="@vueform/slider/themes/default.css"></style>
 
 <style scoped>
-.loader {
-  border-top-color: #3498db;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-@-webkit-keyframes spinner {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 </style>

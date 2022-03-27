@@ -1,40 +1,101 @@
 <template>
     <div>
-        <form>
-            <div>
-                <label for="old_password">Old Password</label>
-                <input type="text" v-model="old_password" id="old_password" placeholder="Enter your old password">
+    <div class="main-page-form-div responsive">
+            <div class="main-page-form-heading">
+                <div class="heading-title">Password</div>
+                <div class="heading-logo"></div>
             </div>
-
-            <div>
-                <label for="new_password">New Password</label>
-                <input type="text" v-model="new_password" id="new_password" placeholder="Enter your old password">
+            <div class="main-page-form-content">
+                <div class="content-back">
+                </div>
+                <div class="content-form ">
+                    <Head title="Register" />
+                    <form @submit.prevent="submit" class="box-border">
+                        <div class="main-form-row">
+                            <div class="main-form-element">
+                                <label class="custom-text-label" for="old_password">Old Password</label><br>
+                                <BreezeInput 
+                                    id="old_password" 
+                                    type="text" 
+                                    :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                    v-model="old_password" 
+                                    required 
+                                />
+                            </div>
+                        </div>
+                        <div class="main-form-row">
+                            <div class="main-form-element">
+                                <label class="custom-text-label" for="new_password">New Password</label><br>
+                                <BreezeInput 
+                                    id="new_password" 
+                                    type="text" 
+                                    :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                    v-model="new_password" 
+                                    required 
+                                />
+                            </div>
+                        </div><div class="main-form-row">
+                            <div class="main-form-element">
+                                <label class="custom-text-label" for="confirm_password">Confirm new Password</label><br>
+                                <BreezeInput 
+                                    id="confirm_password" 
+                                    type="text" 
+                                    :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                    v-model="password_confirmation" 
+                                    required
+                                />
+                            </div>
+                        </div>
+                        
+                        <div class="main-form-row flex items-center">
+                            <div class="main-form-element max">
+                                <button 
+                                    class="main-page-form-cta submit" 
+                                    @click.prevent="updatePassword"
+                                >
+                                    Change Password
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <BreezeValidationErrors class="mb-4" />
+                    </form>
+                </div>
             </div>
-
-            <div>
-                <label for="confirm_password">Confirm Password</label>
-                <input type="text" v-model="password_confirmation" id="password_confirmation" placeholder="Enter your old password">
-            </div>
-
-            <div>
-                <button class="btn btn-primary" @click.prevent="updatePassword">Change Password</button>
-            </div>
-        </form>
-
-
+        </div>
     </div>
 </template>
 
 <script>
+import BreezeButton from '@/Components/Button.vue'
+import BreezeInput from '@/Components/Input.vue'
+import BreezeLabel from '@/Components/Label.vue'
+import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
+import { Head, Link } from '@inertiajs/inertia-vue3';
+import { CogIcon } from '@heroicons/vue/outline';
+import NavBarNew from '@/Components/NavBarNew.vue'
+import Mobile from '@/Components/Mobile.vue'
 
 export default {
     name: "ChangePassword", 
-
+    
+    components: {
+        BreezeButton,
+        BreezeInput,
+        BreezeLabel,
+        BreezeValidationErrors,
+        Head,
+        Link,
+        CogIcon,
+        NavBarNew,
+        Mobile
+    },
     data() {
         return{
             old_password: '', 
             new_password: '', 
             password_confirmation: '',
+            error: {},
         }
     },
 

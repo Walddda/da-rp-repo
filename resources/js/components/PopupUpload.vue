@@ -1,55 +1,20 @@
 <template>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <div class="popup-bg-blurr" @click="close">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <div class="popup-main" @click.stop @click="currencySelect = false">
-            <!-- {{$page.props.auth.user}} -->
             <div class="popup-title">Upload</div>
             <div class="asterisk"> All fields marked with an asterisk (*) are required. </div>
-    <!-- <form v-if="logedin" :action="route" method="post" enctype="multipart/form-data">upload -->
             <form class="popup-content main-form" v-if="$page.props.auth.user" @submit="upload()" enctype="multipart/form-data">
                 <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
                 
-                <!-- <transition name="fade">
-                    <div v-if="!isHidden && error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                        <span class="material-icons material-icons-outlined m-auto sm:inline" style="font-size:20px">gpp_bad</span>
-                        <strong class="font-bold">Upload error<span v-if="error.length > 1">s</span>{{error.length}}: </strong>
-                        <span class="block sm:inline" v-if="error.length < 2">{{error}}</span>
-                        <span class="block sm:inline" v-else v-for="e in error">{{e[0]}}lol<br></span>
-                        <button v-on:click="hide">
-                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                                <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
-                            </span>
-                        </button>
-                        
-                    </div>
-                </transition>
-
-                <transition name="fade">
-                    <div v-if="!isHidden && success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                        <strong class="font-bold">Success! </strong>
-                        <span class="block sm:inline">Your track has been uploaded.</span>
-                        <button v-on:click="hide">
-                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-                                <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
-                            </span>
-                        </button>
-                    </div>
-                </transition> -->
-
-                
-                
                 <div class="main-form-row">
-                
                     <div class="main-form-element vier-fünftel">
                         <label class="custom-text-label" for="title">Title*</label><br>
                         <input
-                            type="text"
-                            name="beatTitle"
-                            :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']"
-                            id="title"
-                            required
-                            v-model="title"
-                            @click="clickTitle"
+                            type="text" name="beatTitle" id="title"
+                            :class="[error && error.title && !title ? 'error' : '', 'custom-text-input main-text-input']"
+                            required v-model="title" @click="clickTitle"
+                            autocomplete="off"
                         />
                     </div>
 
@@ -65,6 +30,7 @@
                             v-model="type"
                             required
                             checked
+                            autocomplete="off"
                             />
                         </label>
                         <label class="inline-flex items-center">
@@ -76,6 +42,7 @@
                             name="beatType"
                             value="sample"
                             v-model="type"
+                            autocomplete="off"
                             />
                         </label>
                     </div>
@@ -86,11 +53,12 @@
                         <input
                             type="text"
                             name="beatBPM"
-                            :class="[error && error.bpm && error.bpm[0].includes('required') && !bpm ? 'error' : '', 'custom-text-input main-text-input']"
+                            :class="[error && error.bpm && !bpm ? 'error' : '', 'custom-text-input main-text-input']"
                             id="bpm"
                             required
                             v-model="bpm"
                             v-on:keypress="NumbersOnly"
+                            autocomplete="off"
                         />
                     </div>
 
@@ -102,7 +70,7 @@
                         <input
                             type="text"
                             name="key"
-                            :class="[error && error.key ? 'error' : '', 'custom-text-input main-text-input']"
+                            :class="[error && error.key && (!selectedKey || selectedKey.length > 3 || !keys.includes(selectedKey)) ? 'error' : '', 'custom-text-input main-text-input']"
                             id="key"
                             required
                             v-model="selectedKey"
@@ -110,6 +78,7 @@
                             @focus="selectFocus = true"
                             @blur="leave('blur')"
                             ref="keyInp"
+                            autocomplete="off"
                         />
                         <div class="main-select-custom-options" 
                             v-if="selectFocus && !keyClick"
@@ -139,6 +108,7 @@
                             :class="[error && error.desc ? 'error' : '', 'custom-text-input main-text-input']"
                             id="description"
                             v-model="description"
+                            autocomplete="off"
                         />
                     </div>
                 </div>
@@ -175,13 +145,14 @@
                         <input
                             type="text"
                             name="beatPrice"
-                            :class="[error && error.price && error.price[0].includes('required') && !price ? 'error' : '', 'custom-text-input main-text-input price-input']"
+                            :class="[error && (error.price || error.ethPrice)  && !price ? 'error' : '', 'custom-text-input main-text-input price-input']"
                             id="price"
                             required 
                             @focus="currencySelect = false"
                             v-model="price"
                             v-on:keypress="NumbersOnly"
                             maxlength = "8"
+                            autocomplete="off"
                         />
                     </div><div class="main-form-element half">
                         <label class="custom-text-label" for="feature">Featured Artists</label><br>
@@ -191,6 +162,7 @@
                             :class="[error && error.feature ? 'error' : '', 'custom-text-input main-text-input']"
                             id="feature"
                             v-model="feature"
+                            autocomplete="off"
                         />
                     </div>
                 </div>
@@ -204,6 +176,7 @@
                         :max-tags="5"
                         :class="[error && error.tags ? 'error' : '', 'main-tag-input']"
                         placeholder=""
+                        autocomplete="off"
                         id="tags"
                         >
                             <div>
@@ -218,16 +191,16 @@
                         <label 
                             v-if="beat" 
                             class="main-file-label-box checked mt-2" 
-                            :class="[error && error.beat && error.beat[0].includes('required') && !beat ? 'error' : '']"
+                            :class="[error && error.beat  && !beat ? 'error' : '']"
                             for="chooseFile"
                         ></label>
                         <label 
                             v-else 
                             class="main-file-label-box mt-2" 
-                            :class="[error && error.beat && error.beat[0].includes('required') && !beat ? 'error' : '']"
+                            :class="[error && error.beat  && !beat ? 'error' : '']"
                             for="chooseFile"
                         ></label>
-                        <span class="main-file-name beat">{{beatFileName}}</span>
+                        <span class="main-file-name beat tooltip">{{filename(beatFileName)}}<span class="tooltiptext">{{beatFileName}}</span></span>
                         <input
                             type="file"
                             name="file"
@@ -257,7 +230,7 @@
                             :class="[error && error.bpm ? 'error' : '']"
                             for="cover"
                         ></label>
-                        <span class="main-file-name cover">{{coverFileName}}</span>
+                        <span class="main-file-name cover tooltip">{{filename(coverFileName)}}<span class="tooltiptext">{{coverFileName}}</span></span>
                         <input 
                             type="file" 
                             ref="file" 
@@ -279,10 +252,11 @@
             </form>
             <div class="popup-footer">
                 <button class="popup-cta back" @click="close()">Back</button>
+                <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loadingIcon"></div>
                 <button class="popup-cta submit"
                             :class="{ 'opacity-25': processing }" 
                             :disabled="processing" 
-                @click="upload();">Upload</button>
+                @click="upload();" v-if="!loadingIcon">Upload</button>
             </div>
         </div>
     </div>
@@ -291,7 +265,8 @@
 
 <script>
 import VueTagsInput from "@sipec/vue3-tags-input";
-import { createBeat, loadBlockchainData, created } from '../services/blockchain.js'
+import Web3 from "web3"
+//import { createBeat, loadBlockchainData, created } from '../services/blockchain.js'
 
 export default {
 
@@ -323,6 +298,7 @@ export default {
             success: null,
             isHidden: false,
             loading: false,
+            loadingIcon: false,
             coverCheckBool: false,
             selectFocus:false,
             clickTitle:false,
@@ -334,6 +310,8 @@ export default {
             beatFileName: '',
             coverFileName: '',
             length: null,
+            confirmed: false,
+            rejected: false,
         }
     },
     
@@ -345,6 +323,31 @@ export default {
     created(){
     },
 	methods: {
+
+        createBeat(contract, id, title, price, owner) {
+            price = Web3.utils.toWei(price.toString())
+            contract.methods.createBeat(id, title, price).send({ from: owner })
+                .once('transactionHash', (transasctionHash) => {
+                    this.emitter.emit('success', 'Transaction started')
+                    console.log(transasctionHash)
+                })
+                .once('receipt', (receipt) => {
+                    this.loadingIcon = false
+                    this.emitter.emit('success', 'Your Track was successfully uploaded.')
+                    this.emitter.emit('upload-success');
+                    console.log(receipt)
+                    this.error = null
+                    this.close();
+                    
+                })
+                .on('error', (error) => {
+                    axios.post('/api/delete/' + id)
+                    this.loadingIcon = false
+                    this.processing = false
+                    this.emitter.emit('error', 'Transaction cancelled')
+                    console.error(error)
+                })
+        },
         focus(bool){
             this.emitter.emit("focus", bool)
         },
@@ -354,8 +357,11 @@ export default {
             e.preventDefault();
         },
 		close() {
-			console.log('yaay');
-			this.emitter.emit("closePopupUpload");
+            if (!this.loadingIcon) {
+			    this.emitter.emit("closePopupUpload");
+            } else {
+              this.emitter.emit('error', 'Please wait for transaction to complete')
+            }
 		},
         hide(e){
             e.preventDefault();
@@ -373,25 +379,33 @@ export default {
                 this.coverFileName = ''
             }
         },
-        // submit(){
-        //     this.upload(document.getElementById("upload-form"));       
-        // },
         upload(e){
-            this.processing = true;
             if(e){
                 console.log(e)
                 e.preventDefault();
             }
-            console.log('lezzgo')
-            this.loading = true;
-            let currentObj = this;
+            this.loadingIcon = true
+            console.log('wait')
             const config = {
                 headers: {
                     'content-type': 'multipart/form-data',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                 },
             }
+            this.error = {}
+            if(!this.title)this.error.title = ['Please specify a title.'];
+            if(!this.beat)this.error.beat = ['Please upload a beat.'];
+            // if(!this.bpm)this.error = Object.assign({bpm: ['Please provide BPM of your beat.']});
+            if(!this.bpm)this.error.bpm = ['Please provide BPM of your beat.'];
+            if(!this.price)this.error.ethPrice = ['Pleace specify a price.'];
+            if(this.selectedKey.length > 3)this.error.key = ['Please provide a valid key.'];
+            console.log(Object.values(this.keys))
+            // if(!Object.values(this.keys).includes(this.selectedKey))this.error.key = ['Please provide a valid key.'];
+            if(!this.keys.includes(this.selectedKey))this.error.key = ['Please provide a valid key.'];
+            if(!this.selectedKey)this.error.key = ['Please provide the key of your beat.'];
 
+            console.log(this.error)
+            console.log(Object.keys(this.error).length)
             let formData = new FormData();
             formData.append('beat', this.beat);
             formData.append('length', this.length);
@@ -415,54 +429,54 @@ export default {
             formData.append('description', this.description);
             formData.append('feature', this.feature);
 
-
-            axios.get('https://api.coinbase.com/v2/exchange-rates')
-                .then(res => {
-                    if(currentObj.currency == 'USD'){
-                        currentObj.ethPrice = (res.data.data.rates.ETH * currentObj.price).toFixed(4);
-                    }else{
-                        currentObj.ethPrice = currentObj.price;
-                    }
-                    formData.append('ethPrice', currentObj.ethPrice);
-                    formData.forEach(console.log)
-                    return axios.post('/api/upload', formData, config)
-                })
-                .then(function (response) {
-                        currentObj.loading = false;
-                        currentObj.isHidden = false;
-                        console.log(response);
-                        if (response.data.error) {
-                            currentObj.emitter.emit('error', 'Your Track failed to upload.')
-                            currentObj.error = response.data.error
-                            currentObj.success = null
-                            currentObj.processing = false;
-                            console.log(currentObj.error)
-                        }else if (response.data.success) {
-                            //response.data.id,
-                            createBeat(currentObj.$store.state.contract, response.data.id, currentObj.title, currentObj.ethPrice, ethereum.selectedAddress)
-                            currentObj.emitter.emit('success', 'Your Track was successfully uploaded.')
-                            currentObj.emitter.emit('upload-success');
-                            currentObj.success = response.data.success
-                            currentObj.error = null
-                            console.log(currentObj.success)
-                            currentObj.close();
-                        }
-                    })
-                    .catch(error => {
-                        if(error.response){
-                        console.log(error)
-                        currentObj.error = error.response.data.errors
-                        currentObj.success = null
-                        console.log(error.response.data);
-                        currentObj.processing = false; // logs an object to the console
+            if(Object.keys(this.error).length === 0){
+                this.processing = true;
+                console.log('lezzgo')
+                this.loading = true;
+                let currentObj = this;
+                axios.get('https://api.coinbase.com/v2/exchange-rates')
+                    .then(res => {
+                        if(currentObj.currency == 'USD'){
+                            currentObj.ethPrice = (res.data.data.rates.ETH * currentObj.price).toFixed(4);
                         }else{
-                            currentObj.success = null
-                            currentObj.processing = false
-                            console.log('help')
-                            currentObj.close();
+                            currentObj.ethPrice = currentObj.price;
                         }
-                        // Do something with error data
-                    });
+                        formData.append('ethPrice', currentObj.ethPrice);
+                        formData.forEach(console.log)
+                        return axios.post('/api/upload', formData, config)
+                    })
+                    .then(function (response) {
+                            currentObj.loading = false;
+                            currentObj.isHidden = false;
+                            console.log(response);
+                            if (response.data.error) {
+                                currentObj.emitter.emit('error', 'Your Track failed to upload.')
+                                currentObj.error = response.data.error
+                                currentObj.success = null
+                                currentObj.processing = false;
+                                console.log(currentObj.error)
+                            }else if (response.data.success) {
+                                //response.data.id,
+                                currentObj.createBeat(currentObj.$store.state.contract, response.data.id, currentObj.title, currentObj.ethPrice, ethereum.selectedAddress)
+                                
+                            }
+                        })
+                        .catch(error => {
+                            if(error.response){
+                            console.error(error)
+                            currentObj.error = error.response.data.errors
+                            currentObj.success = null
+                            console.log(error.response.data);
+                            currentObj.processing = false; // logs an object to the console
+                            }else{
+                                currentObj.success = null
+                                currentObj.processing = false
+                                console.log('help')
+                                currentObj.close();
+                            }
+                            // Do something with error data
+                        });
+            }
         },
         onBeatChange(e) {
             this.beat = e.target.files[0];
@@ -551,6 +565,19 @@ export default {
                 console.log(temp)
             }
         },
+        filename(text){
+            const arr = text.split(".")
+            var ex = arr[arr.length - 1]
+            arr.pop();    
+            var base = arr.join(".");
+            if(base.length <= 30)return text
+            else {
+                
+                return base.substring(0,30) + '[...].' + ex
+                // console.log(arr)
+                // return 'x'
+            }
+        }
     }, 
     mounted(){
         var audio = document.createElement('audio');

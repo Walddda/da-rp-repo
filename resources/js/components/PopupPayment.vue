@@ -25,25 +25,32 @@
           </div>
         </div>
       <div class="popup-footer">
-        <button class="popup-cta back" @click="close()">Back</button>
+        <button class="popup-cta back" @click="close()" >Back</button>
+        
         <div class="flex flex-auto"></div>
-        <p v-if="download" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">You already bought this beat</p>
+        <!-- <p v-if="download" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">You already bought this beat</p> -->
         <p v-if="own" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">This is your beat</p>
         <a v-if="download || own" :href="song.file_path" download>
           <button class="popup-cta download">Download</button>
 
           
         </a>
-        <button v-if="!download && !own" class="popup-cta submit" @click="pay()" :disabled="download">Buy</button>
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
+        <div v-if="!loading">
+          <button v-if="!download && !own" class="popup-cta submit" @click="pay()" :disabled="download">Buy</button>
+        </div>
+
+        
         
       </div>
+      
     </div>
   </div>
 </template>
 <script>
 import Web3 from "web3"
 import Beats from "../../dapp/build/contracts/Beats.json"
-import { purchaseBeat, getBeat } from '../services/blockchain.js'
+//import { purchaseBeat, getBeat } from '../services/blockchain.js'
 
 export default {
     name: 'Payment',
@@ -60,12 +67,35 @@ export default {
             download: false,
             transactions: [],
             own: this.$page.props.auth.user && this.song.is_beat.from_user.id === this.$page.props.auth.user.id,
+            loading: false,
         }
     },
 
     methods: {
         close() {
-            this.emitter.emit('closePopupPayment');
+            if (!this.loading) {
+              this.emitter.emit('closePopupPayment');
+            } else {
+              this.emitter.emit('error', 'Please wait for transaction to complete')
+            }
+        },
+
+        async purchaseBeat(contract, id, price, buyer) {
+          const purchase = await contract.methods.purchaseBeat(id).send( { from: buyer, value: Web3.utils.toWei(price.toString(), 'Ether') })
+            .once('transactionHash', (transasctionHash) => {
+                    this.emitter.emit('success', 'Transaction started')
+                    console.log(transasctionHash)
+                })
+            .once('receipt', (receipt) => {
+              console.log(receipt)
+              this.loading = false
+              this.download = true
+            })
+            .on('error', (error) => {
+              this.loading = false
+              console.error(error)
+            })
+          return purchase
         },
 
         convert() {
@@ -79,9 +109,10 @@ export default {
 
         pay() {
           //console.log(this.song.is_beat.id, this.song.is_beat.from_user.eth_address)
-          purchaseBeat(this.$store.state.contract, this.song.is_beat.id, this.song.is_beat.price, ethereum.selectedAddress)
+          this.loading = true
+          this.purchaseBeat(this.$store.state.contract, this.song.is_beat.id, this.song.is_beat.price, ethereum.selectedAddress)
             .then(response => {
-              this.download = true
+              
 
               console.log('hi')
 
@@ -106,24 +137,28 @@ export default {
                     formCount.append('download_count', this.counter)
                     this.emitter.emit('success', 'Track was successfully purchased')
                     return axios.post('/api/counter', formCount)
+                    .then(res => {
+                      console.log(res)
+                      this.emitter.emit("cover-update", {'cov': res.cov, 'id': this.song.is_beat.id})
+                    })
                   })
             })
             .catch((error) => {
                 this.emitter.emit('error', 'Transaction cancelled')
+                console.error(error)
               })
         },
 
         getTransactions() {
-          axios.get('/api/transactions')
+          axios.get('/api/transactions/'+this.song.is_beat.id+'/'+this.$page.props.auth.user.id)
             .then(response => {
-              this.transactions = response.data
-              this.transactions.forEach((transaction) => {
-                if (transaction.buyer_id === this.$page.props.auth.user.id && transaction.beat_id == this.song.is_beat.id) {
-                  this.download = true
-                }
-              })
+              if(response.data.length){
+                console.log(response.data)
+                this.transactions[0] = response.data[0]
+                this.download = true
+              }
             })
-            .catch((error) => console.error)
+            .catch((error) => console.error(error))
         },
     }, 
     
@@ -157,29 +192,6 @@ export default {
 }
 .cropImg{
     border: 2px solid green;
-}
-
-.loader {
-  border-top-color: #3498db;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-@-webkit-keyframes spinner {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .3s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
 }
 
 </style>

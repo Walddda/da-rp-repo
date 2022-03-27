@@ -4,13 +4,9 @@
             <mobile></mobile>
         </div>
         <div class="responsive">
-             <div class="details">
-                <mobile></mobile>
-            </div>
-            <div class="responsive">
+            <Head :title="form.username" />
                 <!-- <BreezeValidationErrors class="mb-4" /> -->
                 <div class="main-profile-content">
-                    <!-- <wallet></wallet> -->
                     <div>
                         <img src="/storage/assets/PROFILE_BG_cut1.jpg" class="profile-bg"/>
                         <div 
@@ -26,7 +22,7 @@
                             : {'width': '10vw', 'padding':'0.5vw',
                             'margin-top': '2.5%'} ]"
                         >
-                            <img src="/storage/assets/1646747270_1_9977342_3.jpg"/>
+                            <img src="/storage/assets/user_icon_1.png"/>
                         </div>
                     </div>
                     <div class="main-scroll-username" v-if="toggleScrollView">{{headUsername}}</div>
@@ -47,7 +43,7 @@
                             </label>
                             <br>
                             <label class="pd-email">{{form.email}} </label> <br><br>
-                            <label class="pd-location">{{form.location}} </label> <br>
+                            <label class="pd-location">{{form.location}}</label> <br>
                             <label class="pd-joined">joined {{form.joined}} </label>
                         </div>
                         <div class="profile-details-right">
@@ -92,12 +88,10 @@
                 <nav-bar-new profile/>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import Wallet from '@/Components/Wallet.vue';
 import { CogIcon } from '@heroicons/vue/outline';
 import NavBarNew from '@/Components/NavBarNew.vue'
 import Tracks from '@/Components/Tracks.vue';
@@ -119,7 +113,6 @@ export default {
         Head,
         Link,
         NavBarNew,
-        Wallet,
         CogIcon,
         Tracks,
         Player,

@@ -25,7 +25,32 @@
     background-color: #e6e6e6;
     border-radius: 0px 20px 20px 0px;
 }
-.playerImgBox {
+.playerInfoInfo {
+    padding: 10px;
+}
+.playerInfoInfo>* {
+    margin: 2px;
+}
+.playerDesc {
+    display: block;
+    overflow: auto;
+    height: 100px;
+}
+.info-tag {
+    border-radius: 14px;
+    background-color: #bebdbd;
+    // font-size: 18px;
+    color: black;
+    height: 28px;
+    justify-content: center;
+    margin-left: 5px;
+    margin-top: 1px;
+    padding: 0px 10px 0px 10px;
+}
+.info-tags-main{
+    height: 30px;
+    overflow: hidden;
+    padding: 0px 10px 0px 15px;
 }
 .playerImg {
     border-radius: 20px 0px 0px 20px;

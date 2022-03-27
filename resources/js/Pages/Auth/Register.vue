@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="details">
+            <mobile></mobile>
+        </div>
         <div class="main-page-form-div responsive">
             <div class="main-page-form-heading">
                 <div class="heading-title">
@@ -148,7 +150,8 @@
                         <div class="main-form-row">
                             <div class="main-form-element">
                                 <label class="custom-text-label" for="password_confirmation">Terms & Conditions*</label><br>
-                                <input type="checkbox" class="form-control" name="terms" value="1" required/>I agree with the <a href="/privacy" target="_blank"><strong>Privacy Policy</strong></a> and <a href="/terms" target="_blank"><strong>Terms & Conditions</strong></a>   
+                                <input type="checkbox" class="form-checkbox main-form-checkbox" name="terms" value="1" required>
+                                I agree with the <a href="/privacy" target="_blank"><strong>Privacy Policy</strong></a> and <a href="/terms" target="_blank"><strong>Terms & Conditions</strong></a>   
                                 
                             </div>
                         </div>
@@ -182,11 +185,11 @@
 
 <script>
 import BreezeButton from '@/Components/Button.vue'
-import BreezeGuestLayout from '@/Layouts/Guest.vue'
 import BreezeInput from '@/Components/Input.vue'
 import BreezeLabel from '@/Components/Label.vue'
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue'
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3'
+import Mobile from '@/Components/Mobile.vue';
 
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
@@ -200,6 +203,7 @@ export default {
         BreezeValidationErrors,
         Head,
         Link,
+        Mobile,
     },
 
     data() {

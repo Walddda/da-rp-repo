@@ -4,7 +4,7 @@ require('chai')
     .use(require('chai-as-promised'))
     .should()
 
-contract('Beats', ([deployer, seller, buyer]) => {
+contract('Beats', ([seller, buyer]) => {
     let beats
 
     before(async () => {
@@ -22,8 +22,6 @@ contract('Beats', ([deployer, seller, buyer]) => {
             assert.equal(name, 'Beatchain')
         })
     })
-
-    
 
     describe('beats', async() => {
         let result, beatCount

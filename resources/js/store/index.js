@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-import { loadBlockchainData } from '@/services/blockchain'
 
 const store = createStore({
     state () {
@@ -9,12 +8,6 @@ const store = createStore({
       }
     },
     mutations: {
-    //   readContract (state) {
-    //       loadBlockchainData()
-    //         .then(response => {
-    //             state.contract = response
-    //         })
-    //   }
     }
   })
 

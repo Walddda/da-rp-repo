@@ -1,5 +1,9 @@
 <template>
     <div>
+        <div class="details">
+            <mobile></mobile>
+        </div>
+        <div class="responsive">
             <div class="main-toggle-own-tracks flex justify-center">
                 <div class="flex justify-center">
                     <!-- <a href="/settings">Settings</a><br>
@@ -207,12 +211,17 @@
                     </tr>
                 </table>
             </div>
-
+        </div>
+        <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
+        <error v-if="showError" :text="messageError" @close="showError = false" />
     </div>
 </template>
 
 <script>
+import Mobile from '@/Components/Mobile.vue';
 import VueTagsInput from "@sipec/vue3-tags-input";
+import Success from '@/Components/Success.vue';
+import Error from '@/Components/Error.vue';
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
 
@@ -220,6 +229,9 @@ export default {
     
     components: {
         VueTagsInput,
+        Mobile,
+        Success,
+        Error,
     },
 
     props: {
@@ -247,6 +259,10 @@ export default {
             deleteU: false,
             tags: [],
             processing: false,
+            showSuccess: false,
+            messageSuccess: 'Gongrats',
+            showError: false,
+            messageError: 'Error',
         }
     },
 
@@ -338,6 +354,7 @@ export default {
                         currentObj.loadSongs();
                         currentObj.editS = false;
                         currentObj.deleteS = false;
+                    currentObj.emitter.emit('success','song deleted')
                     })
                     .catch(error => {
                         if(error.response){
@@ -348,6 +365,7 @@ export default {
                             currentObj.processing = false
                             console.log('help')
                         }
+                    currentObj.emitter.emit('error', 'can\'t delete')
                         // Do something with error data
                     });
         },
@@ -390,7 +408,7 @@ export default {
                         currentObj.loadSongs();
                         currentObj.editS = false;
                         currentObj.deleteS = false;
-                        
+                    currentObj.emitter.emit('success','song edited')
                     })
                     .catch(error => {
                         if(error.response){
@@ -401,6 +419,7 @@ export default {
                             currentObj.processing = false
                             console.log('help')
                         }
+                    currentObj.emitter.emit('error', 'can\'t edit')
                         // Do something with error data
                     });
         },
@@ -440,9 +459,11 @@ export default {
                     currentObj.loadUser();
                     currentObj.editU = false;
                     currentObj.deleteU = false;
+                    currentObj.emitter.emit('success','user updated')
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    // console.log(error.response.data);
+                    currentObj.emitter.emit('error', 'can\'t update')
             });
         },
         deleteUserSubmit(e){
@@ -468,9 +489,11 @@ export default {
                     currentObj.loadUser();
                     currentObj.editU = false;
                     currentObj.deleteU = false;
+                    currentObj.emitter.emit('success','user deleted')
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    // console.log(error.response.data);
+                    currentObj.emitter.emit('error', 'can\'t delete')
                 });
         },
     }, 
@@ -485,6 +508,17 @@ export default {
         // window.location.href = "/";
     },
     mounted() {
+        this.emitter.on("success", message => {
+            console.log(message)
+            this.messageSuccess = message;
+            this.showSuccess = true;
+        })
+
+        this.emitter.on("error", message => {
+            console.log(message)
+            this.messageError = message;
+            this.showError = true;
+        })
     },
     destroyed () {
     },

@@ -1,67 +1,130 @@
 <template>
     <div>
-        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="details"><mobile></mobile></div>
         <div class="responsive">
             <nav-bar-new profile/>
-            <form @submit.prevent="submit" class="w-full max-w-sm m-40">
-                <div class="mt-4">
-                    <BreezeLabel for="username" value="Username" />
-                    <BreezeInput id="username" type="text" class="mt-1 block w-full" v-model="form.username" required autocomplete="username"/>
-                </div>
-
-                <div class="mt-4">
-                    <BreezeLabel for="firstname" value="First Name" />
-                    <BreezeInput id="firstname" type="text" class="mt-1 block w-full" v-model="form.first_name" required autocomplete="first name"/>
-                </div>
-
-                <div class="mt-4">
-                    <BreezeLabel for="lastname" value="Last Name" />
-                    <BreezeInput id="lastname" type="text" class="mt-1 block w-full" v-model="form.last_name" required autocomplete="last name"/>
-                </div>
-
-                <div class="mt-4">
-                        <BreezeLabel for="email" value="Email" />
-                        <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email"/>
+            <div class="settingsContent">
+                <div class="main-page-form-div">
+                    <div class="main-page-form-heading">
+                        <div class="heading-title">
+                            Settings
+                        </div>
                     </div>
-
-                
-
-                <div class="mt-4">
-                    <BreezeLabel for="location" value="Location" />
-                    <select id="location" class="form-select block w-full mt-1" v-model="form.location">
-                        <option v-for="country in countries" :value="country.value">
-                            {{ country.label }}
-                        </option>
-                    </select>
+                    <div class="main-page-form-content">
+                    <div class="content-back"></div>
+                        <div class="content-form ">
+                            <Head title="Settings" />
+                            <form @submit.prevent="submit" class="box-border">
+                                <div class="main-form-row">
+                                    <div class="main-form-element">
+                                        <label class="custom-text-label" for="username">Username</label><br>
+                                        <BreezeInput 
+                                            id="username" 
+                                            type="text" 
+                                            :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                            v-model="form.username" 
+                                            required 
+                                            autofocus 
+                                            autocomplete="first_name" 
+                                        />
+                                    </div>
+                                </div>
+                                <div class="main-form-row">
+                                    <div class="main-form-element half">
+                                        <label class="custom-text-label" for="firstname">First Name</label><br>
+                                        <BreezeInput 
+                                            id="firstname" 
+                                            type="text" 
+                                            :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                            v-model="form.firstname" 
+                                            autofocus 
+                                            autocomplete="first name" 
+                                        />
+                                    </div>
+                                    <div class="main-form-element half">
+                                        <label class="custom-text-label" for="lastname">Last Name</label><br>
+                                        <BreezeInput 
+                                            id="lastname" 
+                                            type="text" 
+                                            :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                            v-model="form.lastname" 
+                                            autofocus 
+                                            autocomplete="last name" 
+                                        />
+                                    </div>
+                                </div>
+                                <div class="main-form-row">
+                                    <div class="main-form-element">
+                                        <label class="custom-text-label" for="email">E-Mail</label><br>
+                                        <BreezeInput 
+                                            id="email" 
+                                            type="text" 
+                                            :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                            v-model="form.email" 
+                                            required
+                                            autofocus 
+                                            autocomplete="email" 
+                                        />
+                                    </div>
+                                </div>
+                                <div class="main-form-row">
+                                    <div class="main-form-element"
+                                    @mouseleave="mouseInpf(false)"
+                                    @mouseover="mouseInpf(true)">
+                                        <label class="custom-text-label" for="location">Location</label><br>
+                                        <input
+                                            type="text"
+                                            name="location"
+                                            :class="[error && error.key ? 'error' : '', 'custom-text-input main-text-input']"
+                                            id="location"
+                                            v-model="form.location"
+                                            @keydown="keyClick = false; mouseOptf(false)"
+                                            @focus="selectFocus = true"
+                                            @blur="leave('blur')"
+                                            ref="keyInp"
+                                        />
+                                        <div class="main-select-custom-options" 
+                                            v-if="selectFocus && !keyClick"
+                                            @mouseleave="mouseOptf(false)"
+                                            @mouseover="mouseOptf(true)"
+                                        >
+                                            <p v-for="k in countries">
+                                                <span v-if="!form.location || k.label.toUpperCase().includes(form.location.toUpperCase())"
+                                                    @click="form.location = k.label; $refs.keyInp.focus(); keyClick = true">
+                                                    {{k.label}}
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="main-form-row">
+                                    <div class="main-form-element">
+                                        <label class="custom-text-label" for="desc">Bio</label><br>
+                                        <BreezeInput 
+                                            id="desc" 
+                                            type="text" 
+                                            :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
+                                            v-model="form.desc"  
+                                        />
+                                    </div>
+                                </div>
+                                <div class="main-form-row">
+                                    <div class="main-form-element max">
+                                        <button 
+                                            class="main-page-form-cta submit" 
+                                            :class="{ 'opacity-25': form.processing }" 
+                                            :disabled="form.processing"
+                                        >
+                                            Update Profile
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="w-full px-3">
-                        <BreezeLabel for="desc" value="Description" />
-                        <textarea id="desc" class="no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none" v-model="form.desc"></textarea>
-                </div>
-
-                <!-- <div class="mt-4">
-                    <BreezeLabel for="password" value="Password" />
-                    <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password"/>
-                </div>
-
-                <div class="mt-4">
-                    <BreezeLabel for="password_confirmation" value="Confirm Password" />
-                    <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"/>
-                </div> -->
-
-                <div class="text-center pt-4 pb-8 border-b border-gray-200">
-                    <Button class="ml-4 cta-main but-main" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Update Profile!
-                    </Button>
-                </div>
-            </form>
-
-            <change-password></change-password>
-
-            <success v-if="showSuccess" :text="messageSuccess" @close="showSuccess = false" />
-
-            <error v-if="showError" :text="messageError" @close="showError = false" />
+                <change-password class="pwdSettings"></change-password>
+            </div>
         </div>
     </div>
 </template>
@@ -73,10 +136,10 @@ import BreezeInput from '@/Components/Input.vue'
 import BreezeLabel from '@/Components/Label.vue'
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
-import Wallet from '@/Components/Wallet.vue'
 import { CogIcon } from '@heroicons/vue/outline';
 import NavBarNew from '@/Components/NavBarNew.vue'
 import ChangePassword from '@/Components/ChangePassword.vue'
+import Mobile from '@/Components/Mobile.vue'
 
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
@@ -93,7 +156,8 @@ export default {
         Link,
         CogIcon,
         NavBarNew,
-        ChangePassword
+        ChangePassword,
+        Mobile
     },
 
      data(){
@@ -109,6 +173,11 @@ export default {
                 location: this.$page.props.auth.user.location,
                 desc: this.$page.props.auth.user.description,
             }), 
+            mouseOpt: false,
+            mouseInp: false,
+            keyClick: false,
+            selectFocus: false,
+            error: {},
         }
     },
 
@@ -122,6 +191,30 @@ export default {
 
 
     methods: {
+        leave(x){
+            console.log(this.mouseOpt + '-'+ this.mouseInp)
+            if(!this.mouseOpt && !this.mouseInp){
+                this.selectFocus = false;
+                this.keyClick = false;
+            }
+            console.log(x)
+            var corrKey = false;
+            this.countries.forEach(key => {
+                if(this.form.location == key.label){
+                    console.log(key.label)
+                    corrKey = true;
+                }
+            })
+            if(!corrKey){
+            }else if(this.error.key){
+            }
+        },
+        mouseOptf(a){
+            this.mouseOpt = a;
+        },
+        mouseInpf(a){
+            this.mouseInp = a;
+        },
         submit(e) {
             e.preventDefault();
             let currentObj = this;
@@ -211,5 +304,7 @@ export default {
 </script>
 
 <style>
-
+    .pwdSettings {
+        margin-top: -250px;
+    }
 </style>

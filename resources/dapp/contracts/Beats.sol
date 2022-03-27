@@ -62,9 +62,6 @@ contract Beats {
         //fetch address
         address payable _seller = _beat.owner;
 
-        //valid id
-        require(_beat.id > 0);
-
         require(_seller != msg.sender);
 
         // //enough ether

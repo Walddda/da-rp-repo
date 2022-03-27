@@ -1,6 +1,8 @@
 <template> 
     <div>
-        <div class="details">Geh auf den Pc bruh... </div>
+        <div class="details">
+            <mobile></mobile>
+        </div>
         <div class="main-page-form-div responsive">
             <div class="main-page-form-heading">
                 <div class="heading-title">Login</div>
@@ -120,11 +122,11 @@
 <script>
 import BreezeButton from "@/Components/Button.vue";
 import BreezeCheckbox from "@/Components/Checkbox.vue";
-import BreezeGuestLayout from "@/Layouts/Guest.vue";
 import BreezeInput from "@/Components/Input.vue";
 import BreezeLabel from "@/Components/Label.vue";
 import BreezeValidationErrors from "@/Components/ValidationErrors.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import Mobile from '@/Components/Mobile.vue';
 
 export default {
     components: {
@@ -135,6 +137,7 @@ export default {
         BreezeValidationErrors,
         Head,
         Link,
+        Mobile,
     },
 
     props: {
@@ -149,6 +152,7 @@ export default {
                 password: "",
                 remember: false,
             }),
+            error: {},
         };
     },
 

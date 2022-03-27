@@ -1,7 +1,9 @@
 <template>
     <div class="flex items-center justify-center" :class="[loc == 'nav' ? 'nav-search-div' : '']">
     <div class="flex">
-        <form action="/" method="post" name="searchForm" ref="form" style="margin-top:20px" class="flex flex-row" :class="[loc == 'feed' ? 'main-search-form' : loc == 'nav' ? 'nav-search-form' : '']">
+        <form action="/" method="post" name="searchForm" ref="form" class="flex flex-row" 
+        :style="[loc == 'feed' ? {'margin-top':'20px'} : '']"
+        :class="[loc == 'feed' ? 'main-search-form' : loc == 'nav' ? 'nav-search-form' : '']">
             <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
             <i v-if=" loc == 'feed'" class="main-search-icon">
                 <svg class="w-14 h-14 text-gray-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
@@ -20,6 +22,7 @@
                 :placeholder="'Search ...'" 
                 @focus="focus(true)" 
                 @blur="focus(false)"
+                @keyup="emitter.emit('nav-change', keywords)"
             >
             <input type="text" 
                 v-if=" loc == 'feed'"
@@ -27,9 +30,10 @@
                 name="searchTerm" 
                 v-model="keywords" 
                 v-on:keyup.enter="send" 
-                :placeholder='"\"Metro Boomin\""' 
+                :placeholder='"Piano Beat"' 
                 @focus="focus(true)" 
                 @blur="focus(false)"
+                @keyup="emitter.emit('nav-change', keywords)"
             >
             <button 
                 class="flex items-center justify-center bg-white px-4 search-button-input-feed"

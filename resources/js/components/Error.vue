@@ -23,16 +23,14 @@ export default {
         }
     },
     created(){
-        console.log('created');
     },
     unmounted(){
-        console.log('unmounted');
         clearInterval(this.int)
         },
     mounted(){
-        console.log('mounted');
         this.length = 110;
         this.opac = 0;
+        console.info({error: this.text})
         // this.$nextTick(function(){
         //     this.dec()
         // });
@@ -41,7 +39,6 @@ export default {
     },
     methods:{
         dec(){
-            console.log(this.length)
             if(this.length <= 10){
                 this.opac = 0;
             }

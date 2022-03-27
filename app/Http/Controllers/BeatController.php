@@ -54,4 +54,22 @@ class BeatController extends Controller
 
         // return view('test', ['beats' => $beats]);
     }
+
+    public function singletrack(Request $request){
+        
+        // dd($request->id);
+        // $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
+        // ->has('isBeat.fromUser')
+        // ->join('beats', function ($join) {
+        //     $join->on('beats.id', '=', 'files.beat_id');
+        // })
+        // ->where('beats.id', '=', $request->id)
+        // ->orderBy('beats.created_at', 'desc')
+        // ->get()
+        // ->toArray();
+        return Inertia::render('SingleTrack', [
+            // 'beats' => $res,
+            'id' => $request->id,
+        ]);
+    }
 }
