@@ -45,15 +45,19 @@
 }
 
 .main-drop-list {
-    margin-left: 50px;
     padding-left: 50px;
     margin-top: -15px;
     padding-top: 15px;
 }
 .main-drop-list .nav-link {
     font-size: 25px;
+    padding-left: 30px;
     padding-right: 30px;
-    border-bottom: white solid 2px;
+}
+.main-drop-list .nav-link:first-child{
+    padding-left: 15px;
+    border-left: white solid 2px;
+    border-radius: 0px 0px 0px 15px;
 }
 .main-noti-span {
     margin-top: 2px;

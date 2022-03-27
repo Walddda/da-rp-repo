@@ -4,11 +4,11 @@
       <div class="popup-title">Buy</div>
         <p class="main-pay-title">{{ song.is_beat.title }}</p>
         <div class="main-pay-row">
-          <p class="main-pay-artist">by {{ song.is_beat.title }}</p>
+          <p class="main-pay-artist">by {{ song.is_beat.from_user.username }}</p>
           <p class="main-pay-eth">{{ song.is_beat.price }} ETH</p>
         </div>
         <div class="main-pay-row">
-          <p class="main-pay-feat" v-if="song.is_beat.feature">feat. {{ song.is_beat.feature }}</p>
+          <p class="main-pay-feat">{{ song.is_beat.feature ? 'feat. ' + song.is_beat.feature : '' }}</p>
           <p class="main-pay-dol">= {{ this.calculating ? 'Loading...' : this.dollarPrice }} $</p>
         </div>
         <div class="main-pay-info">
@@ -25,27 +25,35 @@
           </div>
         </div>
       <div class="popup-footer">
-        <button class="popup-cta back" @click="close()">Back</button>
+        <button class="popup-cta back" @click="close()" >Back</button>
+        
         <div class="flex flex-auto"></div>
-        <p v-if="download" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">You already bought this beat</p>
+        <!-- <p v-if="download" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">You already bought this beat</p> -->
         <p v-if="own" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">This is your beat</p>
         <a v-if="download || own" :href="song.file_path" download>
           <button class="popup-cta download">Download</button>
+
+          
         </a>
-        <button v-if="!download && !own" class="popup-cta submit" @click="pay()" :disabled="download">Buy</button>
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12" v-if="loading"></div>
+        <div v-if="!loading">
+          <button v-if="!download && !own" class="popup-cta submit" @click="pay()" :disabled="download">Buy</button>
+        </div>
+
+        
+        
       </div>
+      
     </div>
   </div>
 </template>
 <script>
-import web3 from 'web3/dist/web3.min.js'
+import Web3 from "web3"
+import Beats from "../../dapp/build/contracts/Beats.json"
+//import { purchaseBeat, getBeat } from '../services/blockchain.js'
 
 export default {
     name: 'Payment',
-    
-    components: {
-        web3,
-    },
 
     props:{
       song: Object,
@@ -59,12 +67,35 @@ export default {
             download: false,
             transactions: [],
             own: this.$page.props.auth.user && this.song.is_beat.from_user.id === this.$page.props.auth.user.id,
+            loading: false,
         }
     },
 
     methods: {
         close() {
-            this.emitter.emit('closePopupPayment');
+            if (!this.loading) {
+              this.emitter.emit('closePopupPayment');
+            } else {
+              this.emitter.emit('error', 'Please wait for transaction to complete')
+            }
+        },
+
+        async purchaseBeat(contract, id, price, buyer) {
+          const purchase = await contract.methods.purchaseBeat(id).send( { from: buyer, value: Web3.utils.toWei(price.toString(), 'Ether') })
+            .once('transactionHash', (transasctionHash) => {
+                    this.emitter.emit('success', 'Transaction started')
+                    console.log(transasctionHash)
+                })
+            .once('receipt', (receipt) => {
+              console.log(receipt)
+              this.loading = false
+              this.download = true
+            })
+            .on('error', (error) => {
+              this.loading = false
+              console.error(error)
+            })
+          return purchase
         },
 
         convert() {
@@ -77,62 +108,57 @@ export default {
         },
 
         pay() {
-            ethereum.request({
-              method: 'eth_sendTransaction',
-              params: [
-                  {
-                  from: this.$page.props.auth.user.eth_address,
-                  to: this.song.is_beat.from_user.eth_address,
-                  value: parseInt(web3.utils.toWei(String(this.song.is_beat.price), 'ether')).toString(16),
-                  },
-              ],
-              })
-              .then(
-                (txHash) => {
-                  console.log(txHash)
-                  this.hash = txHash
-                  this.download = true
+          //console.log(this.song.is_beat.id, this.song.is_beat.from_user.eth_address)
+          this.loading = true
+          this.purchaseBeat(this.$store.state.contract, this.song.is_beat.id, this.song.is_beat.price, ethereum.selectedAddress)
+            .then(response => {
+              
 
-                  let formData = new FormData()
-                  console.log('transaction')
-                  console.log(this.song.is_beat.from_user.id)
-                  console.log(this.$page.props.auth.user.id)
-                  formData.append('seller_id', this.song.is_beat.from_user.id)
-                  formData.append('buyer_id', this.$page.props.auth.user.id)
-                  formData.append('hash', this.hash)
-                  formData.append('beat_id', this.song.is_beat.id)
+              console.log('hi')
 
-                  const config = {
+              let formData = new FormData()
+              formData.append('seller_id', this.song.is_beat.from_user.id)
+              formData.append('buyer_id', this.$page.props.auth.user.id)
+              formData.append('hash', response.transactionHash)
+              formData.append('beat_id', this.song.is_beat.id)
+
+              const config = {
                       headers: {
                           'content-type': 'multipart/form-data',
                           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                       },
                   }
-                
-                return axios.post('/api/transaction', formData, config)
+
+              return axios.post('/api/transaction', formData, config)
                   .then(response => {
                     let formCount = new FormData();
                     formCount.append('beat_id', this.song.is_beat.id)
                     formCount.append('seller_id', this.song.is_beat.from_user.id)
                     formCount.append('download_count', this.counter)
-
+                    this.emitter.emit('success', 'Track was successfully purchased')
                     return axios.post('/api/counter', formCount)
+                    .then(res => {
+                      console.log(res)
+                      this.emitter.emit("cover-update", {'cov': res.cov, 'id': this.song.is_beat.id})
+                    })
                   })
+            })
+            .catch((error) => {
+                this.emitter.emit('error', 'Transaction cancelled')
+                console.error(error)
               })
-              .catch((error) => console.error)
         },
 
         getTransactions() {
-          axios.get('api/transactions')
+          axios.get('/api/transactions/'+this.song.is_beat.id+'/'+this.$page.props.auth.user.id)
             .then(response => {
-              this.transactions = response.data
-              this.transactions.forEach((transaction) => {
-                if (transaction.buyer_id === this.$page.props.auth.user.id && transaction.beat_id == this.song.is_beat.id) {
-                  this.download = true
-                }
-              })
+              if(response.data.length){
+                console.log(response.data)
+                this.transactions[0] = response.data[0]
+                this.download = true
+              }
             })
-            .catch((error) => console.error)
+            .catch((error) => console.error(error))
         },
     }, 
     
@@ -166,29 +192,6 @@ export default {
 }
 .cropImg{
     border: 2px solid green;
-}
-
-.loader {
-  border-top-color: #3498db;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-@-webkit-keyframes spinner {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spinner {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .3s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
 }
 
 </style>

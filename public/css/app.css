@@ -32,6 +32,37 @@
   border-radius: 0px 20px 20px 0px;
 }
 
+.playerInfoInfo {
+  padding: 10px;
+}
+
+.playerInfoInfo > * {
+  margin: 2px;
+}
+
+.playerDesc {
+  display: block;
+  overflow: auto;
+  height: 100px;
+}
+
+.info-tag {
+  border-radius: 14px;
+  background-color: #bebdbd;
+  color: black;
+  height: 28px;
+  justify-content: center;
+  margin-left: 5px;
+  margin-top: 1px;
+  padding: 0px 10px 0px 10px;
+}
+
+.info-tags-main {
+  height: 30px;
+  overflow: hidden;
+  padding: 0px 10px 0px 15px;
+}
+
 .playerImg {
   border-radius: 20px 0px 0px 20px;
 }
@@ -48,6 +79,7 @@
   height: 7px;
   width: 100%;
   transition: height 0.5s;
+  transition: width 0.1s;
   background-color: #e6e6e6;
 }
 
@@ -68,6 +100,7 @@
   border-radius: 0px 0px 20px 0px;
   overflow: hidden;
   margin-top: -5px;
+  transition: width 0.1s;
 }
 
 .slider-global.main-slider-container {
@@ -92,6 +125,10 @@
 
 .slider-global .main-slider-play {
   background: linear-gradient(90deg, #c39fe7 0%, #e08d96 100%);
+}
+
+.main-slider-play {
+  transition: width 0.1s;
 }
 
 .main-slider-hider {
@@ -184,8 +221,16 @@
   border-bottom-left-radius: 0.25rem;
 }
 
+.popup-cta.pay {
+  background-color: #8f35e8;
+  padding: 0 18px;
+  font-size: 18px;
+  height: 40px;
+}
+
 .main-form {
   height: 100%;
+  font-size: 14px;
 }
 
 .main-form-row {
@@ -197,7 +242,7 @@
 input.main-text-input {
   width: 100%;
   border-radius: 15px;
-  height: 45px;
+  height: 35px;
   background-color: #e6e1eb;
   border: none;
 }
@@ -217,7 +262,7 @@ input.main-text-input.price-input {
 select.main-select-input {
   width: 100%;
   border-radius: 15px;
-  height: 45px;
+  height: 35px;
   background-color: #e6e6e6;
 }
 
@@ -275,18 +320,23 @@ select.main-select-input:focus {
 .main-form-row div.main-tag-input .ti-input {
   width: 100%;
   border-radius: 15px;
-  height: 45px;
+  height: 35px;
   background-color: #e6e1eb;
-  border: none;
+  border: 1px transparent solid;
+  padding: 0;
 }
 
 .main-form-row div.main-tag-input .ti-new-tag-input {
   background-color: inherit;
   --tw-ring-color: 0;
+  outline-offset: 0;
   padding-top: 0.5rem;
   padding-right: 0.75rem;
   padding-bottom: 0.5rem;
   padding-left: 0.75rem;
+  --tw-ring-shadow:0;
+  --tw-ring-offset-shadow: 0;
+  box-shadow: 0;
 }
 
 .main-form-row div.main-tag-input .ti-new-tag-input-wrapper {
@@ -310,7 +360,8 @@ select.main-select-input:focus {
   color: black;
   height: 28px;
   justify-content: center;
-  margin-left: 7px;
+  margin-left: 5px;
+  margin-top: 1px;
 }
 
 li.ti-tag .ti-actions {
@@ -478,7 +529,7 @@ label.main-file-label-box.error {
   height: 28px;
   justify-content: center;
   margin-left: 7px;
-  margin-top: 8px;
+  margin-top: 4px;
   padding: 4px 9px;
   align-items: center;
   display: flex;
@@ -498,7 +549,7 @@ label.main-file-label-box.error {
 .currency-icon {
   position: absolute;
   margin-left: 150px;
-  margin-top: 10px;
+  margin-top: 7px;
 }
 
 .currency-icon .doller-sign {
@@ -507,6 +558,7 @@ label.main-file-label-box.error {
 
 .currency-icon .ETH-sign {
   padding-top: 4px;
+  margin-top: -2px;
 }
 
 .main-file-name {
@@ -537,6 +589,11 @@ label.main-file-label-box.error {
   left: 400px;
 }
 
+.main-file-name.tooltip .tooltiptext {
+  top: -5px;
+  left: 105%;
+}
+
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
@@ -546,6 +603,7 @@ label.main-file-label-box.error {
   border-radius: 25px;
   box-shadow: 8px 10px 10px rgba(0, 0, 0, 0.16);
   width: 600px;
+  max-height: 90vh;
 }
 
 .popup-bg-blurr {
@@ -561,7 +619,7 @@ label.main-file-label-box.error {
 
 .popup-title {
   text-align: center;
-  font-size: 104px;
+  font-size: 80px;
   margin-top: 35px;
 }
 
@@ -574,7 +632,7 @@ label.main-file-label-box.error {
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
-  margin-top: 80px;
+  margin-top: 55px;
   padding-left: 35px;
   padding-right: 35px;
 }
@@ -582,7 +640,7 @@ label.main-file-label-box.error {
 .popup-content {
   margin-left: 100px;
   margin-right: 100px;
-  margin-top: 70px;
+  margin-top: 30px;
 }
 
 .popup-cta {
@@ -604,8 +662,8 @@ label.main-file-label-box.error {
   font-size: 34px;
 }
 
-.loader {
-  border-top-color: #3498db;
+div.loader {
+  border-top-color: #8f35e8;
   -webkit-animation: spinner 1.5s linear infinite;
   animation: spinner 1.5s linear infinite;
 }
@@ -723,9 +781,7 @@ label.main-file-label-box.error {
   right: 16vw;
   position: fixed;
   top: 9vw;
-  background: -webkit-linear-gradient(0deg, #8f35e8 0%, #e20000 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white;
   font-size: 9vw;
   -webkit-text-decoration: underline white;
           text-decoration: underline white;
@@ -823,7 +879,6 @@ label.main-file-label-box.error {
 }
 
 .main-drop-list {
-  margin-left: 50px;
   padding-left: 50px;
   margin-top: -15px;
   padding-top: 15px;
@@ -831,8 +886,14 @@ label.main-file-label-box.error {
 
 .main-drop-list .nav-link {
   font-size: 25px;
+  padding-left: 30px;
   padding-right: 30px;
-  border-bottom: white solid 2px;
+}
+
+.main-drop-list .nav-link:first-child {
+  padding-left: 15px;
+  border-left: white solid 2px;
+  border-radius: 0px 0px 0px 15px;
 }
 
 .main-noti-span {
@@ -998,7 +1059,7 @@ input.search-text-input-feed:focus {
 input.search-text-input-nav {
   border-radius: 15px 0px 0px 15px;
   font-size: 20px;
-  height: 60px;
+  height: 40px;
   width: 300px;
   border: none;
 }
@@ -1017,12 +1078,17 @@ button.search-button-input-feed {
   width: 180px;
 }
 
+form.nav-search-form {
+  padding-top: 6.5px;
+  margin-left: 2.5rem;
+}
+
 button.search-button-input-nav {
   background-color: #8f35e8;
   color: white;
   border-radius: 0px 15px 15px 0px;
   font-size: 34px;
-  height: 60px;
+  height: 40px;
   width: 50px;
 }
 
@@ -1032,12 +1098,41 @@ button.search-button {
 
 .main-feed-div {
   min-height: calc(100vh - 125px);
+  margin-bottom: 100px;
 }
 
 .nav-search-div {
   height: -webkit-min-content;
   height: -moz-min-content;
   height: min-content;
+}
+
+.details {
+  display: none;
+}
+
+.settingsContent {
+  margin-top: 110px;
+}
+
+@media all and (max-width: 1000px) {
+  .details {
+    display: block;
+    color: white;
+    font-size: 25px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .responsive * {
+    display: none;
+  }
+
+  .mobileHeader {
+    padding-top: 17.5%;
+    padding-left: 25%;
+    padding-right: 25%;
+  }
 }
 /*! tailwindcss v2.2.17 | MIT License | https://tailwindcss.com */
 

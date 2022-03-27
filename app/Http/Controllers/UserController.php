@@ -80,11 +80,15 @@ class UserController extends Controller
         //     ->where('users.username', '=', $username)
         //     ->get()
         //     ->toArray();
-        return Inertia::render('Profile', [
-            'logedIn' => Auth::id(),
-            'userData' => $res[0],
-
-        ]);
+        // dd($res);
+        if(isset($res[0])){
+            return Inertia::render('Profile', [
+                'logedIn' => Auth::id(),
+                'userData' => $res[0],
+            ]);
+        }else{
+            return Inertia::render('Error', ['msg' => 'This user doesn\'t exist']);
+        }
     }
 
     /**
@@ -145,7 +149,7 @@ class UserController extends Controller
             'description' => $request->desc,
         ]);
 
-        return "/myprofile/{$request->username}";
+        return "/profile/{$request->username}";
     }
 
     /**

@@ -113,7 +113,7 @@ input.search-text-input-feed:focus {
 input.search-text-input-nav {
     border-radius: 15px 0px 0px 15px;
     font-size: 20px;
-    height: 60px;
+    height: 40px;
     width: 300px;
     border: none;
 }
@@ -129,13 +129,16 @@ button.search-button-input-feed {
     height: 110px;
     width: 180px;
 }
-
+form.nav-search-form{
+    padding-top: 6.5px;
+    margin-left: 2.5rem;
+}
 button.search-button-input-nav {
     background-color: $rp-purple;
     color: white;
     border-radius: 0px 15px 15px 0px;
     font-size: 34px;
-    height: 60px;
+    height: 40px;
     width: 50px;
 }
 
@@ -144,7 +147,35 @@ button.search-button {
 }
 .main-feed-div {
     min-height: calc(100vh - 125px);
+    margin-bottom: 100px;
 }
 .nav-search-div {
     height: min-content;
+}
+
+.details {
+    display: none;
+}
+.settingsContent {
+    margin-top: 110px;
+}
+
+@media all and (max-width: 1000px) {
+    .details {
+        display: block;
+        color: white;
+        font-size: 25px;
+        text-align: center;
+        font-weight: $semibold;
+    }
+
+    .responsive * {
+        display: none;
+    }
+
+    .mobileHeader {
+        padding-top: 17.5%;
+        padding-left: 25%;
+        padding-right: 25%;
+    }
 }

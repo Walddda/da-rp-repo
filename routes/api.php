@@ -15,6 +15,7 @@ Route::post('delete/{id}', [AxiosController::class, 'deleteTrack']);
 Route::post('deleteUser/{id}', [UserController::class, 'deleteUser']);
 Route::post('transaction',  [AxiosController::class, 'transaction']);
 Route::get('transactions',  [AxiosController::class, 'getTransactions']);
+Route::get('transactions/{beat}/{user}',  [AxiosController::class, 'getTransaction']);
 Route::post('counter', [AxiosController::class, 'downloadCounter']);
 
 // Route::middleware(['auth:api'])->group(function () {

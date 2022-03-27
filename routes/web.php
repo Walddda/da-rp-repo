@@ -3,11 +3,10 @@
 use App\Http\Controllers\BeatController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\FeedController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\FileUpload;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Application;
@@ -28,14 +27,6 @@ use SebastianBergmann\Environment\Console;
 |
 */
 
-Route::get('/storage/{any}', function () {
-    return Inertia::render('Error', []);
-});
-
-// Routes for File Upload
-Route::get('/upload', [FileUpload::class, 'createForm']);
-
-Route::post('/upload', [FileUpload::class, 'fileUpload'])->name('fileUpload');
 
 //Routes for our pages
 
@@ -45,67 +36,34 @@ Route::get('/admin', function () {
     ]);
 })->middleware(['auth', 'verified']);
 
-Route::get('/feed', [FeedController::class, 'show']);
-Route::get('/feeed', function () {
-    return Inertia::render('Feed', [
-        'token' => csrf_token(),
-    ]);
-});
-// Route::get('/fed', [FeedController::class, 'showAxios']);
 Route::get('/', function () {
     return Inertia::render('FeedNew', [
         'token' => csrf_token(),
     ]);
 });
-
 Route::post('/', function (Request $req) {
-    return Inertia::render('Feed', [
+    return Inertia::render('FeedNew', [
         'token' => csrf_token(),
         'searchTerm' => $req->input('searchTerm'),
+        'givenSearchTerm' => $req->input('searchTerm'),
     ]);
 })->name('home');
-// ->middleware('guest')
-// ->name('register');
-
-// Route::get('/feed', [FeedController::class, 'show']);
-
 
 Route::get('/settings', function () {
     return Inertia::render('Settings', []);
 })->middleware(['auth', 'verified']);
 
-Route::get('/wave', function () {
-    return Inertia::render('Wave', []);
-});
-Route::get('/myprofile/{username}', [UserController::class, 'show']);
-Route::post('/myprofile', [UserController::class, 'update'])->name('myprofile');
-
+Route::get('/profile/{username}', [UserController::class, 'show']);
+Route::post('/profile', [UserController::class, 'update'])->name('profile');
 Route::post('/wallet', [WalletController::class, 'save'])->name('wallet');
-
-
-// Routes for Auth-Pages
-Route::get('/old', function () {
-    return Inertia::render('Welcome', [
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/share', function () {
-    return Inertia::render('Share');
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/test', [BeatController::class, 'show']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', 'RoleController');
     Route::resource('users', 'UserController');
     Route::resource('blogs', 'BlogController');
 });
+
+Route::get('/track/{id}', [BeatController::class, 'singletrack']);
 
 
 // Routes for E-Mail-Verification
@@ -126,23 +84,29 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-// Route::get('/profile', function () {
-//     // Only verified users may access this route...
-// })->middleware('verified');
 
+//TODO in api.php
 Route::get('/unreadNotifications', [NotificationController::class, 'unreadNotifications']);
 Route::get('/markNotificationsAsRead', [NotificationController::class, 'markAsRead']);
 
 Route::get('/privacy', function () {
     return view('privacyPolicy');
 });
-
 Route::get('/terms', function () {
     return view('terms');
 });
 
+// Passwort aendern by Gab
+//TODO in API??
+Route::post('/change-password', [ChangePasswordController::class, 'updatePassword']);
 
 
-// Route::get('post/like/{id}', ['as' => 'post.like', 'uses' => 'LikeController@likePost']);
+
 
 require __DIR__ . '/auth.php';
+Route::get('/storage/{any?}', function ($any) {
+    return Inertia::render('Error', []);
+})->where('any', '(.*)');
+Route::get('/{any?}', function ($any) {
+    return Inertia::render('Error', []);
+})->where('any', '(.*)');

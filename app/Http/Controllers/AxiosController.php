@@ -20,17 +20,48 @@ class AxiosController extends Controller
 {
     public function getTracks(Request $request)
     {
+        // dd(json_decode($request->profile)->id);
         // var_dump(sizeOf(json_decode($request->profile)));
         if (strlen($request->profile) > 2) {
+            // dd('yes');
+            // dd(json_decode($request->profile));
+            if (json_decode($request->profile)->transact) {
+
+                $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.transactions', 'isBeat.getCover', 'isBeat.likes2')
+                    ->has('isBeat.fromUser')
+                    ->join('beats', function ($join) {
+                        $join->on('beats.id', '=', 'files.beat_id');
+                    })
+                    ->join('transactions', function ($join) {
+                        $join->on('beats.id', '=', 'transactions.beat_id');
+                    })
+                    ->where('transactions.buyer_id', '=', json_decode($request->profile)->id)
+                    ->orderBy('beats.created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            } else {
+                $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
+                    ->has('isBeat.fromUser')
+                    ->join('beats', function ($join) {
+                        $join->on('beats.id', '=', 'files.beat_id');
+                    })
+                    ->where('beats.user_id', '=', json_decode($request->profile)->id)
+                    ->orderBy('beats.created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            }
+            // dd($res);
+            return response()->json($res);
+        } else if ($request->id){
             $res = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')
-                ->has('isBeat.fromUser')
-                ->join('beats', function ($join) {
-                    $join->on('beats.id', '=', 'files.beat_id');
-                })
-                ->where('beats.user_id', '=', json_decode($request->profile)->id)
-                ->orderBy('beats.created_at', 'desc')
-                ->get()
-                ->toArray();
+            ->has('isBeat.fromUser')
+            ->join('beats', function ($join) {
+                $join->on('beats.id', '=', 'files.beat_id');
+            })
+            ->where('beats.id', '=', $request->id)
+            ->orderBy('beats.created_at', 'desc')
+            ->get()
+            ->toArray();
             return response()->json($res);
         } else if (!$request->keywords) {
             $files = File::with('isBeat', 'isBeat.fromUser', 'isBeat.getCover', 'isBeat.likes2')->has('isBeat.fromUser')
@@ -111,16 +142,16 @@ class AxiosController extends Controller
             'beat' => 'required|max:10240',
             'cover' => 'mimes:png,jpg',
             'title' => 'required|max:255',
+            'selectedKey' => 'required|max:3',
             'ethPrice' => array('required', 'digits_between:1,10'),
             'type' => array('required', 'regex:/(sample|beat)/'),
             'bpm' => array('required', 'regex:/\d+/'),
         ]);
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors(), 'lool' => 'saad']);
+            return response()->json([
+                'error' => $validator->errors(),
+            ]);
         }
-
-        // 'type' => 'required|regex:(sample|beat)',
-        // 'bpm' => 'required|regex:(\d*)',
 
 
         $fileModel = new File;
@@ -149,6 +180,7 @@ class AxiosController extends Controller
             $path_name = time() . '_' . $req->input('userID') . '_' . rand(1000000, 9999999) . '_' . $beat_id;
 
             $filePath = $req->file('beat')->storePubliclyAs('uploads', $path_name . '.' . $req->file('beat')->getClientOriginalExtension(), 'public');
+            // $filePath = $req->file('beat')->storePubliclyAs('uploads', $path_name . '.png', 'public');
 
             $fileModel->name = time() . '_' . $req->file('beat')->getClientOriginalName();
             $fileModel->file_path = '/storage/' . $filePath;
@@ -195,11 +227,11 @@ class AxiosController extends Controller
             // dd('test');
             $beatModel->save();
             return response()->json([
+                'id' => $beat_id,
                 'path' => $filePath,
                 'success' => 'File has been uploaded.',
             ]);
         } else {
-
             return response()->json([
                 'path' => $filePath,
                 'error' => $errorMsg[$errorKey],
@@ -256,14 +288,8 @@ class AxiosController extends Controller
         ]);
     }
 
-
-
-
-
     public function transaction(Request $req)
     {
-        // dd($req);
-        // var_dump($req);
         $transaction = new Transaction();
 
         $transaction->hash = $req->input('hash');
@@ -288,36 +314,75 @@ class AxiosController extends Controller
         $transactions = DB::table('transactions')->get();
         return response()->json($transactions);
     }
+    public function getTransaction(Request $request)
+    {
+        // dd($request->user);
+        $transaction = DB::table('transactions')
+        ->where('beat_id', $request->beat)
+        ->where('buyer_id', $request->user)
+        ->get();
+        return response()->json($transaction);
+    }
 
     public function downloadCounter(Request $request)
     {
-        $downloadCount = Beat::where('id', $request->input('beat_id'))->value('download_count') + 1;
+        $downCount = sizeOf(Transaction::where('beat_id', '=', $request->input('beat_id'))->get()->toArray());
 
         Beat::where('id', $request->input('beat_id'))
-            ->update(['download_count' => $downloadCount]);
+            ->update(['download_count' => $downCount]);
 
-
-
-        $count = Beat::where('id', $request->input('beat_id'))->value('download_count');
 
         $receiver = User::where('id', '=', $request->input('seller_id'))->first();
 
         $beat = Beat::where('id', $request->input('beat_id'))->first();
 
-        if ($count == 10) {
+
+        if ($beat['cover_id'] <= 4) {
+            switch (true) {
+                case ($downCount <= '9'):
+                    $newCover = 1;
+                    break;
+                case ($downCount <= '99'):
+                    $newCover = 2;
+                    break;
+                case ($downCount <= '999'):
+                    $newCover = 3;
+                    break;
+                case ($downCount >= '1000'):
+                    $newCover = 4;
+                    break;
+                default:
+                    $newCover = 1;
+                    break;
+            }
+            $currFile = File::with('isBeat', 'isBeat.getCover')
+                ->has('isBeat.getCover')
+                ->join('beats', function ($join) {
+                    $join->on('beats.id', '=', 'files.beat_id');
+                })
+                ->where('beats.id', '=', $request->input('beat_id'))
+                ->update([
+                    'beats.cover_id' => $newCover,
+                ]);
+        } else {
+            $newCover = 'old';
+        }
+
+        if ($downCount == 10) {
             Notification::send($receiver, new DownloadCountNotification($beat));
-        } elseif ($count == 100) {
+        } elseif ($downCount == 100) {
             Notification::send($receiver, new DownloadCountNotification($beat));
-        } elseif ($count == 200) {
+        } elseif ($downCount == 200) {
             Notification::send($receiver, new DownloadCountNotification($beat));
-        } elseif ($count == 500) {
+        } elseif ($downCount == 500) {
             Notification::send($receiver, new DownloadCountNotification($beat));
-        } elseif ($count == 1000) {
+        } elseif ($downCount == 1000) {
             Notification::send($receiver, new DownloadCountNotification($beat));
         }
 
         return response()->json([
             'success' => 'Download saved',
+            'cov' => $newCover,
         ]);
     }
 

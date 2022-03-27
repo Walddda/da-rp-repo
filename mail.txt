@@ -14,3 +14,13 @@ Wir wollten Sie fragen, ob Ihnen dieses Problem eventuell bekannt vorkommt, oder
 
 Mit freundlichen Grüßen und ein schönes Wochenende
 Samuel Gerhartinger
+
+
+
+
+
+public function deleteTrack($id, Request $request){
+    Beat::where('id', $id)
+        ->delete();
+}
+

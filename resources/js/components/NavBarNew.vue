@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 h-32 w-full" :style="[backgroundOp >= 1 ? {backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'} : [backgroundOp || backgroundOp == 0 ? '' : {backgroundColor: 'rgb(0,0,0)'} ]]">
+  <nav class="fixed top-0 h-32 w-full" id="feedNav" :style="[backgroundOp >= 1 ? {backgroundColor: 'rgba(0,0,0,'+backgroundOp+')'} : [backgroundOp || backgroundOp == 0 ? '' : {backgroundColor: 'rgb(0,0,0)'} ]]"  ref="feedNav">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
     <div class="mx-auto px-2">
         <div class="relative flex justify-between h-32 pt-8">
@@ -8,15 +8,18 @@
                 <div v-if="profile">
                     <span class="nav-link main-noti-span" @click="showNoti = !showNoti">
                         <i class="fa fa-bell main-noti-icon" id="notify_icon"></i>
-                        <span style="color:white" id="notifiy_num" class="main-noti-indic" v-show="unreadNoti > 0"> {{unreadNoti}}</span>
+                        <span style="color:white" id="notifiy_num" class="main-noti-indic" v-show="unreadNoti > 0 && unreadNoti < 10"> {{ unreadNoti }}</span>
+                        <span style="color:white; padding-left: 2px;" id="notifiy_num" class="main-noti-indic" v-show="unreadNoti > 0 && unreadNoti > 9">&#32;!</span>
                     </span>
+
                     <div class="main-noti-back" @click="hideNotis" v-show="showNoti"></div>
-                    <a :href="userhref" @mouseenter="mouseEnter" @mouseleave="mouseLeavesMeth" class="nav-link ml-12">{{username}}</a>
+                    <a href="/" @mouseenter="mouseEnter" @mouseleave="mouseLeavesMeth" class="nav-link ml-12">Home</a>
                     <a v-for="item in navigationProfile" :key="item.name" :href="item.href" @click="item.click" @mouseover="item.mouseEnter" class="nav-link pl-10" :style="item.style" >{{ item.name }}</a>
                     <span class="nav-link pl-10 inline" @click="toggleSearch" >Search</span>
                     <notification @unreadCount="(n) => unreadNoti = n" v-show="showNoti"></notification>
+
                     <div v-if="showDrop" class="absolute flex main-drop-list" @mouseleave="mouseLeavesMeth" @mouseenter="mouseEnter">
-                        <a :href="'/myprofile/' + this.$page.props.auth.user.username" class="nav-link">
+                        <a :href="'/profile/' + this.$page.props.auth.user.username" class="nav-link">
                             Profile
                         </a>
                         <a href="/" class="nav-link">Home</a>
@@ -37,7 +40,8 @@
                 <div v-else >
                     <span class="nav-link main-noti-span" @click="showNoti = !showNoti">
                         <i class="fa fa-bell main-noti-icon" id="notify_icon"></i>
-                        <span style="color:white" id="notifiy_num" class="main-noti-indic" v-show="unreadNoti > 0"> {{unreadNoti}}</span>
+                        <span style="color:white" id="notifiy_num" class="main-noti-indic" v-show="unreadNoti > 0 && unreadNoti < 10"> {{ unreadNoti }}</span>
+                        <span style="color:white; padding-left: 2px;" id="notifiy_num" class="main-noti-indic" v-show="unreadNoti > 0 && unreadNoti > 9">&#32;!</span>
                     </span>
                     <div class="main-noti-back" @click="hideNotis" v-show="showNoti"></div>
                     <a :href="userhref" @mouseenter="mouseEnter" @mouseleave="mouseLeavesMeth" class="nav-link ml-12">{{username}}</a>
@@ -45,7 +49,7 @@
                     <span class="nav-link ml-10 inline cursor-pointer" @click="toggleSearch" :style="[this.backgroundOp <= 0.9 ? {display: 'none'} : this.backgroundOp <= 1 ?  {opacity: (-4+(this.backgroundOp/0.2)), display: 'inline'} : {display:'inline'}]">Search</span>
                     <notification @unreadCount="(n) => unreadNoti = n" v-show="showNoti"></notification>
                     <div v-if="showDrop" class="absolute flex main-drop-list" @mouseleave="mouseLeavesMeth" @mouseenter="mouseEnter">
-                        <a :href="'/myprofile/' + this.$page.props.auth.user.username" class="nav-link">
+                        <a :href="'/profile/' + this.$page.props.auth.user.username" class="nav-link">
                             Profile
                         </a>
                         <a href="/settings" class="nav-link">
@@ -70,6 +74,7 @@
             <search :keywords="searchTerm" v-if="showSearch || searchTerm " loc="nav" :feed="feed"
                 :style="[backgroundOp <= 0.9 ? {opacity: 0} : backgroundOp <= 1 ?  {opacity: (-4+(backgroundOp/0.2))} : '']"
             ></search>
+            <div class="flex flex-auto"></div>
             <div class="pr-8">
                 <a href="/">
                 <!-- <img src="/storage/assets/logo_w.png" loading="lazy" class="h-44 w-auto"/> -->
@@ -77,13 +82,13 @@
                         :style="[backgroundOp >= 1 || (!backgroundOp && backgroundOp != 0) ? {marginTop: '-95px'} : [backgroundOp >= 0.88 ? {marginTop: ((-83.6+95*backgroundOp)/-0.12)+'px'} : '']]"
                     >
                         <defs>
-                            <linearGradient id="linear-gradient" x1="28.38" y1="511.63" x2="1249.68" y2="511.63" gradientUnits="userSpaceOnUse">
+                            <linearGradient id="gradient" x1="28.38" y1="511.63" x2="1249.68" y2="511.63" gradientUnits="userSpaceOnUse">
                                 <stop offset="0.1" stop-color="#8f35e8" />
                                 <stop offset="0.9" stop-color="#e20000" />
                             </linearGradient>
                         </defs>
                         <path d="M995.55,314a282.13,282.13,0,0,0-32,1.74,288.52,288.52,0,0,0-83.46,20,251.33,251.33,0,0,0-62.67,35A244.29,244.29,0,0,0,755,336.14,277.32,277.32,0,0,0,672.53,316,251.74,251.74,0,0,0,639,314a299.45,299.45,0,0,0-32.71,1.74,305.13,305.13,0,0,0-83.14,20A268.12,268.12,0,0,0,460.61,371a261,261,0,0,0-62.47-35.19A282.93,282.93,0,0,0,316,316,251.74,251.74,0,0,0,282.5,314C142.38,314,28.38,402.71,28.38,511.76s114,197.52,254.12,197.52a283,283,0,0,0,32-1.74,288.13,288.13,0,0,0,83.4-20,250.06,250.06,0,0,0,62.68-35,245.77,245.77,0,0,0,62.46,34.61,276.47,276.47,0,0,0,82.41,20.1A254.22,254.22,0,0,0,639,709.28a297.67,297.67,0,0,0,32.65-1.74,305.57,305.57,0,0,0,83.2-20,267.33,267.33,0,0,0,62.52-35.24,261.76,261.76,0,0,0,62.51,35.19A282.37,282.37,0,0,0,962,707.22a254.22,254.22,0,0,0,33.55,2.06c140.12,0,254.13-88.74,254.13-197.78S1135.67,314,995.55,314Zm0,350.77a59.21,59.21,0,0,1-6.91-.26l-.68,0a261.55,261.55,0,0,1-81.51-14.51,217.27,217.27,0,0,1-56.29-28.44,178.34,178.34,0,0,0,31.65-51.38,35.6,35.6,0,0,0,2.32-6.49,155.21,155.21,0,0,0-.1-104.56l-4.22-11.66L871,456.21c-.85.84-1.8,1.69-2.85,2.69-1.43,1.37-3.06,3-5,4.85l-18.2,18.89,1,4.22a110.68,110.68,0,0,1,2.64,24.64,118.48,118.48,0,0,1-2.38,23.84c-5,22.69-17,44.32-35,62.84a97.65,97.65,0,0,1-13,12.5l-.73.63a54,54,0,0,1-6.18,5.12c-17.83,14-39.25,25.37-63.73,33.82a264.67,264.67,0,0,1-82.88,14.19l-1,.1a31.68,31.68,0,0,1-4.64.21,59,59,0,0,1-6.91-.26l-.69,0a254.44,254.44,0,0,1-81.51-14.51,217.93,217.93,0,0,1-56.29-28.38,167.9,167.9,0,0,0,27.12-41.73,103.13,103.13,0,0,0,6.75-15.94,151.28,151.28,0,0,0,9.13-52.12,153.05,153.05,0,0,0-9.13-52.7l-3.9-10.71L515,455.79a52.49,52.49,0,0,0-5.65,5.85L488.83,484.8l.79,3.91a107.89,107.89,0,0,1,2.43,23.05,114.68,114.68,0,0,1-2.43,23.69l-.1.84c-5.17,22.42-17,43.84-34.19,61.83a176,176,0,0,1-13.56,12.66l-.52.53a43,43,0,0,1-6.28,5.07l-.48.37c-17.83,13.92-39.3,25.32-63.78,33.76a264.86,264.86,0,0,1-83.14,13.93l-1.22.1a21.16,21.16,0,0,1-3.85.21C167,664.75,73,596.12,73,511.76S167,358.5,282.5,358.5a55.63,55.63,0,0,1,6.86.27l.74.05a261.86,261.86,0,0,1,81.51,14.51,218.35,218.35,0,0,1,56.29,28.43,178.6,178.6,0,0,0-31.71,51.39,40.42,40.42,0,0,0-2.32,6.49A155.94,155.94,0,0,0,394,564.2l4.27,11.66,8.76-8.81c.84-.84,1.79-1.69,2.85-2.69,1.47-1.37,3.11-3,5-4.86l18.25-18.88-1-4.22a107.75,107.75,0,0,1-2.69-24.64,117.87,117.87,0,0,1,2.43-23.85c5-22.68,17-44.31,35-62.83a98.08,98.08,0,0,1,13-12.5l.74-.63a60.3,60.3,0,0,1,6.22-5.12c17.78-14,39.26-25.38,63.73-33.82a264.14,264.14,0,0,1,82.83-14.19l1.06-.1a30.19,30.19,0,0,1,4.64-.22,56.12,56.12,0,0,1,6.86.27l.74.05a254.65,254.65,0,0,1,81.5,14.51,218.57,218.57,0,0,1,56.29,28.38,166,166,0,0,0-27.11,41.73,103.57,103.57,0,0,0-6.81,15.93,152.55,152.55,0,0,0-9.07,52.13,154.44,154.44,0,0,0,9.07,52.7l3.91,10.71,8.7-7.44a51.12,51.12,0,0,0,6-6.22l20.16-22.79-.85-3.91a112,112,0,0,1-2.43-23,119,119,0,0,1,2.43-23.69l.16-.84c5.12-22.43,17-43.79,34.29-61.94,4.59-4.54,8.86-8.86,13.4-12.56l.58-.52a42.49,42.49,0,0,1,6.28-5.07l.47-.37c17.78-13.93,39.25-25.32,63.73-33.76a265.17,265.17,0,0,1,83.15-13.93l1.21-.1a20.82,20.82,0,0,1,3.9-.22c115.54,0,209.55,68.64,209.55,153S1111.09,664.75,995.55,664.75Z" 
-                            transform="translate(-16.06 -15.4)" style="fill:url(#linear-gradient)" 
+                            transform="translate(-16.06 -15.4)" style="fill:url(#gradient)" 
                             :style="[backgroundOp >= 1 || (!backgroundOp && backgroundOp != 0) ? {fill: '#fff'} : '']"
                         />
                         <path d="M156.34,149.7c0,42.4-25.89,68.87-61.75,68.87-22.19,0-37-11.1-44.67-27h-.57a135.86,135.86,0,0,1-3.41,25.32H16.06V16H55v86.22c7.4-12,20.2-21.35,41.54-21.35C130.45,80.84,156.34,105.89,156.34,149.7Zm-39.55,0c0-22.19-11.38-36.13-30.73-36.13-19.92,0-31,17.07-31,31.87v8.82c0,15.93,11.67,31.58,31.87,31.58C105.12,185.84,116.79,171.9,116.79,149.7Z" 
@@ -116,7 +121,6 @@
 import Search from '@/Components/Search.vue';
 import { UploadIcon, MenuIcon, XIcon } from '@heroicons/vue/outline';
 import Notification from "@/Components/Notification.vue";
-import Web3 from 'web3/dist/web3.min.js'
 import { useForm } from '@inertiajs/inertia-vue3'
 
 // const navigation = [
@@ -133,7 +137,6 @@ export default {
         UploadIcon,
         Notification,
         useForm,
-        Web3,
     },
     props:{
         searchTerm: {type: String, required: false},
@@ -152,6 +155,8 @@ export default {
         unreadNoti: 0,
         username: '',
         userhref: '',
+        accounts: '',
+        address: '',
         navigation: [
                     { name: 'Login', href: '/login', current: false, click: '' },
                     { name: 'Register', href: '/register', current: false, click: '' },
@@ -161,7 +166,6 @@ export default {
                     { name: 'Wallet', href: '#', current: false, click: this.connect },
                     ],
         navigationProfile: [
-                    { name: 'Home', href: '/', current: false, click: '' },
                     { name: 'Upload', href: '#', current: false, click: this.toggleUpload },
                     { name: 'Wallet', href: '#', current: false, click: this.connect },
                     ],
@@ -174,28 +178,29 @@ export default {
         },
         
         toggleUpload(){
-            if (this.$page.props.auth.user.eth_address) {
+            if (ethereum.selectedAddress) {
                 this.emitter.emit('openPopupUpload')
             } else {
-                alert('Connect your wallet before uploading')
+                this.emitter.emit('error', 'Connect Wallet to upload')
             }
         },
         async connect() {
-            if (typeof window.ethereum !== 'undefined') {
+            if (this.$page.props.auth.user) {
+                if (typeof window.ethereum !== 'undefined') {
+                    this.accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+                    this.address = this.accounts[0]
 
+                    this.emitter.emit('success', 'Your wallet was successfully connected.')
 
-                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                const address = accounts[0];
+                    console.log(this.address)
 
+                    return axios.post('/wallet', {address: this.address})
 
-                this.emitter.emit('success', 'Your Wallet was successfully connected.')
-                
-
-                
-
-                return useForm({ address }).post(this.route('wallet'))
+                } else {
+                    this.emitter.emit('error', 'MetaMask not detected')
+                }
             } else {
-                alert('MetaMask not detected. Please try again from a MetaMask enabled browser.')
+                this.emitter.emit('error', 'Login to connect a wallet')
             }
         },
         mouseEnter() {
@@ -221,10 +226,14 @@ export default {
         if(this.$page.props.auth.user){
             // this.navigationLoged[0].name = this.$page.props.auth.user.username
             this.username = this.$page.props.auth.user.username
-            // this.navigationLoged[0].href = '/myprofile/'+this.$page.props.auth.user.username
-            this.userhref = '/myprofile/'+this.$page.props.auth.user.username
+            // this.navigationLoged[0].href = '/popfile/'+this.$page.props.auth.user.username
+            this.userhref = '/profile/'+this.$page.props.auth.user.username
         }
         
+    },
+
+    created() {
+        ethereum.on('accountsChanged', this.connect)
     }
 
 }
