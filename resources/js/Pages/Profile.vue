@@ -43,11 +43,11 @@
                             </label>
                             <br>
                             <label class="pd-email">{{form.email}} </label> <br><br>
-                            <label class="pd-location">{{form.location}}</label> <br>
+                            <label v-if="form.location !== 'null'" class="pd-location">{{form.location}}</label> <br>
                             <label class="pd-joined">joined {{form.joined}} </label>
                         </div>
-                        <div class="profile-details-right">
-                            <label class="pd-desc">{{form.description}} </label>
+                        <div v-if="form.description !== 'null'" class="profile-details-right">
+                            <label class="pd-desc" >{{form.description}} </label>
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@ export default {
                 first_name: this.userData.first_name,
                 last_name: this.userData.last_name,
                 email: this.userData.email,
-                location: this.dataLabel(this.userData.location),
+                location: this.userData.location,
                 description: this.userData.description,
                 joined: this.joinedReadable(this.userData.created_at),
                 password: this.userData.password,
@@ -172,14 +172,14 @@ export default {
 
     methods: {
         onScroll (event) {
-            // console.log(window.scrollY);
+            // //console.log(window.scrollY);
             this.scrollY = window.scrollY;
             if(window.scrollY <= 200){
                 this.toggleScrollView = false;
             }else{
                 this.toggleScrollView = true;
             }
-            // console.log(this.backgroundOp)
+            // //console.log(this.backgroundOp)
         },
         submit() {
             this.form.post(this.route('profile'), {
@@ -195,9 +195,9 @@ export default {
             } return false
         },
         dataLabel(x){
-            // console.log('hey')
+            // //console.log('hey')
             // const list = countries.getNames('en', { select: 'official' })
-            // console.log(Object.keys(list).map((key) => ({ value: key, label: list[key] })))
+            // //console.log(Object.keys(list).map((key) => ({ value: key, label: list[key] })))
             // return Object.keys(list).map((key) => ({ value: key, label: list[key] }))[x]
             return countries.getName(x, "en", {select: "alias"})
         },
@@ -205,7 +205,7 @@ export default {
             axios.get('/api/beats')
             .then(response => {
                 if(!response.data.length){
-                    console.info('empty')
+                    // console.info('empty')
                 }else{
                     this.allFiles = response.data
                     //console.info('finish: ');
@@ -242,45 +242,45 @@ export default {
     mounted() {
         this.emitter.on("closePopupEdit", () => {
             this.showPopupEdit = false;
-            console.info('cl')
+            // console.info('cl')
         });
 
         this.emitter.on("openPopupEdit", track => {
-            console.log(track)
+            //console.log(track)
             this.showPopupEdit = true;
             this.editTrack = track;
-            console.info('op')
+            // console.info('op')
         });
 
         this.emitter.on("closePopupUpload", () => {
             this.showPopupUpload = false;
-            console.info('cl')
+            // console.info('cl')
         });
 
         this.emitter.on("openPopupUpload", () => {
             this.showPopupUpload = true;
-            console.info('op')
+            // console.info('op')
         });
 
         this.emitter.on("closePopupPayment", () => {
             this.showPopupPayment = false;
-            console.info('cl')
+            // console.info('cl')
         });
 
         this.emitter.on("openPopupPayment", track => {
             this.paymentTrack = track;
             this.showPopupPayment = true;
-            console.info('op')
+            // console.info('op')
         });
 
         this.emitter.on("success", message => {
-            console.log(message)
+            //console.log(message)
             this.messageSuccess = message;
             this.showSuccess = true;
         })
 
         this.emitter.on("error", message => {
-            console.log(message)
+            //console.log(message)
             this.messageError = message;
             this.showError = true;
         })
