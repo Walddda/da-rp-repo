@@ -149,9 +149,8 @@
                         </div>
                         <div class="main-form-row">
                             <div class="main-form-element">
-                                <label class="custom-text-label" for="password_confirmation">Terms & Conditions*</label><br>
                                 <input type="checkbox" class="form-checkbox main-form-checkbox" name="terms" value="1" required>
-                                I agree with the <a href="/privacy" target="_blank"><strong>Privacy Policy</strong></a> and <a href="/terms" target="_blank"><strong>Terms & Conditions</strong></a>   
+                                I agree with the <a href="/privacy" target="_blank"><strong>Privacy Policy</strong></a> and <a href="/terms" target="_blank"><strong>Terms & Conditions</strong>*</a>   
                                 
                             </div>
                         </div>
@@ -242,20 +241,20 @@ export default {
         },
         
         changeKey (event) {
-            console.log(event.target.value);
+            
             this.form.location = event.target.value
         }, 
         leave(x){
-            console.log(this.mouseOpt + '-'+ this.mouseInp)
+            
             if(!this.mouseOpt && !this.mouseInp){
                 this.selectFocus = false;
                 this.keyClick = false;
             }
-            console.log(x)
+            
             var corrKey = false;
             this.countries.forEach(key => {
                 if(this.form.location == key.label){
-                    console.log(key.label)
+                    
                     corrKey = true;
                 }
             })

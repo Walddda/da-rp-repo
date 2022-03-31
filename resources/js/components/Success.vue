@@ -23,14 +23,14 @@ export default {
         }
     },
     created(){
-        // console.log('created');
+        // 
     },
     unmounted(){
-        // console.log('unmounted');
+        // 
         clearInterval(this.int)
         },
     mounted(){
-        // console.log('mounted');
+        // 
         console.info({success: this.text})
         this.length = 110;
         this.opac = 0;

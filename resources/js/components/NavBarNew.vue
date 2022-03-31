@@ -3,7 +3,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
     <div class="mx-auto px-2">
         <div class="relative flex justify-between h-32 pt-8">
-            <!-- <div class="flex items-center  space-x-4 h-16 pl-5" :style="[backgroundOp >= 1 ? {color: 'black'} : {color:'rgb('+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+','+(255-backgroundOp*255*2)+')'} ]"> -->
             <div class="flex flex-col items-center space-x-4 pl-5" :class="[showNoti ? 'h-32' : 'h-16']" v-if="$page.props.auth.user">
                 <div v-if="profile">
                     <span class="nav-link main-noti-span" @click="showNoti = !showNoti">
@@ -70,6 +69,7 @@
             </div>
             <div class="flex items-center  space-x-4 h-16 pl-5" v-else>
                 <a v-for="item in navigation" :key="item.name" :href="item.href" @click="item.click" class="nav-link pl-10" >{{ item.name }}</a>
+                    <span class="nav-link ml-10 pl-10 inline cursor-pointer" @click="toggleSearch" :style="[this.backgroundOp <= 0.9 ? {display: 'none'} : this.backgroundOp <= 1 ?  {opacity: (-4+(this.backgroundOp/0.2)), display: 'inline'} : {display:'inline'}]">Search</span>
             </div>
             <search :keywords="searchTerm" v-if="showSearch || searchTerm " loc="nav" :feed="feed"
                 :style="[backgroundOp <= 0.9 ? {opacity: 0} : backgroundOp <= 1 ?  {opacity: (-4+(backgroundOp/0.2))} : '']"
@@ -77,7 +77,6 @@
             <div class="flex flex-auto"></div>
             <div class="pr-8">
                 <a href="/">
-                <!-- <img src="/storage/assets/logo_w.png" loading="lazy" class="h-44 w-auto"/> -->
                     <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1245.94 693.88" class="h-44 w-auto"
                         :style="[backgroundOp >= 1 || (!backgroundOp && backgroundOp != 0) ? {marginTop: '-95px'} : [backgroundOp >= 0.88 ? {marginTop: ((-83.6+95*backgroundOp)/-0.12)+'px'} : '']]"
                     >
@@ -122,12 +121,6 @@ import Search from '@/Components/Search.vue';
 import { UploadIcon, MenuIcon, XIcon } from '@heroicons/vue/outline';
 import Notification from "@/Components/Notification.vue";
 import { useForm } from '@inertiajs/inertia-vue3'
-
-// const navigation = [
-//   { name: 'Sign in', href: '#', current: false, click: this.test },
-//   { name: 'Sign up', href: '#', current: false, click: '' },
-//   { name: 'Search', href: '#', current: false, click: this.toggleSearch },
-// ]
 
 export default {
 
@@ -189,13 +182,8 @@ export default {
                 if (typeof window.ethereum !== 'undefined') {
                     this.accounts = await ethereum.request({ method: 'eth_requestAccounts' })
                     this.address = this.accounts[0]
-
                     this.emitter.emit('success', 'Your wallet was successfully connected.')
-
-                    console.log(this.address)
-
                     return axios.post('/wallet', {address: this.address})
-
                 } else {
                     this.emitter.emit('error', 'MetaMask not detected')
                 }
@@ -210,7 +198,7 @@ export default {
             this.showDrop = false;
         },
         test(){
-            console.log('lol')
+            
         },
         showNotis(){
             this.showNoti = true;
@@ -219,21 +207,21 @@ export default {
             this.showNoti = false;
         },
         closeNoti(){
-            console.log('yes')
+            
         },
     },
     mounted(){
         if(this.$page.props.auth.user){
-            // this.navigationLoged[0].name = this.$page.props.auth.user.username
             this.username = this.$page.props.auth.user.username
-            // this.navigationLoged[0].href = '/popfile/'+this.$page.props.auth.user.username
             this.userhref = '/profile/'+this.$page.props.auth.user.username
         }
         
     },
 
     created() {
+        if (typeof window.ethereum !== 'undefined') {
         ethereum.on('accountsChanged', this.connect)
+        }
     }
 
 }

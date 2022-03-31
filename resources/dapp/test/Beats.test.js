@@ -35,7 +35,7 @@ contract('Beats', ([seller, buyer]) => {
         it('creates Beat', async () => {
             assert.equal(beatCount, 1)
             const event = result.logs[0].args
-            console.log(event)
+            
             assert.equal(event.id.toNumber(), 83, 'id is correct')
             assert.equal(event.title, 'Cool Beat', 'name is correct')
             assert.equal(event.price, web3.utils.toWei('1', 'Ether'), 'price is correct')
@@ -65,8 +65,8 @@ contract('Beats', ([seller, buyer]) => {
             purchase = await beats.purchaseBeat(83, { from: buyer, value: web3.utils.toWei('1', 'Ether') })
 
             const event = purchase.logs[0].args
-            console.log(purchase.logs[0].args)
-            console.log(beatCount)
+            
+            
             assert.equal(event.id.toNumber(), 83, 'id is correct')
             //assert.equal(event.title, 'Cool Beat', 'name is correct')
             assert.equal(event.price, web3.utils.toWei('1', 'Ether'), 'price is correct')
@@ -85,7 +85,7 @@ contract('Beats', ([seller, buyer]) => {
 
             assert.equal(newSellerBalance.toString(), excpectedBalance.toString())
 
-            //console.log(oldSellerBalance, newSellerBalance, price)
+            //
 
             await beats.purchaseBeat(24, { from: buyer, value: web3.utils.toWei('1', 'Ether') }).should.be.rejected
 

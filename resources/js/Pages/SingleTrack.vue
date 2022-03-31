@@ -66,25 +66,22 @@ export default {
     },
     mounted(){
         this.emitter.on("success", message => {
-            console.log(message)
             this.messageSuccess = message;
             this.showSuccess = true;
         })
 
         this.emitter.on("error", message => {
-            console.log(message)
+            
             this.messageError = message;
             this.showError = true;
         })
 
         this.emitter.on("closePopupPayment", () => {
             this.showPopupPayment = false;
-            console.info('cl')
         });
         this.emitter.on("openPopupPayment", track => {
             this.paymentTrack = track;
             this.showPopupPayment = true;
-            console.info('op')
         });
         
         this.emitter.on("focus", bool =>{
@@ -92,11 +89,10 @@ export default {
         })
         this.emitter.on("closePopupEdit", () => {
             this.showPopupEdit = false;
-            console.info('cl')
         });
 
         this.emitter.on("openPopupEdit", track => {
-            console.log(track)
+            
             this.showPopupEdit = true;
             this.editTrack = track;
             console.info('op')

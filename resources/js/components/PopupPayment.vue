@@ -28,7 +28,6 @@
         <button class="popup-cta back" @click="close()" >Back</button>
         
         <div class="flex flex-auto"></div>
-        <!-- <p v-if="download" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">You already bought this beat</p> -->
         <p v-if="own" class="main-pay-down-text text-sm text-gray-600 hover:text-gray-900">This is your beat</p>
         <a v-if="download || own" :href="song.file_path" download>
           <button class="popup-cta download">Download</button>
@@ -49,8 +48,6 @@
 </template>
 <script>
 import Web3 from "web3"
-import Beats from "../../dapp/build/contracts/Beats.json"
-//import { purchaseBeat, getBeat } from '../services/blockchain.js'
 
 export default {
     name: 'Payment',
@@ -84,11 +81,11 @@ export default {
           const purchase = await contract.methods.purchaseBeat(id).send( { from: buyer, value: Web3.utils.toWei(price.toString(), 'Ether') })
             .once('transactionHash', (transasctionHash) => {
                     this.emitter.emit('success', 'Transaction started')
-                    console.log(transasctionHash)
+                    
                 })
             .once('receipt', (receipt) => {
-              console.log(receipt)
-              this.loading = false
+              
+              
               this.download = true
             })
             .on('error', (error) => {
@@ -99,7 +96,6 @@ export default {
         },
 
         convert() {
-          // this.calculating= true;
             axios.get('https://api.coinbase.com/v2/exchange-rates')
             .then(res => {
               this.calculating = false;
@@ -108,14 +104,9 @@ export default {
         },
 
         pay() {
-          //console.log(this.song.is_beat.id, this.song.is_beat.from_user.eth_address)
-          this.loading = true
+          th
           this.purchaseBeat(this.$store.state.contract, this.song.is_beat.id, this.song.is_beat.price, ethereum.selectedAddress)
             .then(response => {
-              
-
-              console.log('hi')
-
               let formData = new FormData()
               formData.append('seller_id', this.song.is_beat.from_user.id)
               formData.append('buyer_id', this.$page.props.auth.user.id)
@@ -138,8 +129,8 @@ export default {
                     this.emitter.emit('success', 'Track was successfully purchased')
                     return axios.post('/api/counter', formCount)
                     .then(res => {
-                      console.log(res)
-                      this.emitter.emit("cover-update", {'cov': res.cov, 'id': this.song.is_beat.id})
+                      
+                      "cover-update", {'cov': res.cov, 'id': this.song.is_beat.id}
                     })
                   })
             })
@@ -153,8 +144,8 @@ export default {
           axios.get('/api/transactions/'+this.song.is_beat.id+'/'+this.$page.props.auth.user.id)
             .then(response => {
               if(response.data.length){
-                console.log(response.data)
-                this.transactions[0] = response.data[0]
+                
+                nse.data[0]
                 this.download = true
               }
             })
@@ -167,7 +158,6 @@ export default {
       this.getTransactions()
       this.emitter.on("reload", () => {
               this.convert();
-              // console.log(text);
           });
       }, 
 } 

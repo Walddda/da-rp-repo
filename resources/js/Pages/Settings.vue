@@ -36,7 +36,7 @@
                                             id="firstname" 
                                             type="text" 
                                             :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
-                                            v-model="form.firstname" 
+                                            v-model="form.first_name" 
                                             autofocus 
                                             autocomplete="first name" 
                                         />
@@ -47,7 +47,7 @@
                                             id="lastname" 
                                             type="text" 
                                             :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']" 
-                                            v-model="form.lastname" 
+                                            v-model="form.last_name" 
                                             autofocus 
                                             autocomplete="last name" 
                                         />
@@ -167,8 +167,6 @@ export default {
                 first_name: this.$page.props.auth.user.first_name,
                 last_name: this.$page.props.auth.user.last_name,
                 email: this.$page.props.auth.user.email,
-                // password: this.$page.props.auth.user.password,
-                // password_confirmation: this.$page.props.auth.user.password_confirmation,
                 id: this.$page.props.auth.user.id,
                 location: this.$page.props.auth.user.location,
                 desc: this.$page.props.auth.user.description,
@@ -192,16 +190,16 @@ export default {
 
     methods: {
         leave(x){
-            console.log(this.mouseOpt + '-'+ this.mouseInp)
+            
             if(!this.mouseOpt && !this.mouseInp){
                 this.selectFocus = false;
                 this.keyClick = false;
             }
-            console.log(x)
+            
             var corrKey = false;
             this.countries.forEach(key => {
                 if(this.form.location == key.label){
-                    console.log(key.label)
+                    
                     corrKey = true;
                 }
             })
@@ -230,8 +228,6 @@ export default {
             formData.append('first_name', this.form.first_name);
             formData.append('last_name', this.form.last_name);
             formData.append('email', this.form.email);
-            // formData.append('password', this.form.password);
-            // formData.append('password_confirmation', this.form.password_confirmation);
             formData.append('id', this.form.id);
             formData.append('location', this.form.location);
             formData.append('desc', this.form.desc);
@@ -239,20 +235,11 @@ export default {
 
             axios.post('/profile', formData, config)
                 .then(function (response) {
-                    console.log(response);
+                    
                     window.location.href= response.data;
                 })
                 .catch(error => {
-                    console.log(error.response.data); // logs an object to the console
-
-                    // Do something with error data
             });
-
-
-
-            // this.form.post(this.route('myprofile'), {
-            //     onFinish: () => this.form.reset('password', 'password_confirmation'),
-            // })
         },
         
         upload(e){
@@ -271,30 +258,27 @@ export default {
 
             axios.post('/profile', formData, config)
                 .then(function (response) {
-                    console.log(response);
+                    
                     if (response.data.error) {
-                        console.log(currentObj.error)
+                        
                     }else if (response.data.success) {
-                        console.log(currentObj.success)
+                        
                     }
                 })
                 .catch(error => {
-                    console.log(error.response.data); // logs an object to the console
-
-                    // Do something with error data
                 });
         },
     },
 
     mounted() {
         this.emitter.on("success", message => {
-            console.log(message)
+            
             this.messageSuccess = message;
             this.showSuccess = true;
         })
 
         this.emitter.on("error", message => {
-            console.log(message)
+            
             this.messageError = message;
             this.showError = true;
         })

@@ -14,7 +14,6 @@
             </div>
             <div class="main-page-form-content">
                 <div class="content-back">
-                    <!--  bg-yellow-500 -->
                     <a :href="route('home')">
                         <button class="main-page-form-cta back">Back</button>
                     </a>
@@ -33,11 +32,6 @@
                     <BreezeValidationErrors class="mb-4" />
 
                     <form @submit.prevent="submit">
-                        <div class="main-form-row text-right flex justify-end">
-                            <div class="main-form-element half text-right">  
-                                <Link :href="route('logout')" method="post" as="button" class="underline text-sm text-gray-600 hover:text-gray-900">Log Out</Link>
-                            </div>
-                        </div>
                         <div class="main-form-row flex items-center justify-end mt-4">
                             <div class="main-form-element max">
                                 <button 

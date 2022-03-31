@@ -92,11 +92,6 @@
                                 </span>
                             </p>
                         </div>
-                        <!-- <select :class="[error.key ? 'error' : '','form-control main-select-input']" id="key" @change="changeKey($event)">
-                            <option value="" selected></option>
-                            <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
-                        </select> -->
-                        <!-- <v-select :options="[{country: 'Canada', code: 'CA'},]"></v-select> -->
                     </div>
                 </div>
                 <div class="main-form-row">
@@ -215,7 +210,6 @@
                     <div class="main-form-element zwei-fünftel flex flex-col items-end">
                         <div>
                             <label class="custom-text-label" for="cover">Custom Cover</label>
-                            <!-- <span @click="coverCheck" :class="[coverCheckBool ? 'main-form-checkbox checked' : 'main-form-checkbox']"></span> -->
                             <input type="checkbox" class="form-checkbox main-form-checkbox" v-model="coverType" @click="changeCoverSel" name="coverType">
                         </div>
                         <label 
@@ -244,8 +238,6 @@
                     </div>
                 </div>
 
-                
-
                 <div class="main-form-row flex flex-col" v-if="error">
                     <span class="main-form-error-msg" v-for="e in error">{{e[0]}}<br></span>
                 </div>
@@ -266,7 +258,6 @@
 <script>
 import VueTagsInput from "@sipec/vue3-tags-input";
 import Web3 from "web3"
-//import { createBeat, loadBlockchainData, created } from '../services/blockchain.js'
 
 export default {
 
@@ -325,17 +316,18 @@ export default {
 	methods: {
 
         createBeat(contract, id, title, price, owner) {
+            this.loadingIcon = true
             price = Web3.utils.toWei(price.toString())
             contract.methods.createBeat(id, title, price).send({ from: owner })
                 .once('transactionHash', (transasctionHash) => {
                     this.emitter.emit('success', 'Transaction started')
-                    console.log(transasctionHash)
+                    
                 })
                 .once('receipt', (receipt) => {
                     this.loadingIcon = false
                     this.emitter.emit('success', 'Your Track was successfully uploaded.')
                     this.emitter.emit('upload-success');
-                    console.log(receipt)
+                    
                     this.error = null
                     this.close();
                     
@@ -350,11 +342,6 @@ export default {
         },
         focus(bool){
             this.emitter.emit("focus", bool)
-        },
-        test(e){
-            console.warn('help')
-            console.log(e)
-            e.preventDefault();
         },
 		close() {
             if (!this.loadingIcon) {
@@ -381,11 +368,8 @@ export default {
         },
         upload(e){
             if(e){
-                console.log(e)
                 e.preventDefault();
             }
-            this.loadingIcon = true
-            console.log('wait')
             const config = {
                 headers: {
                     'content-type': 'multipart/form-data',
@@ -395,17 +379,12 @@ export default {
             this.error = {}
             if(!this.title)this.error.title = ['Please specify a title.'];
             if(!this.beat)this.error.beat = ['Please upload a beat.'];
-            // if(!this.bpm)this.error = Object.assign({bpm: ['Please provide BPM of your beat.']});
             if(!this.bpm)this.error.bpm = ['Please provide BPM of your beat.'];
             if(!this.price)this.error.ethPrice = ['Pleace specify a price.'];
             if(this.selectedKey.length > 3)this.error.key = ['Please provide a valid key.'];
-            console.log(Object.values(this.keys))
-            // if(!Object.values(this.keys).includes(this.selectedKey))this.error.key = ['Please provide a valid key.'];
             if(!this.keys.includes(this.selectedKey))this.error.key = ['Please provide a valid key.'];
             if(!this.selectedKey)this.error.key = ['Please provide the key of your beat.'];
 
-            console.log(this.error)
-            console.log(Object.keys(this.error).length)
             let formData = new FormData();
             formData.append('beat', this.beat);
             formData.append('length', this.length);
@@ -419,7 +398,6 @@ export default {
                 tagsFin.push(e.text)
             });
 
-
             formData.append('title', this.title);
             formData.append('userID', this.$page.props.auth.user.id);
             formData.append('bpm', this.bpm);
@@ -431,7 +409,6 @@ export default {
 
             if(Object.keys(this.error).length === 0){
                 this.processing = true;
-                console.log('lezzgo')
                 this.loading = true;
                 let currentObj = this;
                 axios.get('https://api.coinbase.com/v2/exchange-rates')
@@ -442,23 +419,18 @@ export default {
                             currentObj.ethPrice = currentObj.price;
                         }
                         formData.append('ethPrice', currentObj.ethPrice);
-                        formData.forEach(console.log)
                         return axios.post('/api/upload', formData, config)
                     })
                     .then(function (response) {
                             currentObj.loading = false;
                             currentObj.isHidden = false;
-                            console.log(response);
                             if (response.data.error) {
                                 currentObj.emitter.emit('error', 'Your Track failed to upload.')
                                 currentObj.error = response.data.error
                                 currentObj.success = null
                                 currentObj.processing = false;
-                                console.log(currentObj.error)
                             }else if (response.data.success) {
-                                //response.data.id,
                                 currentObj.createBeat(currentObj.$store.state.contract, response.data.id, currentObj.title, currentObj.ethPrice, ethereum.selectedAddress)
-                                
                             }
                         })
                         .catch(error => {
@@ -466,15 +438,12 @@ export default {
                             console.error(error)
                             currentObj.error = error.response.data.errors
                             currentObj.success = null
-                            console.log(error.response.data);
-                            currentObj.processing = false; // logs an object to the console
+                            currentObj.processing = false;
                             }else{
                                 currentObj.success = null
                                 currentObj.processing = false
-                                console.log('help')
                                 currentObj.close();
                             }
-                            // Do something with error data
                         });
             }
         },
@@ -487,7 +456,7 @@ export default {
             }
             },
 		loadImage(event) {
-            console.log(event.target.files[0]);
+            
             this.cover = event.target.files[0];
             if(event.target.files[0]){
                 this.coverFileName = event.target.files[0].name;
@@ -523,30 +492,25 @@ export default {
         }, 
 
         changeKey (event) {
-            console.log(event.target.value);
+            
             this.selectedKey = event.target.value
-            // this.selectedKey = event.target.options[event.target.options.selectedIndex].text
         }, 
         leave(x){
-            console.log(this.mouseOpt + '-'+ this.mouseInp)
+            
             if(!this.mouseOpt && !this.mouseInp){
                 this.selectFocus = false;
                 this.keyClick = false;
             }
-            console.log(x)
+            
             var corrKey = false;
             this.keys.forEach(key => {
-                // console.log(key +'-'+ this.selectedKey)
                 if(this.selectedKey == key){
-                    console.log(key)
+                    
                     corrKey = true;
                 }
             })
             if(!corrKey){
-                // this.error.key = ["Please use an existing key."]
             }else if(this.error.key){
-                // this.$delete(this.error, 'key')
-                // this.deleteError('key')
             }
         },
         mouseOptf(a){
@@ -559,10 +523,10 @@ export default {
             var temp = this.error;
             if(typeof temp === 'object' && temp !== null){
                 for (const [key, value] of Object.entries(temp)) {
-                    console.log(`${key}: ${value}`);
+                    
                 }
             }else{
-                console.log(temp)
+                
             }
         },
         filename(text){
@@ -574,8 +538,6 @@ export default {
             else {
                 
                 return base.substring(0,30) + '[...].' + ex
-                // console.log(arr)
-                // return 'x'
             }
         }
     }, 
@@ -593,15 +555,8 @@ export default {
                 reader.onload = function (e) {
                     audio.src = e.target.result;
                     audio.addEventListener('loadedmetadata', function(){
-                        // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
                         var duration = audio.duration;
                         diese.length = audio.duration;
-                    
-                        // example 12.3234 seconds
-                        console.log("The duration of the song is of: " + duration + " seconds");
-                        // Alternatively, just display the integer value with
-                        // parseInt(duration)
-                        // 12 seconds
                     },false);
                 };
 

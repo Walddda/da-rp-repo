@@ -70,13 +70,13 @@ export default {
     },
     mounted(){
         this.emitter.on("success", message => {
-            //console.log(message)
+            
             this.messageSuccess = message;
             this.showSuccess = true;
         })
 
         this.emitter.on("error", message => {
-            //console.log(message)
+            
             this.messageError = message;
             this.showError = true;
         })
@@ -100,7 +100,7 @@ export default {
         });
 
         this.emitter.on("openPopupEdit", track => {
-            //console.log(track)
+            
             this.showPopupEdit = true;
             this.editTrack = track;
             // console.info('op')

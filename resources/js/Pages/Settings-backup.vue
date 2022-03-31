@@ -41,17 +41,6 @@
                             <BreezeLabel for="desc" value="Description" />
                             <textarea id="desc" class="no-resize appearance-none block w-full bg-white-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none" v-model="form.desc"></textarea>
                     </div>
-
-                    <!-- <div class="mt-4">
-                        <BreezeLabel for="password" value="Password" />
-                        <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password"/>
-                    </div>
-
-                    <div class="mt-4">
-                        <BreezeLabel for="password_confirmation" value="Confirm Password" />
-                        <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password"/>
-                    </div> -->
-
                     <div class="text-center pt-4 pb-8 border-b border-gray-200">
                         <Button class="ml-4 cta-main but-main" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                             Update Profile!
@@ -151,11 +140,11 @@ export default {
 
             axios.post('/profile', formData, config)
                 .then(function (response) {
-                    console.log(response);
+                    
                     window.location.href= response.data;
                 })
                 .catch(error => {
-                    console.log(error.response.data); // logs an object to the console
+                     // logs an object to the console
 
                     // Do something with error data
             });
@@ -183,15 +172,15 @@ export default {
 
             axios.post('/profile', formData, config)
                 .then(function (response) {
-                    console.log(response);
+                    
                     if (response.data.error) {
-                        console.log(currentObj.error)
+                        
                     }else if (response.data.success) {
-                        console.log(currentObj.success)
+                        
                     }
                 })
                 .catch(error => {
-                    console.log(error.response.data); // logs an object to the console
+                     // logs an object to the console
 
                     // Do something with error data
                 });
@@ -200,13 +189,13 @@ export default {
 
     mounted() {
         this.emitter.on("success", message => {
-            console.log(message)
+            
             this.messageSuccess = message;
             this.showSuccess = true;
         })
 
         this.emitter.on("error", message => {
-            console.log(message)
+            
             this.messageError = message;
             this.showError = true;
         })

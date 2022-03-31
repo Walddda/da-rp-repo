@@ -107,7 +107,7 @@ export default {
                 password_confirmation: this.password_confirmation
             })
             .then((res) => {
-                console.log(res.data)
+                
                 if(res.data.status == 'success'){
                 window.location.href = "/profile/" + this.$page.props.auth.user.username 
                 
@@ -119,7 +119,7 @@ export default {
                     alert("Passwords dont match")
                 } 
             }).catch((err) => {
-                console.log(err)
+                
             })
 
         }

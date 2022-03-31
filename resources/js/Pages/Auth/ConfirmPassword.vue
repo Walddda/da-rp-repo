@@ -14,7 +14,6 @@
             </div>
             <div class="main-page-form-content">
                 <div class="content-back">
-                    <!--  bg-yellow-500 -->
                     <a :href="route('home')">
                         <button class="main-page-form-cta back">Back</button>
                     </a>

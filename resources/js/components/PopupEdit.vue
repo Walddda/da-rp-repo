@@ -1,156 +1,151 @@
 <template>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <div class="popup-bg-blurr" @click="close">
-        <div class="popup-main" @click.stop @click="currencySelect = false">
-            <!-- {{$page.props.auth.user}} -->
-            <div class="popup-title">Edit</div>
-    <!-- <form v-if="logedin" :action="route" method="post" enctype="multipart/form-data">upload -->
-            <form class="popup-content main-form" v-if="$page.props.auth.user" @submit="upload()" enctype="multipart/form-data">
-                <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
+    <div>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <div class="popup-bg-blurr" @click="close">
+            <div class="popup-main" @click.stop @click="currencySelect = false">
+                <div class="popup-title">Edit</div>
+                <form class="popup-content main-form" v-if="$page.props.auth.user" @submit="upload()" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
 
-                <div class="main-form-row">
-                    <div class="main-form-element vier-fünftel">
-                        <label class="custom-text-label" for="title">Title</label><br>
-                        <input
-                            type="text"
-                            name="beatTitle"
-                            :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']"
-                            id="title"
-                            required
-                            v-model="title"
-                            @click="clickTitle"
-                        />
-                    </div>
-
-                    <div class="main-form-element ein-fünftel flex flex-col items-end justify-end ">
-                        <label class="inline-flex items-center">
-                            <span class="ml-2">Beat </span>
+                    <div class="main-form-row">
+                        <div class="main-form-element vier-fünftel">
+                            <label class="custom-text-label" for="title">Title</label><br>
                             <input
-                            type="radio"
-                            class="form-radio main-form-radio"
-                            :class="[error && error.type && !type ? 'error' : '']"
-                            name="beatType"
-                            value="beat"
-                            v-model="type"
-                            required
+                                type="text"
+                                name="beatTitle"
+                                :class="[error && error.title && error.title[0].includes('required') && !title ? 'error' : '', 'custom-text-input main-text-input']"
+                                id="title"
+                                required
+                                v-model="title"
+                                @click="clickTitle"
                             />
-                        </label>
-                        <label class="inline-flex items-center">
-                            <span class="ml-2">Sample </span>
-                            <input
-                            type="radio"
-                            class="form-radio main-form-radio"
-                            :class="[error && error.type && !type ? 'error' : '']"
-                            name="beatType"
-                            value="sample"
-                            v-model="type"
-                            />
-                        </label>
-                    </div>
-                </div>
-                <div class="main-form-row">
-                    <div class="main-form-element half">  
-                        <label class="custom-text-label" for="bpm">BPM</label><br>
-                        <input
-                            type="text"
-                            name="beatBPM"
-                            :class="[error && error.bpm && error.bpm[0].includes('required') && !bpm ? 'error' : '', 'custom-text-input main-text-input']"
-                            id="bpm"
-                            required
-                            v-model="bpm"
-                            v-on:keypress="NumbersOnly"
-                            
-                        />
-                    </div>
-
-                    <div class="main-form-element half"
-                        @mouseleave="mouseInpf(false)"
-                        @mouseover="mouseInpf(true)"
-                    >
-                        <label class="custom-text-label" for="key">Key</label><br>
-                        <input
-                            type="text"
-                            name="key"
-                            :class="[error && error.key ? 'error' : '', 'custom-text-input main-text-input']"
-                            id="key"
-                            required
-                            v-model="key"
-                            @keydown="keyClick = false; mouseOptf(false)"
-                            @focus="selectFocus = true"
-                            @blur="leave('blur')"
-                            ref="keyInp"
-                        />
-                        <div class="main-select-custom-options"
-                            v-if="selectFocus && !keyClick"
-                            @mouseleave="mouseOptf(false)"
-                            @mouseover="mouseOptf(true)"
-                        >
-                            <p v-for="k in keys">
-                                <span v-if="!k.toUpperCase().includes(key.toUpperCase())"
-                                    @click="key = k; $refs.keyInp.focus(); keyClick = true">
-                                    {{k}}
-                                </span>
-                            </p>
                         </div>
-                        <!-- <select :class="[error.key ? 'error' : '','form-control main-select-input']" id="key" @change="changeKey($event)">
-                            <option value="" selected></option>
-                            <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
-                        </select> -->
-                        <!-- <v-select :options="[{country: 'Canada', code: 'CA'},]"></v-select> -->
-                    </div>
-                </div>
-                <div class="main-form-row">
-                    <div class="main-form-element">
-                        <label class="custom-text-label" for="description">Description</label><br>
-                            <input
-                            type="text"
-                            name="description"
-                            :class="[error && error.desc ? 'error' : '', 'custom-text-input main-text-input']"
-                            id="description"
-                            v-model="description"
-                        />
-                    </div>
-                </div>
-                <div class="main-form-row">
-                    <div class="main-form-element">
-                        <label class="custom-text-label" for="feature">Featured Artists</label><br>
-                            <input
-                            type="text"
-                            name="featArtist"
-                            :class="[error && error.feature ? 'error' : '', 'custom-text-input main-text-input']"
-                            id="feature"
-                            v-model="feature"
-                        />
-                    </div>
-                </div>
-                <div class="main-form-row">
-                    <div class="main-form-element">
-                        <label class="custom-text-label" for="tags">Tags</label><br>
-                        <vue-tags-input
-                        v-model="tag"
-                        :tags="tags"
-                        @tags-changed="newTags => tags = newTags"
-                        :max-tags="5"
-                        :class="[error && error.tags ? 'error' : '', 'main-tag-input']"
-                        placeholder=""
-                        id="tags"
-                        >
-                            <div>
 
-                            </div>
-                        </vue-tags-input>
+                        <div class="main-form-element ein-fünftel flex flex-col items-end justify-end ">
+                            <label class="inline-flex items-center">
+                                <span class="ml-2">Beat </span>
+                                <input
+                                type="radio"
+                                class="form-radio main-form-radio"
+                                :class="[error && error.type && !type ? 'error' : '']"
+                                name="beatType"
+                                value="beat"
+                                v-model="type"
+                                required
+                                />
+                            </label>
+                            <label class="inline-flex items-center">
+                                <span class="ml-2">Sample </span>
+                                <input
+                                type="radio"
+                                class="form-radio main-form-radio"
+                                :class="[error && error.type && !type ? 'error' : '']"
+                                name="beatType"
+                                value="sample"
+                                v-model="type"
+                                />
+                            </label>
+                        </div>
                     </div>
+                    <div class="main-form-row">
+                        <div class="main-form-element half">  
+                            <label class="custom-text-label" for="bpm">BPM</label><br>
+                            <input
+                                type="text"
+                                name="beatBPM"
+                                :class="[error && error.bpm && error.bpm[0].includes('required') && !bpm ? 'error' : '', 'custom-text-input main-text-input']"
+                                id="bpm"
+                                required
+                                v-model="bpm"
+                                v-on:keypress="NumbersOnly"
+                                
+                            />
+                        </div>
+
+                        <div class="main-form-element half"
+                            @mouseleave="mouseInpf(false)"
+                            @mouseover="mouseInpf(true)"
+                        >
+                            <label class="custom-text-label" for="key">Key</label><br>
+                            <input
+                                type="text"
+                                name="key"
+                                :class="[error && error.key ? 'error' : '', 'custom-text-input main-text-input']"
+                                id="key"
+                                required
+                                v-model="key"
+                                @keydown="keyClick = false; mouseOptf(false)"
+                                @focus="selectFocus = true"
+                                @blur="leave('blur')"
+                                ref="keyInp"
+                            />
+                            <div class="main-select-custom-options"
+                                v-if="selectFocus && !keyClick"
+                                @mouseleave="mouseOptf(false)"
+                                @mouseover="mouseOptf(true)"
+                            >
+                                <p v-for="k in keys">
+                                    <span v-if="!k.toUpperCase().includes(key.toUpperCase())"
+                                        @click="key = k; $refs.keyInp.focus(); keyClick = true">
+                                        {{k}}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-form-row">
+                        <div class="main-form-element">
+                            <label class="custom-text-label" for="description">Description</label><br>
+                                <input
+                                type="text"
+                                name="description"
+                                :class="[error && error.desc ? 'error' : '', 'custom-text-input main-text-input']"
+                                id="description"
+                                v-model="description"
+                            />
+                        </div>
+                    </div>
+                    <div class="main-form-row">
+                        <div class="main-form-element">
+                            <label class="custom-text-label" for="feature">Featured Artists</label><br>
+                                <input
+                                type="text"
+                                name="featArtist"
+                                :class="[error && error.feature ? 'error' : '', 'custom-text-input main-text-input']"
+                                id="feature"
+                                v-model="feature"
+                            />
+                        </div>
+                    </div>
+                    <div class="main-form-row">
+                        <div class="main-form-element">
+                            <label class="custom-text-label" for="tags">Tags</label><br>
+                            <vue-tags-input
+                            v-model="tag"
+                            :tags="tags"
+                            @tags-changed="newTags => tags = newTags"
+                            :max-tags="5"
+                            :class="[error && error.tags ? 'error' : '', 'main-tag-input']"
+                            placeholder=""
+                            id="tags"
+                            >
+                                <div>
+
+                                </div>
+                            </vue-tags-input>
+                        </div>
+                    </div>
+                    <div class="main-form-row flex flex-col" v-if="error">
+                        <span class="main-form-error-msg" v-for="e in error">{{e[0]}}<br></span>
+                    </div>
+                </form>
+                <div class="popup-footer">
+                    <button class="popup-cta back" @click="close()">Back</button>
+                    <button class="popup-cta submit"
+                                :class="{ 'opacity-25': processing }" 
+                                :disabled="processing" 
+                    @click="upload();">Edit</button>
                 </div>
-                <div class="main-form-row flex flex-col" v-if="error">
-                    <span class="main-form-error-msg" v-for="e in error">{{e[0]}}<br></span>
-                </div>
-            </form>
-            <div class="popup-footer">
-                <button class="popup-cta back" @click="close()">Back</button>
-                <button class="popup-cta submit"
-                            :class="{ 'opacity-25': processing }" 
-                            :disabled="processing" 
-                @click="upload();">Edit</button>
             </div>
         </div>
     </div>
@@ -210,27 +205,22 @@ export default {
         },
         test(e){
             console.warn('help')
-            console.log(e)
+            //console.log(e)
             e.preventDefault();
         },
 		close() {
-			console.log('yaay');
+			
 			this.emitter.emit("closePopupEdit");
 		},
         hide(e){
             e.preventDefault();
             this.isHidden = true;
         },
-        // submit(){
-        //     this.upload(document.getElementById("upload-form"));       
-        // },
         upload(e){
             this.processing = true;
             if(e){
-                console.log(e)
                 e.preventDefault();
             }
-            console.log('lezzgo')
             this.loading = true;
             let currentObj = this;
             const config = {
@@ -265,32 +255,32 @@ export default {
                 .then(function (response) {
                         currentObj.loading = false;
                         currentObj.isHidden = false;
-                        console.log(response);
+                        
                         if (response.data.error) {
                             currentObj.error = response.data.error
                             currentObj.success = null
                             currentObj.processing = false;
-                            console.log(currentObj.error)
+                            //console.log(currentObj.error)
                         }else if (response.data.success) {
                             currentObj.emitter.emit('success', 'Your Track was successfully edited.')
                             currentObj.success = response.data.success
                             currentObj.error = null
-                            console.log(currentObj.success)
+                            //console.log(currentObj.success)
                             currentObj.emitter.emit('upload-success');
                             currentObj.close();
                         }
                     })
                     .catch(error => {
                         if(error.response){
-                        console.log(error)
+                        //console.log(error)
                         currentObj.error = error.response.data.errors
                         currentObj.success = null
-                        console.log(error.response.data);
+                        
                         currentObj.processing = false; // logs an object to the console
                         }else{
                             currentObj.success = null
                             currentObj.processing = false
-                            console.log('help')
+                            //console.log('help')
                             currentObj.close();
                         }
                         // Do something with error data
@@ -299,7 +289,7 @@ export default {
         },
 
 		loadImage(event) {
-            console.log(event.target.files[0]);
+            
             this.cover = event.target.files[0];
             if(event.target.files[0]){
                 this.coverFileName = event.target.files[0].name;
@@ -330,30 +320,22 @@ export default {
         }, 
 
         changeKey (event) {
-            console.log(event.target.value);
             this.selectedKey = event.target.value
-            // this.selectedKey = event.target.options[event.target.options.selectedIndex].text
         }, 
         leave(x){
-            console.log(this.mouseOpt + '-'+ this.mouseInp)
             if(!this.mouseOpt && !this.mouseInp){
                 this.selectFocus = false;
                 this.keyClick = false;
             }
-            console.log(x)
+            //console.log(x)
             var corrKey = false;
             this.keys.forEach(key => {
-                // console.log(key +'-'+ this.selectedKey)
                 if(this.selectedKey == key){
-                    console.log(key)
                     corrKey = true;
                 }
             })
             if(!corrKey){
-                // this.error.key = ["Please use an existing key."]
             }else if(this.error.key){
-                // this.$delete(this.error, 'key')
-                // this.deleteError('key')
             }
         },
         mouseOptf(a){
@@ -365,15 +347,10 @@ export default {
         deleteError(field){
             var temp = this.error;
             if(typeof temp === 'object' && temp !== null){
-                // temp.forEach((k, element) => {
-                //     console.info(k)
-                //     console.warn(element)
-                // });
                 for (const [key, value] of Object.entries(temp)) {
-                    console.log(`${key}: ${value}`);
+                    
                 }
             }else{
-                console.log(temp)
             }
         },
         convertTags(){

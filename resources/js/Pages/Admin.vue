@@ -6,8 +6,6 @@
         <div class="responsive">
             <div class="main-toggle-own-tracks flex justify-center">
                 <div class="flex justify-center">
-                    <!-- <a href="/settings">Settings</a><br>
-                    <a href="/settings"><CogIcon class="h-6 w-6" aria-hidden="true"/></a> -->
                     <button @click="songs = !songs; user = !user; loadSongs()" class="toggle-option left" :class="[songs ? 'active' : '']">Songs</button>
                     <button @click="user = !user; songs = !songs; loadUser()" class="toggle-option right" :class="[user ? 'active' : '']">User</button>
                 </div>
@@ -15,7 +13,6 @@
             <div>
                 <div class="fixed right-0 top-0 w-1/3 bg-red-300 h-full border-l-4 pl-5">
                     <div v-if="selectedSong && songs">
-                        <!-- {{selectedSong}} -->
                         <form class="popup-content main-form" v-if="editS" @submit="upload()" enctype="multipart/form-data" >
                             <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
 
@@ -68,11 +65,6 @@
                                 v-model="selectedSong.is_beat.key"
                                 ref="keyInp"
                             />
-                            <!-- <select :class="[error.key ? 'error' : '','form-control main-select-input']" id="key" @change="changeKey($event)">
-                                <option value="" selected></option>
-                                <option id="keyVal" v-for="k in keys" :value="k" :key="k">{{ k }}</option>
-                            </select> -->
-                            <!-- <v-select :options="[{country: 'Canada', code: 'CA'},]"></v-select> -->
                             <label class="custom-text-label" for="description">Description</label><br>
                                 <input
                                 type="text"
@@ -111,7 +103,6 @@
                         </form>
                     </div>
                     <div v-if="selectedUser && user">
-                        <!-- {{selectedSong}} -->
                         <form class="popup-content main-form" v-if="editU" @submit="upload()" enctype="multipart/form-data" >
                             <input type="hidden" name="_token" v-bind:value="$page.props.tokens.csrf" />
 
@@ -276,7 +267,7 @@ export default {
         loadUser(){
             axios.get('/api/alluser')
             .then(response => {
-                console.log(response.data);
+                
                 this.userList = response.data
             })
         },
@@ -327,18 +318,17 @@ export default {
             for (let i = 0; i < 5; i++) {
                 if(this.selectedSong.is_beat['tag'+i]){
                     this.tags.push(this.selectedSong.is_beat['tag'+i])
-            }
-                
+                }
             }
         },
         deleteSubmit(e){
             e.preventDefault();
             this.processing = true;
             if(e){
-                console.log(e)
+                
                 e.preventDefault();
             }
-            console.log('lezzgo')
+            
             let currentObj = this;
             const config = {
                 headers: {
@@ -350,7 +340,7 @@ export default {
             axios.post('/api/delete/'+this.selectedSong.is_beat.id, config)
                 .then(function (response) {
                             currentObj.processing = false;
-                        console.log(response);
+                        
                         currentObj.loadSongs();
                         currentObj.editS = false;
                         currentObj.deleteS = false;
@@ -358,25 +348,22 @@ export default {
                     })
                     .catch(error => {
                         if(error.response){
-                        console.log(error)
-                        console.log(error.response.data);
-                        currentObj.processing = false; // logs an object to the console
+                        currentObj.processing = false; 
                         }else{
                             currentObj.processing = false
-                            console.log('help')
+                            
                         }
                     currentObj.emitter.emit('error', 'can\'t delete')
-                        // Do something with error data
                     });
         },
         upload(e){
             e.preventDefault();
             this.processing = true;
             if(e){
-                console.log(e)
+                
                 e.preventDefault();
             }
-            console.log('lezzgo')
+            
             let currentObj = this;
             const config = {
                 headers: {
@@ -404,7 +391,7 @@ export default {
             axios.post('/api/edit/'+this.selectedSong.is_beat.id, formData, config)
                 .then(function (response) {
                             currentObj.processing = false;
-                        console.log(response);
+                        
                         currentObj.loadSongs();
                         currentObj.editS = false;
                         currentObj.deleteS = false;
@@ -412,26 +399,19 @@ export default {
                     })
                     .catch(error => {
                         if(error.response){
-                        console.log(error)
-                        console.log(error.response.data);
-                        currentObj.processing = false; // logs an object to the console
+                        currentObj.processing = false; 
                         }else{
                             currentObj.processing = false
-                            console.log('help')
+                            
                         }
                     currentObj.emitter.emit('error', 'can\'t edit')
-                        // Do something with error data
                     });
         },
         dataLabel(x){
-            // console.log('hey')
-            // const list = countries.getNames('en', { select: 'official' })
-            // console.log(Object.keys(list).map((key) => ({ value: key, label: list[key] })))
-            // return Object.keys(list).map((key) => ({ value: key, label: list[key] }))[x]
             return countries.getName(x, "en", {select: "alias"})
         },
         submitUser(e){
-            console.log('lezzgo')
+            
             e.preventDefault();
             let currentObj = this;
             const config = {
@@ -455,14 +435,12 @@ export default {
             axios.post('/profile', formData, config)
                 .then(function (response) {
                     currentObj.processing = false;
-                    console.log(response);
                     currentObj.loadUser();
                     currentObj.editU = false;
                     currentObj.deleteU = false;
                     currentObj.emitter.emit('success','user updated')
                 })
                 .catch(error => {
-                    // console.log(error.response.data);
                     currentObj.emitter.emit('error', 'can\'t update')
             });
         },
@@ -470,10 +448,10 @@ export default {
             e.preventDefault();
             this.processing = true;
             if(e){
-                console.log(e)
+                
                 e.preventDefault();
             }
-            console.log('lezzgo')
+            
             let currentObj = this;
             const config = {
                 headers: {
@@ -485,37 +463,32 @@ export default {
             axios.post('/api/deleteUser/'+this.selectedUser.id, config)
                 .then(function (response) {
                     currentObj.processing = false;
-                    console.log(response);
                     currentObj.loadUser();
                     currentObj.editU = false;
                     currentObj.deleteU = false;
                     currentObj.emitter.emit('success','user deleted')
                 })
                 .catch(error => {
-                    // console.log(error.response.data);
                     currentObj.emitter.emit('error', 'can\'t delete')
                 });
         },
     }, 
     created(){
         window.addEventListener('scroll', this.onScroll);
-        // console.log(this.$page.props.auth.user.isadmin)
+        // 
         if(!this.$page.props.auth.user || !this.$page.props.auth.user.isadmin){
             window.location.href = "/";
         };
         this.loadSongs();
         this.loadUser();
-        // window.location.href = "/";
     },
     mounted() {
         this.emitter.on("success", message => {
-            console.log(message)
             this.messageSuccess = message;
             this.showSuccess = true;
         })
 
         this.emitter.on("error", message => {
-            console.log(message)
             this.messageError = message;
             this.showError = true;
         })

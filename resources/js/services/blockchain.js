@@ -25,10 +25,10 @@ export function createBeat(contract, id, title, price, owner) {
     price = Web3.utils.toWei(price.toString())
     contract.methods.createBeat(id, title, price).send({ from: owner })
         .once('transactionHash', (transactionHash) => {
-            console.log(transactionHash)
+            
         })
         .on('error', (error) => {
-            console.log(error)
+            
         })
 }
 
@@ -43,13 +43,13 @@ export async function getBeat(contract, id) {
 }
 
 export async function purchaseBeat(contract, id, price, buyer) {
-    // console.log(Web3.utils.toWei(price.toString(), 'Ether'))
-    // console.log(id)
-    // console.log(buyer)
+    // , 'Ether'))
+    // 
+    // 
     const purchase = await contract.methods.purchaseBeat(id).send( { from: buyer, value: Web3.utils.toWei(price.toString(), 'Ether') })
         // .once('receipt', (receipt) => {
-        //     // console.log(receipt.events.BeatPurchased.returnValues)
-        //     // console.log(receipt)
+        //     // 
+        //     // 
         // })
 
     return purchase
