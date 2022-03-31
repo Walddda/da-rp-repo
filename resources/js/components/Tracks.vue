@@ -150,7 +150,6 @@ export default {
     methods: {
         fetchVideoAndPlay(url) {
             var curr = this
-            // console.info('fetch: '+url)
             fetch(url)
             .then(response => response.blob())
             .then(blob => {
@@ -166,56 +165,28 @@ export default {
             .then(_ => {
                 if(curr.cache){
                     curr.updateCurTime(curr.cache)
-                    // console.info(curr.cache)
                     curr.cache = null;
-                }
-                // Video playback started ;)
-                //console.log('leeeego')
+                }                
                 return curr.$refs.player.play();
             })
-            .then(_ => {
-                // // Video playback started ;)
-                // if(curr.wantTime){
-                //     // this.$refs.player.currentTime = this.wantTime*this.audio.length.sum;
-                //     curr.updateCurTime(curr.wantTime*curr.audio.length.sum)
-                //     curr.wantTime = null;
-                // }
-                // if(curr.$page.props.tracks[curr.currentPlaying]){
-                //     // this.$refs.player.currentTime = this.$page.props.tracks[this.currentPlaying];
-                //     curr.updateCurTime(curr.$page.props.tracks[curr.currentPlaying])
-                // }
-                //console.log('dgufdakzgausdzkfdazsugfu')
-            })
-            .catch(e => {
-                // Video playback failed ;(
-                //console.log('no')
+            .catch(e => {                
                 console.error(e)
             })
         },
 		mainSlider(e){
 			let min = 0, cur = e.clientX - this.$refs.mainSliderRef.offsetLeft, max = this.$refs.mainSliderRef.clientWidth, perc = cur/max
-			// //console.log('----------------------------------')
-			// //console.log(e)
-			// //console.log(this.$refs.mainSliderRef)
-			// //console.log(min + ' - '+ cur +' - '+ max)
-			// //console.log(cur/max)
 			if(perc > 1){perc = 1}
 			if(perc < 0){perc = 0}
 			this.emitter.emit('slide', {id: this.currentPlaying, timeP: perc})
 		},
 		volSlider(e){
-			let min = 0, cur = e.clientX - this.$refs.volSliderRef.offsetLeft, max = this.$refs.volSliderRef.clientWidth, perc = cur/max
-			//console.log(cur)
-			//console.log(max)
-			//console.log(perc)
+			let min = 0, cur = e.clientX - this.$refs.volSliderRef.offsetLeft, max = this.$refs.volSliderRef.clientWidth, perc = cur/max			
             this.volChange(perc)
-			// this.volume = perc;
-			// this.volumeEmit()
 		},
         
 		mute(){
 			if(!this.volold && this.volold != 0){
-				//console.log('mute')
+				
 				this.volold = this.volume;
                 this.volChange(0)
 			}else{
@@ -224,12 +195,11 @@ export default {
 				}else{
                 this.volChange(this.volold)
 				}
-				//console.log('mute aus')
+				
 				this.volold = null;
 			}
 		},
         getTracks(term = this.searchTerm){
-            //for profile site, to get only tracks from one profile 
             let profile = {}
             let id = '';
             if(this.attr.loc == 'prof'){
@@ -278,15 +248,9 @@ export default {
                     }else{
                         this.files = response.data
                     }
-                    // this.emitter.emit("openPopupPayment", this.files[1]);
-                    // this.currentPlaying = 1;
-                    // this.currentPlaying = 1; //für global player testing
-                    // console.info('finish: ');
-                    // console.info(response.data);
                     this.loadedBeats = true;
-                    // console.info(this.$refs.player)
                     this.loading = false;
-                    //console.log(term)
+                    
                     this.convert()
                 }
             })
@@ -294,14 +258,14 @@ export default {
         play(numb){
             if(numb){
                 if(this.currentPlaying === null){
-                    // //console.log('r266')
+                    // 
                     this.currentPlaying = numb;
                 }
                 else if(this.currentPlaying == numb || !this.playing){
                     this.currentPlaying = numb;
                     this.playing = !this.playing;
                     this.toggleAudio();
-                    // //console.log('r273')
+                    // 
                 }
                 this.currentPlaying = numb;
                 this.getLength()
@@ -315,7 +279,6 @@ export default {
 
         toggleAudio(slide){         
             var player = this.$refs.player;
-            // console.warn(player.getAttribute("src"))
             try {
                 if (player.paused) {
                     this.playProm(); 
@@ -361,19 +324,16 @@ export default {
             this.$refs.player.onloadedmetadata = function() {
                 var min = Math.trunc(this.duration/60)
                 var sec = (Math.trunc(this.duration) - min*60 ).toFixed(0)
-                // //console.log(min+':'+sec + '--------'+this.duration)
+                // 
                 sis.audio.length.sum = this.duration
                 sis.audio.length.min = min
                 sis.audio.length.sec = sec
                 
             }}
-            // this.audio.length = this.$refs.player.duration/60
         },
 
         getCurrentTime(){
-            // //console.log('getCurrentTime()')
             if (this.files && this.loadedBeats && this.$refs.player) {
-            // //console.log(this.$refs.player.currentTime)
                 if(this.$refs.player.currentTime >= this.audio.length.sum){
                     this.audio.curLength.sum = 0;
                     this.playing = false;
@@ -382,49 +342,29 @@ export default {
                     var sec = (Math.trunc(this.$refs.player.currentTime) - min*60 ).toFixed(0)
                     this.audio.curLength.sum = this.$refs.player.currentTime
                     this.audio.curLength.min = min
-                    this.audio.curLength.sec = sec
-                    // //console.log(this.audio.curLength.sum);
+                    this.audio.curLength.sec = selectedAddress
                 }  
             }
         },
         updateCurTime(v){
-            //console.log('update: '+v);
             var aud = this.$refs.player;
-            // this.$refs.player.currentTime = $event;
-            // this.getCurrentTime()
             aud.currentTime = v;
-            // aud.oncanplay = function() {
-            //     aud.currentTime = v;
-            //     // //console.log('updateeeeed: '+v)
-            // }
             this.playProm()
         },
         changeCurTime(value){
-            // this.audio.curLength.sum += value;
-            // this.$refs.player.currentTime += value;
             this.updateCurTime(this.$refs.player.currentTime + value)
-            // //console.log('r239')
         },
         volChange(x){
-            //console.log("new vol:"+x + ' -> '+Math.pow(x,1.02));
             this.volume = x;
             this.$refs.player.volume = Math.pow(x,1.02);
         },
 
         convert() {
-			// //console.log('test')
             axios.get('https://api.coinbase.com/v2/exchange-rates')
             .then(res => {
-				// //console.log(res)
-				// //console.log(this.track.is_beat.price)
-				// //console.log(currentObj.track.is_beat.price)
-                // //console.log('hi')
-
                 this.files.forEach(element => {
-                
                 element.is_beat.dollarPrice = (Math.round(((element.is_beat.price / res.data.data.rates.ETH) + Number.EPSILON) * 100) / 100).toFixed(2)
-                // //console.log(element.is_beat.dollarPrice)
-            });
+                });
             })
         },
 
@@ -441,7 +381,7 @@ export default {
             loadBlockchainData()
                 .then(response => {
                     this.$store.state.contract = response
-                    //console.log(this.$store.state.contract)
+                    
                     getBeatCount(this.$store.state.contract)
                         .then(response => {
                             for (var i = 1; i <= response; i++) {
@@ -451,7 +391,7 @@ export default {
                                         
                                     })
                             }
-                            //console.log(this.$store.state.beats)
+                            
                         })
                 })
             }else{
@@ -471,34 +411,23 @@ export default {
     mounted() {
         
         
-        //console.log(this.givenSearchTerm)  
+          
         if(this.givenSearchTerm != ''){
-            //console.log('yeah')
+            
             window.scrollTo({
                 top: 840,
                 behaviour: "smooth",
             })
         }
-
-        
-        // this.$nextTick(function () {
-        //     this.rendered = true;
-        // })
         this.getTracks(this.searchTerm);
 
         
 
         this.getCurrentTime();
         setInterval(this.getCurrentTime, 10);
-        // setInterval(()=>{this.emitter.emit("reload")}, 20000);
-
-        
-
-
         this.getLength();
         this.emitter.on("test-emit", text => {
             this.playing = !this.playing;
-            // //console.log(text);
         });
         this.emitter.on("show-info", num => {
             if(this.info == num){
@@ -508,15 +437,15 @@ export default {
             }
         });
         this.emitter.on("play-pause", numb => {
-            //console.log("test")
+            
             this.play(numb);
-            // //console.log(text);
+            // 
         });
 
         this.emitter.on('upload-success',() =>{
             this.getTracks();
             this.blockchainTracks()
-            //console.log('yeeeah')
+            
         });
 
         this.emitter.on("search", term => {
@@ -524,7 +453,7 @@ export default {
             this.loading = true;
             this.searchTerm = term
             this.getTracks(term);
-            // //console.log(text);
+            // 
         });
         this.emitter.on("focus", bool =>{
             this.searchFocus = bool;
@@ -532,46 +461,27 @@ export default {
 
         this.$watch('currentPlaying', () => {
                 this.getLength()
-                //console.log('r301')
+                
                 if(this.currentPlaying){
                     if(this.currentPlayingOld){
-                        //console.log(this.audio)
-                        this.$page.props.tracks[this.currentPlayingOld] = this.audio.curLength.sum
-                        //console.log(this.audio.curLength.sum);
+                        this.$page.props.tracks[this.currentPlayingOld] = this.audio.curLength.sum                        
                     }
-                    // console.warn(this.currentPlaying);
-                    // this.$refs.player.src = this.files[this.currentPlaying-1].file_path;
-                    // this.$refs.player.load()
-                    this.fetchVideoAndPlay(this.files[this.currentPlaying-1].file_path);
-
-                    // if(this.$page.props.tracks[this.currentPlaying]){
-                    //     // this.$refs.player.currentTime = this.$page.props.tracks[this.currentPlaying];
-                    //     this.updateCurTime(this.$page.props.tracks[this.currentPlaying])
-                    // }
-                    // if(this.wantTime){
-                    //     // this.$refs.player.currentTime = this.wantTime*this.audio.length.sum;
-                    //     this.updateCurTime(this.wantTime*this.audio.length.sum)
-                    //     this.wantTime = null;
-                    // }
-
-                    //console.log('r305');
+                    this.fetchVideoAndPlay(this.files[this.currentPlaying-1].file_path);                    
                     this.playing = true;
                     this.toggleAudio();
                     this.currentPlayingOld = this.currentPlaying;
-                    // //console.log('r308')
+                    // 
                     
                 }
 
             });
 
         this.emitter.on('slide', data => {
-            //console.log(data)
-            //console.log(this.currentPlaying)
+            
+            
             // this.playing = true;
             this.toggleAudio('slide')
             if(this.currentPlaying == data.id){
-                //console.log(this.audio.length.sum+'*'+data.timeP+'/'+100+' -> ' + (this.audio.length.sum*data.timeP))
-                // this.$refs.player.currentTime = (this.audio.length.sum*data.timeP)
                 this.updateCurTime(this.audio.length.sum*data.timeP)
             }else{
                 this.wantTime = data.timeP;
@@ -583,7 +493,7 @@ export default {
 
         
         window.addEventListener('keydown', (e) => {
-            // //console.log(e.key +' - '+ e.keyCode); 
+            //  
             if(!this.searchFocus && !this.showPopupUpload && this.currentPlaying){
                 if (e.key === 'Spacebar' || e.keyCode === 32) {
                         this.play();
