@@ -13,8 +13,8 @@ use App\Notifications\PaymentNotification;
 use App\Notifications\DownloadCountNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Redirect;
 
 class AxiosController extends Controller
 {
@@ -124,6 +124,11 @@ class AxiosController extends Controller
             "other" => 'Something other went wrong',
         ];
         $errorKey = 'other';
+        // $inputFile = $req->file('beat');
+        // if (!$inputFile->isValid()) {
+            // dd($inputFile->getErrorMessage());
+        // }
+        // dd($req->file('beat'));
         // dd($req);
         // $req->validate([
         //     'beat' => 'required|max:10240',
